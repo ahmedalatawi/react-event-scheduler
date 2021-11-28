@@ -2,7 +2,20 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
+
+import 'jquery/dist/jquery.min.js';
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+
+// must manually import the stylesheets for each plugin
+//import "@fullcalendar/core/main.css";
+import "@fullcalendar/daygrid/main.css";
+import "@fullcalendar/timegrid/main.css";
+
 import reportWebVitals from './reportWebVitals';
+
+// Put any other imports below so that CSS from your
+// components takes precedence over default styles.
 
 ReactDOM.render(
   <React.StrictMode>
