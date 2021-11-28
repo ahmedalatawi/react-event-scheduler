@@ -1,6 +1,7 @@
 import { ApolloServer, gql } from "apollo-server-express";
 import bodyParser from "body-parser";
 import compression from "compression";
+import path from "path";
 import express from "express";
 
 import { postMessages, putMessage } from "./routes/messages";
@@ -12,8 +13,6 @@ const port = process.env.PORT || 4000;
 
 app.use(compression());
 
-app.use('/', express.static(`${__dirname}/build`));
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 //user
@@ -22,6 +21,8 @@ app.get("/api/users/:id", getUser);
 // messages
 app.post("/api/messages", postMessages);
 app.put("/api/messages/:id", putMessage);
+
+app.use(express.static(path.join(__dirname, 'build')));
 
 const files = [];
 
