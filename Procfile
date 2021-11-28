@@ -1,1 +1,1 @@
-web: ts-node-dev --respawn --transpile-only server/server.ts
+web: ts-node server/server.ts
