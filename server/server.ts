@@ -3,6 +3,7 @@ import bodyParser from "body-parser";
 import compression from "compression";
 import express from "express";
 import enforce from 'express-sslify';
+import path from 'path';
 
 import { connect } from 'mongoose';
 import { rootValue } from "./graphql/resolvers";
@@ -26,7 +27,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 require('dotenv').config();
 
-app.use('/*', express.static(`${__dirname}/../build`));
+app.use('/', express.static(`${__dirname}/../build`));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(`${__dirname}/../build/index.html`));
+});
 
 const startServer = async () => {
   const apolloServer = new ApolloServer({
