@@ -19,7 +19,7 @@ const EventBody: React.FC<IEventBody> = (props) => {
         const endDate = new Date(end);
 
         if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
-            setErrorMsg('Start and end date/time must be valid.');
+            start && setErrorMsg('Start and end date/time must be valid.');
             props.onValidate(false)
         } else if (startDate.getTime() >= endDate.getTime()) {
             setErrorMsg('End date/time must be greater than start date/time.');
