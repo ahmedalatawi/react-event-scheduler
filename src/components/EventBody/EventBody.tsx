@@ -1,4 +1,4 @@
-import { Fragment, useRef, useEffect, useState, ChangeEvent } from 'react';
+import { useEffect, useState, ChangeEvent } from 'react';
 import { IEventBody } from '../../interfaces/types';
 import Alert from '../UI/Alert/Alert';
 
@@ -13,41 +13,28 @@ const EventBody: React.FC<IEventBody> = (props) => {
 
     console.log('EventBody running...')
 
-    const validateEventDates = (start: string, end: string, title: string): boolean => {
-        let valid = true;
-
+    const validateEventDates = (start: string, end: string, title: string) => {
         const today = new Date();
         const startDate = new Date(start);
         const endDate = new Date(end);
 
         if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
             setErrorMsg('Start and end date/time must be valid.');
-            valid = false;
             props.onValidate(false)
         } else if (startDate.getTime() >= endDate.getTime()) {
             setErrorMsg('End date/time must be greater than start date/time.');
-            valid = false;
             props.onValidate(false)
         } else if (startDate.getTime() < today.getTime()) {
             setErrorMsg('Start date/time can not be in the past.');
-            valid = false;
             props.onValidate(false)
         } else if (!title.trim()) {
             setErrorMsg('');
-            valid = false;
             props.onValidate(false)
         } else {
             setErrorMsg('');
-            valid = true;
             props.onValidate(true);
         }
-        console.log('validateEventDates ', startDate)
-
-        return valid;
     };
-
-    const today = new Date();
-    const startDate = new Date(start);
 
     const handleTitleChange = (event: ChangeEvent<HTMLInputElement>) => {
         const { value } = event.target;
@@ -55,10 +42,6 @@ const EventBody: React.FC<IEventBody> = (props) => {
         setTitle(value);
         validateEventDates(start, end, value);
         props.onTitle(value);
-
-        // if (startDate.getTime() < today.getTime()) {
-        //     props.onValidate(false);
-        // }
     };
 
     const handleStartChange = (event: ChangeEvent<HTMLInputElement>) => {
