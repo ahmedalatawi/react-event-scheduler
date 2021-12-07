@@ -1,12 +1,3 @@
-.demo-app {
-  font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
-  font-size: 14px;
-}
-
-.demo-app-top {
-  margin: 0 0 3em;
-}
-
 .container {
   padding-top: 20px;
 }
@@ -18,10 +9,4 @@
 .required .form-label:after {
   content:"*";
   color:red;
-}
-
-@media (min-width: 768px) {
-  .modal-dialog {
-    min-width: 510px;
-  }
 }

@@ -1,19 +1,8 @@
 import { Fragment, useRef, useEffect, useState, ChangeEvent } from 'react';
+import { IEventBody } from '../../interfaces/types';
 import Alert from '../UI/Alert/Alert';
 
-type EventBodyType = {
-    title: string;
-    start: string;
-    end: string;
-    description: string;
-    onTitle: (title: string) => void;
-    onStart: (date: string) => void;
-    onEnd: (date: string) => void;
-    onDescription: (description: string) => void;
-    onValidate: (valid: boolean) => void;
-};
-
-const EventBody: React.FC<EventBodyType> = (props) => {
+const EventBody: React.FC<IEventBody> = (props) => {
     const [title, setTitle] = useState<string>(props.title);
     const [start, setStart] = useState<string>(props.start);
     const [end, setEnd] = useState<string>(props.end);
@@ -24,18 +13,27 @@ const EventBody: React.FC<EventBodyType> = (props) => {
 
     console.log('EventBody running...')
 
-    const validateEventDates = (start: string, end: string): boolean => {
+    const validateEventDates = (start: string, end: string, title: string): boolean => {
         let valid = true;
 
+        const today = new Date();
         const startDate = new Date(start);
         const endDate = new Date(end);
 
         if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
-            setErrorMsg('Start and end date must be valid.');
+            setErrorMsg('Start and end date/time must be valid.');
             valid = false;
             props.onValidate(false)
         } else if (startDate.getTime() >= endDate.getTime()) {
-            setErrorMsg('End date must be greater than start date.');
+            setErrorMsg('End date/time must be greater than start date/time.');
+            valid = false;
+            props.onValidate(false)
+        } else if (startDate.getTime() < today.getTime()) {
+            setErrorMsg('Start date/time can not be in the past.');
+            valid = false;
+            props.onValidate(false)
+        } else if (!title.trim()) {
+            setErrorMsg('');
             valid = false;
             props.onValidate(false)
         } else {
@@ -43,31 +41,40 @@ const EventBody: React.FC<EventBodyType> = (props) => {
             valid = true;
             props.onValidate(true);
         }
-        //startDate.getTime() >= endDate.getTime() ? setIsEventValid(false) : setIsEventValid(true);
-        //(startDate == 'Invalid Date' || endDate == 'Invalid Date') ? setIsEventValid(false) : setIsEventValid(true);
         console.log('validateEventDates ', startDate)
 
         return valid;
     };
 
+    const today = new Date();
+    const startDate = new Date(start);
+
     const handleTitleChange = (event: ChangeEvent<HTMLInputElement>) => {
         const { value } = event.target;
+
         setTitle(value);
+        validateEventDates(start, end, value);
         props.onTitle(value);
+
+        // if (startDate.getTime() < today.getTime()) {
+        //     props.onValidate(false);
+        // }
     };
 
     const handleStartChange = (event: ChangeEvent<HTMLInputElement>) => {
         const { value } = event.target;
-        
+
         setStart(value);
-        validateEventDates(value, end) && props.onStart(value);
+        validateEventDates(value, end, title);
+        props.onStart(value);
     };
 
     const handleEndChange = (event: ChangeEvent<HTMLInputElement>) => {
         const { value } = event.target;
-        
+
         setEnd(value);
-        validateEventDates(start, value) && props.onEnd(value);
+        validateEventDates(start, value, title);
+        props.onEnd(value);
     };
 
     const handleDescriptionChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
@@ -75,6 +82,19 @@ const EventBody: React.FC<EventBodyType> = (props) => {
         setDescription(value);
         props.onDescription(value);
     };
+
+    useEffect(() => {
+        const today = new Date();
+        const startDate = new Date(start);
+
+        // today.setHours(0,0,0,0)
+        // startDate.setHours(0,0,0,0)
+
+        if (startDate.getTime() < today.getTime()) {
+            setErrorMsg('Start date/time can not be in the past.');
+            props.onValidate(false)
+        }
+    }, []);
 
     return (
         <div className="row g-3">
@@ -84,7 +104,7 @@ const EventBody: React.FC<EventBodyType> = (props) => {
             </div>
             <div className="col-md-6 required">
                 <label htmlFor="start" className="form-label">Start</label>
-                <input type="datetime-local" className="form-control" id="start" placeholder="Start" max={end} value={start} onChange={handleStartChange} />
+                <input type="datetime-local" className="form-control" id="start" placeholder="Start" value={start} onChange={handleStartChange} />
             </div>
             <div className="col-md-6 required">
                 <label htmlFor="end" className="form-label">End</label>

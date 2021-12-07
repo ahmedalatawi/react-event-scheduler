@@ -1,58 +1,33 @@
 import './App.css';
 
-import {
-  ApolloClient,
-  InMemoryCache,
-  ApolloProvider,
-  useQuery,
-  gql
-} from "@apollo/client";
+import { ApolloProvider } from '@apollo/client';
+import { Routes, Route, BrowserRouter } from 'react-router-dom';
 
 import Navbar from './components/Navbar/Navbar';
 import Calendar from './components/Calendar/Calendar';
-
-const client = new ApolloClient({
-  uri: 'https://48p1r2roz4.sse.codesandbox.io',
-  cache: new InMemoryCache()
-});
-
-const EXCHANGE_RATES = gql`
-  query GetExchangeRates {
-    rates(currency: "USD") {
-      currency
-      rate
-    }
-  }
-`;
-
-function ExchangeRates() {
-
-  const { loading, error, data } = useQuery(EXCHANGE_RATES);
-
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error :(</p>;
-
-  console.log('ExchangeRates runing...')
-  return data.rates.map((rateObj: any) => (
-    <div key={rateObj.currency}>
-      <p>
-        {rateObj.currency}: {rateObj.rate}
-      </p>
-    </div>
-  ));
-}
+import client from './apollo';
+import SearchBox from './components/SearchBox/SearchBox';
+import AddEvent from './components/AddEvent/AddEvent';
+import PageNotFound from './components/PageNotFound/PageNotFound';
 
 
 function App() {
   return (
     <div className="container">
       <ApolloProvider client={client}>
-        {/* <ExchangeRates /> */}
-        <div className="navbar-custom">
-          <Navbar />
-        </div>
+        <BrowserRouter>
+          <div className="navbar-custom">
+            <Navbar />
+          </div>
+          <Routes>
 
-        <Calendar />
+            <Route path="*" element={<PageNotFound />} />
+            <Route path="/" element={<Calendar />} />
+            <Route path="/searchEvents" element={<SearchBox />} />
+            <Route path="/addEvent" element={<AddEvent />} />
+            <Route path="/calendar" element={<Calendar />} />
+          </Routes>
+        </BrowserRouter>
       </ApolloProvider>
     </div>
   );

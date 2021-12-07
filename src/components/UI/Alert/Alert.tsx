@@ -1,14 +1,9 @@
+import React from "react";
+import { IAlert } from "../../../interfaces/types";
 
-type AlertType = {
-    type: string;
-    fillType: string;
-    ariaLabel: string;
-    msg: string
-};
-
-const Alert: React.FC<AlertType> = (props) => {
+const Alert: React.FC<IAlert> = (props) => {
     console.log('Alert running...')
-    
+
     return (
         <>
             <svg xmlns="http://www.w3.org/2000/svg" style={{ display: 'none' }}>
@@ -23,7 +18,7 @@ const Alert: React.FC<AlertType> = (props) => {
                 </symbol>
             </svg>
 
-            <div className={`alert alert-${props.type} d-flex align-items-center`} role="alert" data-testid="Alert">
+            <div className={`alert alert-${props.type} d-flex justify-content-center`} role="alert" data-testid="Alert">
                 <svg className="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label={props.ariaLabel}><use xlinkHref={props.fillType} /></svg>
                 <div>
                     {props.msg}
@@ -33,4 +28,4 @@ const Alert: React.FC<AlertType> = (props) => {
     )
 }
 
-export default Alert;
+export default React.memo(Alert);
