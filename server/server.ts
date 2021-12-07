@@ -26,7 +26,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 require('dotenv').config();
 
-app.use('/', express.static(`${__dirname}/../build`));
+app.use('/*', express.static(`${__dirname}/../build`));
 
 const startServer = async () => {
   const apolloServer = new ApolloServer({
