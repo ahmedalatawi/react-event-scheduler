@@ -30,15 +30,15 @@ export const Events = {
         }
 
         try {
-            const event = await EventModel.findOne({ _id: id, createdBy: userId });
-
-            if (!event) {
-                throw new AuthenticationError('Event could not be found');
-            }
-
             let savedEvent;
 
             if (id) {
+                const event = await EventModel.findOne({ _id: id, createdBy: userId });
+
+                if (!event) {
+                    throw new AuthenticationError('Event could not be found');
+                }
+
                 await EventModel.findOneAndUpdate({ _id: id, createdBy: userId }, { title, start, end, isPrivate, description });
 
             } else {
