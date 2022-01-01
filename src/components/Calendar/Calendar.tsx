@@ -1,4 +1,4 @@
-import { useState, useRef, Fragment } from 'react';
+import { useState, useRef, Fragment, useContext, useEffect } from 'react';
 import Modal from '../UI/Modal/Modal';
 
 import FullCalendar, { EventClickArg, EventInput } from '@fullcalendar/react';
@@ -7,7 +7,7 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
 
 import EventBody from '../EventBody/EventBody';
-import { useMutation, useQuery } from '@apollo/client';
+import { NetworkStatus, useMutation, useQuery } from '@apollo/client';
 
 import GET_EVENTS from '../../gql/getEvents';
 import SAVE_EVENT from '../../gql/saveEvent';
@@ -20,31 +20,54 @@ import { IEvent } from '../../interfaces/types';
 
 import './Calendar.css';
 
-const Calendar = () => {
+import AuthContext from '../../store/auth-context';
+
+const Calendar: React.FC = () => {
     const [showModal, setShowModal] = useState<boolean>(false);
     const [title, setTitle] = useState<string>('');
 
     const [eventTitle, setEventTitle] = useState<string>('');
     const [start, setStart] = useState<string>('');
     const [end, setEnd] = useState<string>('');
+    const [isPrivate, setIsPrivate] = useState<boolean>(false);
     const [description, setDescription] = useState<string>('');
 
     const [displayDeleteBtn, setDisplayDeleteBtn] = useState<boolean>(false);
     const [disableSaveBtn, setDisableSaveBtn] = useState<boolean>(true);
     const [disableDeleteBtn, setDisableDeleteBtn] = useState<boolean>(false);
 
+    const [loggedIn, setLoggedIn] = useState<boolean>(true);
+    const [disableEdit, setDisableEdit] = useState<boolean>(false);
+
     const calendarApiRef = useRef<any>({});
     const clickInfoRef = useRef<any>({});
 
-    const { loading: getEventsLoading, data: events, error: getEventsError } = useQuery<EventInput[]>(GET_EVENTS, { fetchPolicy: 'no-cache' });
+    const { loading: getEventsLoading, data: events, error: getEventsError, refetch, networkStatus } = useQuery<EventInput[]>(GET_EVENTS, {
+        fetchPolicy: 'no-cache',
+        notifyOnNetworkStatusChange: true
+    });
 
     const [saveEvent, { error: saveEventError, loading: saveEventLoading }] = useMutation<{ saveEvent: IEvent }, { event: IEvent }>(SAVE_EVENT, {
-        variables: { event: { id: clickInfoRef.current.value?.event?.id || '', title: eventTitle, start, end, description } }
+        variables: { event: { id: clickInfoRef.current.value?.event?.id || '', title: eventTitle, start, end, isPrivate, description } }
     });
 
     const [deleteEvent, { error: deleteEventError, loading: deleteEventLoading }] = useMutation<{ deleteEvent: boolean }, { id: string }>(DELETE_EVENT, {
         variables: { id: clickInfoRef.current.value?.event?.id }
     });
+
+    const authCtx = useContext(AuthContext);
+
+    console.log('Calendar...');
+
+    useEffect(() => {
+        const auth = authCtx.getAuth();
+        refetch();
+        setLoggedIn(!!auth);
+        setDisableSaveBtn(!auth);
+        setDisableEdit(!auth);
+        setDisableDeleteBtn(!auth);
+    }, [authCtx, refetch]);
+
 
     const handleSaveEvent = () => {
         setDisableSaveBtn(true);
@@ -57,6 +80,7 @@ const Calendar = () => {
 
             if (clickInfoRef.current.value) {
                 clickInfoRef.current.value.event.setProp('title', eventTitle)
+                clickInfoRef.current.value.event.setExtendedProp('isPrivate', isPrivate)
                 clickInfoRef.current.value.event.setExtendedProp('description', description)
                 clickInfoRef.current.value.event.setStart(start)
                 clickInfoRef.current.value.event.setEnd(end)
@@ -67,6 +91,7 @@ const Calendar = () => {
                     start,
                     end,
                     extendedProps: {
+                        isPrivate,
                         description
                     }
                 })
@@ -82,13 +107,18 @@ const Calendar = () => {
         clickInfoRef.current.value = null;
         calendarApiRef.current.value = selectedDate.view.calendar;
 
+        const auth = authCtx.getAuth();
+
         setTitle('New Event');
         setEventTitle('');
         setDescription('');
         setStart(`${selectedDate.dateStr}T00:00:00`);
         setEnd(`${selectedDate.dateStr}T01:00:00`);
+        setIsPrivate(false);
         setDisplayDeleteBtn(false);
-        setDisableSaveBtn(true);
+        setDisableSaveBtn(!auth);
+        setDisableEdit(!auth);
+        setDisableDeleteBtn(!auth);
         setShowModal(true);
     };
 
@@ -97,15 +127,29 @@ const Calendar = () => {
 
         setTitle('Update Event');
 
+        const auth = authCtx.getAuth();
+
+        if (auth) {
+            const equal = auth.userId === clickInfo.event.extendedProps.createdBy._id;
+
+            setDisableEdit(!equal);
+            setDisableSaveBtn(!equal);
+            setDisableDeleteBtn(!equal);
+        } else {
+            setDisableEdit(true);
+            setDisableSaveBtn(true);
+            setDisableDeleteBtn(true);
+        }
+
         const startDate = clickInfo.event.startStr.substring(0, clickInfo.event.startStr.lastIndexOf('-'))
         const endDate = clickInfo.event.endStr.substring(0, clickInfo.event.endStr.lastIndexOf('-'))
 
         setEventTitle(clickInfo.event.title)
         setStart(startDate);
         setEnd(endDate);
+        setIsPrivate(clickInfo.event.extendedProps.isPrivate);
         setDescription(clickInfo.event.extendedProps.description);
         setDisplayDeleteBtn(true);
-        setDisableSaveBtn(false);
         setShowModal(true);
     };
 
@@ -127,37 +171,59 @@ const Calendar = () => {
 
     return (
         <Fragment>
-            {getEventsError && <Alert msg="Error occurred while retrieving events! Please try again later." type="danger" ariaLabel="Warning" fillType="#exclamation-triangle-fill" />}
-            {saveEventError && <Alert msg="Error occurred while saving event! Please try again later." type="danger" ariaLabel="Warning" fillType="#exclamation-triangle-fill" />}
-            {deleteEventError && <Alert msg="Error occurred while deleting event! Please try again later." type="danger" ariaLabel="Warning" fillType="#exclamation-triangle-fill" />}
+            {getEventsError && <Alert
+                msg={getEventsError.message}
+                type="danger" ariaLabel="Warning"
+                fillType="#exclamation-triangle-fill"
+            />}
+
+            {saveEventError && <Alert
+                msg={saveEventError.message}
+                type="danger" ariaLabel="Warning"
+                fillType="#exclamation-triangle-fill"
+            />}
+
+            {deleteEventError && <Alert
+                msg={deleteEventError.message}
+                type="danger" ariaLabel="Warning"
+                fillType="#exclamation-triangle-fill"
+            />}
+
             {showModal && (
                 <Modal
                     title={title}
-                    disableSaveBtn={disableSaveBtn}
+                    closeOnSubmit={true}
+                    disableSubmitBtn={disableSaveBtn}
                     disableDeleteBtn={disableDeleteBtn}
                     displayDeleteBtn={displayDeleteBtn}
-                    isSaveLoading={saveEventLoading}
+                    isSubmitLoading={saveEventLoading}
                     isDeleteLoading={deleteEventLoading}
                     onClose={() => setShowModal(false)}
                     onDelete={handleDeleteEvent}
-                    onSave={handleSaveEvent}
+                    onSubmit={handleSaveEvent}
                     children={
-                        <EventBody
-                            title={eventTitle}
-                            start={start}
-                            end={end}
-                            description={description}
-                            onTitle={(title) => setEventTitle(title)}
-                            onDescription={(description) => setDescription(description)}
-                            onStart={(start) => setStart(start)}
-                            onEnd={(end) => setEnd(end)}
-                            onValidate={(valid) => setDisableSaveBtn(!valid)}
-                        />
+                        <Fragment>
+                            {!loggedIn && <Alert msg="You must log in to be able to add or edit events." type="warning" ariaLabel="Warning:" fillType="#exclamation-triangle-fill" />}
+                            <EventBody
+                                title={eventTitle}
+                                start={start}
+                                end={end}
+                                isPrivate={isPrivate}
+                                description={description}
+                                disableEdit={disableEdit}
+                                onTitle={(title) => setEventTitle(title)}
+                                onDescription={(description) => setDescription(description)}
+                                onStart={(start) => setStart(start)}
+                                onEnd={(end) => setEnd(end)}
+                                onIsPrivate={(isPrivate) => setIsPrivate(isPrivate)}
+                                onValidate={(valid) => setDisableSaveBtn(!valid)}
+                            />
+                        </Fragment>
                     }
                 />
             )}
 
-            {getEventsLoading ? <Spinner /> :
+            {(getEventsLoading || networkStatus === NetworkStatus.refetch) ? <Spinner /> :
                 events && <FullCalendar
                     initialView='dayGridMonth'
                     initialEvents={events}

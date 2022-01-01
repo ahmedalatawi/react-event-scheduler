@@ -4,13 +4,14 @@ import {
     createHttpLink
 } from "@apollo/client";
 
-export const link = createHttpLink({
-    uri: "/graphql"
+const httpLink = createHttpLink({
+    uri: "/graphql",
+    credentials: 'same-origin'
 });
 
 const client = new ApolloClient({
     cache: new InMemoryCache(),
-    link,
+    link: httpLink
 });
 
 export default client;

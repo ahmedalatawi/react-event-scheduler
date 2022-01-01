@@ -15,18 +15,21 @@ const Modal: React.FC<IModal> = (props) => {
 
     const {
         title,
-        isSaveLoading,
+        closeOnSubmit,
+        submitBtnName,
+        closeBtnName,
+        isSubmitLoading,
         isDeleteLoading,
         children,
         displayDeleteBtn,
         disableDeleteBtn,
-        disableSaveBtn,
-        onSave,
+        disableSubmitBtn,
+        onSubmit,
         onDelete,
         onClose
     } = props;
 
-    console.log('Modal running...')
+    console.log('Modal...')
 
     useEffect(() => {
         const modal = new ModalBootstrap(modalRef.current, { keyboard: false })
@@ -41,9 +44,9 @@ const Modal: React.FC<IModal> = (props) => {
     }, []);
 
     useEffect(() => {
-        !isSaveLoading && modal?.hide();
+        (!isSubmitLoading && closeOnSubmit) && modal?.hide();
 
-    }, [isSaveLoading, modal]);
+    }, [isSubmitLoading, closeOnSubmit, modal]);
 
     useEffect(() => {
         !isDeleteLoading && modal?.hide();
@@ -64,12 +67,12 @@ const Modal: React.FC<IModal> = (props) => {
                     </div>
 
                     <div className="modal-footer">
-                        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal"> {closeBtnName || 'Cancel'}</button>
                         {displayDeleteBtn && <button type="button" className="btn btn-danger" disabled={disableDeleteBtn} onClick={onDelete}>
                             {isDeleteLoading && <div className="spinner-border spinner-border-sm" role="status"></div>} Remove
                         </button>}
-                        <button type="button" className="btn btn-primary" onClick={onSave} disabled={disableSaveBtn}>
-                            {isSaveLoading && <div className="spinner-border spinner-border-sm" role="status"></div>} Save
+                        <button type="button" className="btn btn-primary" onClick={onSubmit} disabled={disableSubmitBtn}>
+                            {isSubmitLoading && <div className="spinner-border spinner-border-sm" role="status"></div>} {submitBtnName || 'Save'}
                         </button>
                     </div>
                 </div>

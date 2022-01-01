@@ -6,12 +6,13 @@ const EventBody: React.FC<IEventBody> = (props) => {
     const [title, setTitle] = useState<string>(props.title);
     const [start, setStart] = useState<string>(props.start);
     const [end, setEnd] = useState<string>(props.end);
+    const [isPrivate, setIsPrivate] = useState<boolean>(props.isPrivate);
     const [description, setDescription] = useState<string>(props.description);
 
     const [errorMsg, setErrorMsg] = useState<string>('');
 
 
-    console.log('EventBody running...')
+    console.log('EventBody...')
 
     const validateEventDates = (start: string, end: string, title: string) => {
         const today = new Date();
@@ -19,13 +20,13 @@ const EventBody: React.FC<IEventBody> = (props) => {
         const endDate = new Date(end);
 
         if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
-            start && setErrorMsg('Start and end date/time must be valid.');
+            start && setErrorMsg('Date & time must be valid.');
             props.onValidate(false)
         } else if (startDate.getTime() >= endDate.getTime()) {
-            setErrorMsg('End date/time must be greater than start date/time.');
+            setErrorMsg('End date & time must be greater than start date & time.');
             props.onValidate(false)
         } else if (startDate.getTime() < today.getTime()) {
-            setErrorMsg('Start date/time can not be in the past.');
+            setErrorMsg('Start date & time can not be in the past.');
             props.onValidate(false)
         } else if (!title.trim()) {
             setErrorMsg('');
@@ -66,6 +67,12 @@ const EventBody: React.FC<IEventBody> = (props) => {
         props.onDescription(value);
     };
 
+    const handleIsPrivateChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const { checked } = event.target;
+        setIsPrivate(checked);
+        props.onIsPrivate(checked);
+    };
+
     useEffect(() => {
         const today = new Date();
         const startDate = new Date(start);
@@ -74,7 +81,7 @@ const EventBody: React.FC<IEventBody> = (props) => {
         // startDate.setHours(0,0,0,0)
 
         if (startDate.getTime() < today.getTime()) {
-            setErrorMsg('Start date/time can not be in the past.');
+            setErrorMsg('Event can not be saved if start date & time is in the past.');
             props.onValidate(false)
         }
     }, []);
@@ -83,22 +90,30 @@ const EventBody: React.FC<IEventBody> = (props) => {
         <div className="row g-3">
             <div className="col-12 required">
                 <label htmlFor="title" className="form-label">Title</label>
-                <input type="text" className="form-control" id="title" placeholder="Title" value={title} onChange={handleTitleChange} />
+                <input type="text" className="form-control" disabled={props.disableEdit} id="title" placeholder="Title" maxLength={50} value={title} onChange={handleTitleChange} />
             </div>
             <div className="col-md-6 required">
                 <label htmlFor="start" className="form-label">Start</label>
-                <input type="datetime-local" className="form-control" id="start" placeholder="Start" value={start} onChange={handleStartChange} />
+                <input type="datetime-local" className="form-control" disabled={props.disableEdit} id="start" placeholder="Start" value={start} onChange={handleStartChange} />
             </div>
             <div className="col-md-6 required">
                 <label htmlFor="end" className="form-label">End</label>
-                <input type="datetime-local" className="form-control" id="end" min={start} value={end} placeholder="End" onChange={handleEndChange} />
+                <input type="datetime-local" className="form-control" disabled={props.disableEdit} id="end" min={start} value={end} placeholder="End" onChange={handleEndChange} />
             </div>
-            {errorMsg && <div className="col-12">
+            {(errorMsg && !props.disableEdit) && <div className="col-12">
                 <Alert msg={errorMsg} type="warning" ariaLabel="Warning" fillType="#exclamation-triangle-fill" />
             </div>}
             <div className="col-12">
                 <label htmlFor="description" className="form-label">Description</label>
-                <textarea className="form-control" id="description" rows={3} value={description} onChange={handleDescriptionChange}></textarea>
+                <textarea className="form-control" disabled={props.disableEdit} id="description" rows={3} value={description} maxLength={1000} onChange={handleDescriptionChange}></textarea>
+            </div>
+            <div className="col-12">
+                <div className="form-check">
+                    <input className="form-check-input" type="checkbox" disabled={props.disableEdit} id="gridCheck" checked={isPrivate} onChange={handleIsPrivateChange} />
+                    <label className="form-check-label" htmlFor="gridCheck">
+                        Private (event is only visible to you)
+                    </label>
+                </div>
             </div>
         </div>
     );

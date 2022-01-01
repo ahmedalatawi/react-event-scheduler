@@ -7,7 +7,11 @@ export default gql`
             title
             start
             end
+            isPrivate
             description
+            createdBy {
+                _id
+            }
         }
     }
 `;

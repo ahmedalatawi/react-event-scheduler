@@ -2,7 +2,7 @@ import React from "react";
 import { IAlert } from "../../../interfaces/types";
 
 const Alert: React.FC<IAlert> = (props) => {
-    console.log('Alert running...')
+    console.log('Alert...')
 
     return (
         <>
@@ -18,10 +18,10 @@ const Alert: React.FC<IAlert> = (props) => {
                 </symbol>
             </svg>
 
-            <div className={`alert alert-${props.type} d-flex justify-content-center`} role="alert" data-testid="Alert">
+            <div className={`alert alert-${props.type} d-flex justify-content-center alert-dismissible fade show`} role="alert" data-testid="Alert">
                 <svg className="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label={props.ariaLabel}><use xlinkHref={props.fillType} /></svg>
                 <div>
-                    {props.msg}
+                    {props.msg} <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             </div>
         </>

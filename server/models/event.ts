@@ -17,6 +17,14 @@ const schema = new Schema<IEvent>({
     description: {
         type: String,
         required: false
+    },
+    isPrivate: {
+        type: Boolean,
+        required: false
+    },
+    createdBy: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
     }
 });
 

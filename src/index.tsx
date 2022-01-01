@@ -13,13 +13,16 @@ import "@fullcalendar/daygrid/main.css";
 import "@fullcalendar/timegrid/main.css";
 
 import reportWebVitals from './reportWebVitals';
+import AuthProvider from './store/AuthProvider';
 
 // Put any other imports below so that CSS from your
 // components takes precedence over default styles.
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <AuthProvider>
+      <App />
+    </AuthProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
