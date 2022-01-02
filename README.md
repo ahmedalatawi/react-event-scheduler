@@ -29,6 +29,8 @@ Event Scheduler is a React app that allows users to create events. An event can 
 > APIs implemented using GraphQL
 
 ## Run app locally
+> Make sure MongoDB is up and running
+
 In the project directory, you can run:
 
 ### `npm start`
@@ -50,7 +52,9 @@ You will also see any lint errors in the console.
 
 ### Coming soon
 * User profile
+* Admin tab & profile
 * Search & filter events
+* Share events with family & friends on Facebook
 
 
 ## Run unit tests
