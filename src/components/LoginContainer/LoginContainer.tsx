@@ -42,7 +42,7 @@ const LoginContainer: React.FC<ILoginContainer> = ({ view, onClose, onSuccess })
             onSuccess();
         }
 
-    }, [loginData, signupData]);
+    }, [authCtx, loginData, onSuccess, signupData]);
 
     const handleSubmit = () => {
         const view = getViewType();

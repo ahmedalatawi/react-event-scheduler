@@ -73,6 +73,8 @@ const EventBody: React.FC<IEventBody> = (props) => {
         props.onIsPrivate(checked);
     };
 
+    const { onValidate } = props;
+
     useEffect(() => {
         const today = new Date();
         const startDate = new Date(start);
@@ -82,9 +84,9 @@ const EventBody: React.FC<IEventBody> = (props) => {
 
         if (startDate.getTime() < today.getTime()) {
             setErrorMsg('Event can not be saved if start date & time is in the past.');
-            props.onValidate(false)
+            onValidate(false)
         }
-    }, []);
+    }, [onValidate, start]);
 
     return (
         <div className="row g-3">

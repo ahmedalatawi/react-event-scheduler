@@ -12,7 +12,7 @@ const AuthProvider: React.FC = (props) => {
   useEffect(() => {
     const storedAuth = getAuth();
     setAuth(storedAuth)
-  }, []);
+  }, [getAuth]);
 
   const addAuthHandler = (auth: IAuth) => {
     addAuth(auth);

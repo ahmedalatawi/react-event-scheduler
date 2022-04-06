@@ -27,7 +27,7 @@ const Login: React.FC<ILogin> = ({ onChangePassword, onChangeUsername, onToggleL
                 onChange={(e: ChangeEvent<HTMLInputElement>) => onChangePassword(e.target.value.trim())} />
         </div>
         <div className="col-12">
-            <p className="mb-0">Don't have an account yet? <a onClick={onToggleLogin} href="#">Signup</a></p>
+            <p className="mb-0">Don't have an account yet? <a onClick={onToggleLogin} href="/#">Signup</a></p>
         </div>
     </div>
 };
