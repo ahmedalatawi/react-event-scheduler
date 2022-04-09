@@ -41,7 +41,9 @@ const Modal: React.FC<IModal> = (props) => {
         modalEl.addEventListener('hidden.bs.modal', () => onClose())
 
         return () => modalEl.removeEventListener('hidden.bs.modal', () => { });
-    }, [onClose]);
+    },
+        //eslint-disable-next-line 
+        []);
 
     useEffect(() => {
         (!isSubmitLoading && closeOnSubmit) && modal?.hide();
