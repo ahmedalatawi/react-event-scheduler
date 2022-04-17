@@ -47,13 +47,13 @@ You will also see any lint errors in the console.
 ## Current functionality
 * User signup and login
 * Create, update and delete events
+* Search & pagination
 * Make events as private (only visible to creators)
 * Session expiry warning (displayed when being idle for 3 minutes after logging in)
 
 ### Coming soon
 * User profile
 * Admin tab & profile
-* Search & filter events
 * Share events with family & friends on Facebook
 
 

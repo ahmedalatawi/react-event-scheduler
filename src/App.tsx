@@ -32,7 +32,7 @@ function App() {
 
           <Routes>
             <Route path="*" element={<PageNotFound />} />
-            <Route path="/" element={<Calendar />} />
+            <Route path="/" element={<SearchBox />} />
             <Route path="/searchEvents" element={<SearchBox />} />
             <Route path="/addEvent" element={<AddEvent />} />
             <Route path="/calendar" element={<Calendar />} />

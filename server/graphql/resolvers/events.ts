@@ -4,16 +4,15 @@ import { UserModel } from "../../models/user";
 import { transformEvents } from "../../utils/events";
 
 export const Events = {
-    events: async (args, { isAuthorized, userId }) => {
+    eventsData: async ({ filterInput: { searchText = '', pageNumber = 0, pageSize = 0 } }, { isAuthorized, userId }) => {
+        const filter = (isAuthorized && userId) ? { $or: [{ createdBy: userId}, { isPrivate: false }] } : { isPrivate: false };
+        const regexFilter = { ...filter, title: { "$regex": searchText, "$options": "six" } };
+
         try {
-            const events = await EventModel.find({ isPrivate: false });
-            let privateEvents = [];
+            const events = await EventModel.find(regexFilter).limit(pageSize).skip(pageNumber > 0 ? ((pageNumber - 1) * pageSize) : 0);
+            const totalCount = await EventModel.countDocuments(regexFilter);
 
-            if (isAuthorized && userId) {
-                privateEvents = await EventModel.find({ isPrivate: true, createdBy: userId });
-            }
-
-            return [...events, ...privateEvents].map(transformEvents);
+            return {totalCount, events: events.map(transformEvents)};
         } catch (err) {
             throw err;
         }

@@ -1,7 +1,13 @@
-import { ChangeEvent } from "react";
-import { ISignup } from "../../interfaces/types";
+import { ChangeEvent, FC } from "react";
 
-const Signup: React.FC<ISignup> = ({ onChangeUsername, onChangePassword, onChangeConfirmPassword, onToggleSignup }) => {
+type SignupProps = {
+    onChangeUsername: (username: string) => void;
+    onChangePassword: (password: string) => void;
+    onChangeConfirmPassword: (confirmPassword: string) => void;
+    onToggleSignup: () => void;
+}
+
+const Signup: FC<SignupProps> = ({ onChangeUsername, onChangePassword, onChangeConfirmPassword, onToggleSignup }) => {
 
     return <div className="row g-3">
         <div className="col-12 required">

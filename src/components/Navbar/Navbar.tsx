@@ -1,11 +1,11 @@
-import { useState, Fragment, useContext, useEffect } from 'react';
+import { useState, Fragment, useContext, useEffect, FC } from 'react';
 import { NavLink } from 'react-router-dom';
 import AuthContext from '../../store/auth-context';
 import LoginContainer from '../LoginContainer/LoginContainer';
 
 import './Navbar.css';
 
-const Navbar = () => {
+const Navbar: FC = () => {
     const [showModal, setShowModal] = useState<boolean>(false);
     const [loggedIn, setLoggedIn] = useState<boolean>(false);
     const [view, setView] = useState<string>('Login');

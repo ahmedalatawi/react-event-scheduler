@@ -1,7 +1,11 @@
-import { useEffect, useRef, useState } from "react";
-import { ITimer } from "../../interfaces/types";
+import { FC, useEffect, useRef, useState } from "react";
 
-const Timer: React.FC<ITimer> = ({ seconds, onTimeout }) => {
+type TimerProps = {
+  seconds: number;
+  onTimeout: () => void;
+}
+
+const Timer: FC<TimerProps> = ({ seconds, onTimeout }) => {
   const [timeLeft, setTimeLeft] = useState<number>(seconds);
   const intervalRef = useRef<any>({});
 

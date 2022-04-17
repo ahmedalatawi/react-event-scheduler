@@ -1,15 +1,29 @@
 
-import { useEffect, useRef, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import { Modal as ModalBootstrap } from 'bootstrap';
 import ReactDOM from 'react-dom';
-
-import { IModal } from '../../../interfaces/types';
 
 import './Modal.css';
 
 const portalElement: any = document.getElementById('modal-root');
 
-const Modal: React.FC<IModal> = (props) => {
+type ModalProps = {
+    title: string;
+    closeOnSubmit?: boolean;
+    submitBtnName?: string;
+    closeBtnName?: string;
+    disableSubmitBtn: boolean;
+    disableDeleteBtn?: boolean;
+    displayDeleteBtn?: boolean;
+    hideSubmitBtn?: boolean;
+    isSubmitLoading: boolean;
+    isDeleteLoading?: boolean;
+    onClose: () => void;
+    onDelete?: () => void;
+    onSubmit: () => void;
+}
+
+const Modal: FC<ModalProps> = (props) => {
     const modalRef = useRef<any>(null);
     const [modal, setModal] = useState<ModalBootstrap>();
 
@@ -24,6 +38,7 @@ const Modal: React.FC<IModal> = (props) => {
         displayDeleteBtn,
         disableDeleteBtn,
         disableSubmitBtn,
+        hideSubmitBtn,
         onSubmit,
         onDelete,
         onClose
@@ -73,9 +88,9 @@ const Modal: React.FC<IModal> = (props) => {
                         {displayDeleteBtn && <button type="button" className="btn btn-danger" disabled={disableDeleteBtn} onClick={onDelete}>
                             {isDeleteLoading && <div className="spinner-border spinner-border-sm" role="status"></div>} Remove
                         </button>}
-                        <button type="button" className="btn btn-primary" onClick={onSubmit} disabled={disableSubmitBtn}>
+                        {!hideSubmitBtn && <button type="button" className="btn btn-primary" onClick={onSubmit} disabled={disableSubmitBtn}>
                             {isSubmitLoading && <div className="spinner-border spinner-border-sm" role="status"></div>} {submitBtnName || 'Save'}
-                        </button>
+                        </button>}
                     </div>
                 </div>
             </div>

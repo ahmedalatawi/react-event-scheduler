@@ -1,7 +1,12 @@
-import { ChangeEvent } from "react";
-import { ILogin } from "../../interfaces/types";
+import { ChangeEvent, FC } from "react";
 
-const Login: React.FC<ILogin> = ({ onChangePassword, onChangeUsername, onToggleLogin }) => {
+type LoginProps = {
+    onChangePassword: (password: string) => void;
+    onChangeUsername: (username: string) => void;
+    onToggleLogin: () => void;
+}
+
+const Login: FC<LoginProps> = ({ onChangePassword, onChangeUsername, onToggleLogin }) => {
 
     return <div className="row g-3">
         <div className="col-12">

@@ -1,11 +1,14 @@
-import { Fragment, useContext, useRef, useState } from 'react';
+import { FC, Fragment, useContext, useRef, useState } from 'react';
 import { useIdleTimer } from 'react-idle-timer'
-import { IUserIdleTimer } from '../../interfaces/types';
 import AuthContext from '../../store/auth-context';
 import Timer from '../Timer/Timer';
 import Modal from '../UI/Modal/Modal';
 
-const UserIdleTimer: React.FC<IUserIdleTimer> = ({ onLogout }) => {
+type UserIdleTimerProps = {
+  onLogout: () => void;
+}
+
+const UserIdleTimer: FC<UserIdleTimerProps> = ({ onLogout }) => {
   const [displayModal, setDisplayModal] = useState<boolean>(false);
   const [closeOnStayLoggedIn, setCloseOnStayLoggedIn] = useState<boolean>(false);
   const resetTimerRef = useRef<any>({});
@@ -13,11 +16,11 @@ const UserIdleTimer: React.FC<IUserIdleTimer> = ({ onLogout }) => {
   console.log('UserIdleTimer...')
 
   const authCtx = useContext(AuthContext);
-  
+
   const handleOnIdle = () => {
     resetTimerRef.current = false;
     const auth = authCtx.getAuth();
-    auth? setDisplayModal(true) : onLogout();
+    auth ? setDisplayModal(true) : onLogout();
   }
 
   const handleOnLogout = () => {

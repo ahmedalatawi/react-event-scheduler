@@ -1,4 +1,4 @@
-import { useState, useRef, Fragment, useContext, useEffect } from 'react';
+import { useState, useRef, Fragment, useContext, useEffect, FC } from 'react';
 import Modal from '../UI/Modal/Modal';
 
 import FullCalendar, { EventClickArg, EventInput } from '@fullcalendar/react';
@@ -22,7 +22,16 @@ import './Calendar.css';
 
 import AuthContext from '../../store/auth-context';
 
-const Calendar: React.FC = () => {
+type EventsDataType = {
+    totalCount: number;
+    events: EventInput[];
+  };
+  
+  type EventsType = {
+    eventsData: EventsDataType;
+  };
+
+const Calendar: FC = () => {
     const [showModal, setShowModal] = useState<boolean>(false);
     const [title, setTitle] = useState<string>('');
 
@@ -35,6 +44,7 @@ const Calendar: React.FC = () => {
     const [displayDeleteBtn, setDisplayDeleteBtn] = useState<boolean>(false);
     const [disableSaveBtn, setDisableSaveBtn] = useState<boolean>(true);
     const [disableDeleteBtn, setDisableDeleteBtn] = useState<boolean>(false);
+    const [hideSaveBtn, setHideSaveBtn] = useState<boolean>(true);
 
     const [loggedIn, setLoggedIn] = useState<boolean>(true);
     const [disableEdit, setDisableEdit] = useState<boolean>(false);
@@ -42,9 +52,10 @@ const Calendar: React.FC = () => {
     const calendarApiRef = useRef<any>({});
     const clickInfoRef = useRef<any>({});
 
-    const { loading: getEventsLoading, data: events, error: getEventsError, refetch, networkStatus } = useQuery<EventInput[]>(GET_EVENTS, {
+    const { loading: getEventsLoading, data: events, error: getEventsError, refetch, networkStatus } = useQuery<EventsType>(GET_EVENTS, {
         fetchPolicy: 'no-cache',
-        notifyOnNetworkStatusChange: true
+        notifyOnNetworkStatusChange: true,
+        variables: { filter: {} }
     });
 
     const [saveEvent, { error: saveEventError, loading: saveEventLoading }] = useMutation<{ saveEvent: IEvent }, { event: IEvent }>(SAVE_EVENT, {
@@ -119,6 +130,7 @@ const Calendar: React.FC = () => {
         setDisableSaveBtn(!auth);
         setDisableEdit(!auth);
         setDisableDeleteBtn(!auth);
+        setHideSaveBtn(!auth);
         setShowModal(true);
     };
 
@@ -135,10 +147,14 @@ const Calendar: React.FC = () => {
             setDisableEdit(!equal);
             setDisableSaveBtn(!equal);
             setDisableDeleteBtn(!equal);
+            setHideSaveBtn(!equal);
+            setDisplayDeleteBtn(equal);
         } else {
             setDisableEdit(true);
             setDisableSaveBtn(true);
             setDisableDeleteBtn(true);
+            setHideSaveBtn(true);
+            setDisplayDeleteBtn(false);
         }
 
         const startDate = clickInfo.event.startStr.substring(0, clickInfo.event.startStr.lastIndexOf('-'))
@@ -149,7 +165,6 @@ const Calendar: React.FC = () => {
         setEnd(endDate);
         setIsPrivate(clickInfo.event.extendedProps.isPrivate);
         setDescription(clickInfo.event.extendedProps.description);
-        setDisplayDeleteBtn(true);
         setShowModal(true);
     };
 
@@ -194,6 +209,7 @@ const Calendar: React.FC = () => {
                     title={title}
                     closeOnSubmit={true}
                     disableSubmitBtn={disableSaveBtn}
+                    hideSubmitBtn={hideSaveBtn}
                     disableDeleteBtn={disableDeleteBtn}
                     displayDeleteBtn={displayDeleteBtn}
                     isSubmitLoading={saveEventLoading}
@@ -226,7 +242,7 @@ const Calendar: React.FC = () => {
             {(getEventsLoading || networkStatus === NetworkStatus.refetch) ? <Spinner /> :
                 events && <FullCalendar
                     initialView='dayGridMonth'
-                    initialEvents={events}
+                    initialEvents={events.eventsData.events}
                     plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
                     eventClick={handleEventClick}
                     dateClick={handleDateClick}

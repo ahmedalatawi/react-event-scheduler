@@ -1,5 +1,5 @@
 import { useMutation } from "@apollo/client";
-import { ChangeEvent, Fragment, useContext, useEffect, useState } from "react";
+import { ChangeEvent, FC, Fragment, useContext, useEffect, useState } from "react";
 import { IEvent } from "../../interfaces/types";
 import EventBody from "../EventBody/EventBody";
 import SAVE_EVENT from '../../gql/saveEvent';
@@ -7,7 +7,7 @@ import Spinner from "../UI/Spinner/Spinner";
 import Alert from "../UI/Alert/Alert";
 import AuthContext from "../../store/auth-context";
 
-const AddEvent: React.FC = () => {
+const AddEvent: FC = () => {
     const [title, setTitle] = useState<string>('');
     const [start, setStart] = useState<string>('');
     const [end, setEnd] = useState<string>('');

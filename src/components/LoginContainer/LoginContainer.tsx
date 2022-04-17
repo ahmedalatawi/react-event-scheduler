@@ -1,6 +1,6 @@
-import { useState, useRef, Fragment, useContext, useEffect } from "react";
+import { useState, useRef, Fragment, useContext, useEffect, FC } from "react";
 import useValidation from "../../hooks/useValidation";
-import { IAuth, ILoginContainer, ILoginInput, ISignupInput } from "../../interfaces/types";
+import { IAuth, ILoginInput, ISignupInput } from "../../interfaces/types";
 import Login from "../Login/Login";
 import Signup from "../Signup/Signup";
 import Alert from "../UI/Alert/Alert";
@@ -11,7 +11,13 @@ import SIGNUP_USER from '../../gql/signupUser';
 import { useLazyQuery, useMutation } from "@apollo/client";
 import AuthContext from "../../store/auth-context";
 
-const LoginContainer: React.FC<ILoginContainer> = ({ view, onClose, onSuccess }) => {
+type LoginContainerProps = {
+    view: string;
+    onClose: () => void;
+    onSuccess: () => void;
+}
+
+const LoginContainer: FC<LoginContainerProps> = ({ view, onClose, onSuccess }) => {
     const [viewType, setViewType] = useState<string>('');
     const [errorMsg, setErrorMsg] = useState<string>('');
     const [displayLoginError, setDisplayLoginError] = useState<boolean>(false);
@@ -42,7 +48,9 @@ const LoginContainer: React.FC<ILoginContainer> = ({ view, onClose, onSuccess })
             onSuccess();
         }
 
-    }, [authCtx, loginData, onSuccess, signupData]);
+    },
+        // eslint-disable-next-line
+        [loginData, signupData]);
 
     const handleSubmit = () => {
         const view = getViewType();

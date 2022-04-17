@@ -1,7 +1,14 @@
 import React from 'react';
-import { IAuthContext } from '../interfaces/types';
+import { IAuth } from '../interfaces/types';
 
-const AuthContext = React.createContext<IAuthContext>({
+type AuthContextProps = {
+    auth: IAuth | null;
+    addAuth: (auth: IAuth) => void;
+    getAuth: () => IAuth | null;
+    removeAuth: () => void;
+}
+
+const AuthContext = React.createContext<AuthContextProps>({
     auth: null,
     addAuth: () => null,
     getAuth: () => null,

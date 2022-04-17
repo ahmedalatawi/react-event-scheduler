@@ -1,8 +1,22 @@
-import { useEffect, useState, ChangeEvent } from 'react';
-import { IEventBody } from '../../interfaces/types';
+import { useEffect, useState, ChangeEvent, FC } from 'react';
 import Alert from '../UI/Alert/Alert';
 
-const EventBody: React.FC<IEventBody> = (props) => {
+type EventBodyProps = {
+    title: string;
+    start: string;
+    end: string;
+    isPrivate: boolean;
+    description: string;
+    disableEdit: boolean;
+    onTitle: (title: string) => void;
+    onStart: (date: string) => void;
+    onEnd: (date: string) => void;
+    onIsPrivate: (isPrivate: boolean) => void;
+    onDescription: (description: string) => void;
+    onValidate: (valid: boolean) => void;
+}
+
+const EventBody: FC<EventBodyProps> = (props) => {
     const [title, setTitle] = useState<string>(props.title);
     const [start, setStart] = useState<string>(props.start);
     const [end, setEnd] = useState<string>(props.end);
@@ -20,13 +34,12 @@ const EventBody: React.FC<IEventBody> = (props) => {
         const endDate = new Date(end);
 
         if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
-            start && setErrorMsg('Date & time must be valid.');
             props.onValidate(false)
         } else if (startDate.getTime() >= endDate.getTime()) {
-            setErrorMsg('End date & time must be greater than start date & time.');
+            setErrorMsg('End date/time must be greater than start date/time.');
             props.onValidate(false)
         } else if (startDate.getTime() < today.getTime()) {
-            setErrorMsg('Start date & time can not be in the past.');
+            setErrorMsg('Start date/time can not be in the past.');
             props.onValidate(false)
         } else if (!title.trim()) {
             setErrorMsg('');
@@ -73,8 +86,6 @@ const EventBody: React.FC<IEventBody> = (props) => {
         props.onIsPrivate(checked);
     };
 
-    const { onValidate } = props;
-
     useEffect(() => {
         const today = new Date();
         const startDate = new Date(start);
@@ -83,10 +94,12 @@ const EventBody: React.FC<IEventBody> = (props) => {
         // startDate.setHours(0,0,0,0)
 
         if (startDate.getTime() < today.getTime()) {
-            setErrorMsg('Event can not be saved if start date & time is in the past.');
-            onValidate(false)
+            setErrorMsg('Event can\'t be saved in the past.');
+            props.onValidate(false)
         }
-    }, [onValidate, start]);
+    },
+        // eslint-disable-next-line
+        []);
 
     return (
         <div className="row g-3">
