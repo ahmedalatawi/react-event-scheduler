@@ -1,7 +1,7 @@
-import { ApolloServer } from "apollo-server-express";
-import bodyParser from "body-parser";
-import compression from "compression";
-import express from "express";
+import { ApolloServer } from 'apollo-server-express';
+import bodyParser from 'body-parser';
+import compression from 'compression';
+import express from 'express';
 import enforce from 'express-sslify';
 import path from 'path';
 import cors from 'cors';
@@ -9,11 +9,11 @@ import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 
 import { connect } from 'mongoose';
-import { rootValue } from "./graphql/resolvers";
-import { typeDefs } from "./graphql/schema";
+import { rootValue } from './graphql/resolvers';
+import { typeDefs } from './graphql/schema';
 
 import { constants } from './config/constants';
-import { context } from "./middleware/auth";
+import { context } from './middleware/auth';
 
 dotenv.config();
 
@@ -21,7 +21,7 @@ const { ENV, PORT, URI, MONGODB_URI } = constants;
 
 const corsOptions = {
   origin: URI,
-  credentials: true
+  credentials: true,
 };
 
 const app = express();
@@ -48,7 +48,7 @@ const startServer = async () => {
   const apolloServer = new ApolloServer({
     typeDefs,
     rootValue,
-    context
+    context,
   });
 
   await apolloServer.start();
@@ -60,10 +60,9 @@ const startServer = async () => {
     app.listen(PORT, () => {
       console.log(`🚀  Server ready on port ${PORT}`);
     });
-
   } catch (err) {
     console.error('Error occured while connecting to MongoDB: ', err);
   }
-}
+};
 
 startServer();

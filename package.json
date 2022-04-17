@@ -69,7 +69,8 @@
     "eject": "react-scripts eject",
     "start:server": "cd server && ts-node-dev --respawn --transpile-only ./server.ts && wait-on tcp:4000",
     "start:web": "react-scripts start",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "pretty": "prettier --write \"./**/*.{js,jsx,css,tsx,ts,json}\""
   },
   "proxy": "http://localhost:4000/",
   "eslintConfig": {

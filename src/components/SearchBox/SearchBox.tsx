@@ -1,4 +1,4 @@
-import { NetworkStatus, useMutation, useQuery } from "@apollo/client";
+import { NetworkStatus, useMutation, useQuery } from '@apollo/client';
 import {
   ChangeEvent,
   FC,
@@ -6,24 +6,24 @@ import {
   useContext,
   useEffect,
   useState,
-} from "react";
-import { EventInput } from "@fullcalendar/react";
-import useDebounce from "../../hooks/useDebounce";
+} from 'react';
+import { EventInput } from '@fullcalendar/react';
+import useDebounce from '../../hooks/useDebounce';
 
-import GET_EVENTS from "../../gql/getEvents";
-import SAVE_EVENT from "../../gql/saveEvent";
-import DELETE_EVENT from "../../gql/deleteEvent";
+import GET_EVENTS from '../../gql/getEvents';
+import SAVE_EVENT from '../../gql/saveEvent';
+import DELETE_EVENT from '../../gql/deleteEvent';
 
-import Spinner from "../UI/Spinner/Spinner";
-import Card from "../UI/Card/Card";
+import Spinner from '../UI/Spinner/Spinner';
+import Card from '../UI/Card/Card';
 
-import "./SearchBox.css";
-import Alert from "../UI/Alert/Alert";
-import Pagination from "../Pagination/Pagination";
-import { IEvent } from "../../interfaces/types";
-import AuthContext from "../../store/auth-context";
-import Modal from "../UI/Modal/Modal";
-import EventBody from "../EventBody/EventBody";
+import './SearchBox.css';
+import Alert from '../UI/Alert/Alert';
+import Pagination from '../Pagination/Pagination';
+import { IEvent } from '../../interfaces/types';
+import AuthContext from '../../store/auth-context';
+import Modal from '../UI/Modal/Modal';
+import EventBody from '../EventBody/EventBody';
 
 const EVENTS_PER_PAGE = 20;
 
@@ -37,18 +37,18 @@ type EventsType = {
 };
 
 const SearchBox: FC = () => {
-  const [searchText, setSearchText] = useState<string>("");
+  const [searchText, setSearchText] = useState<string>('');
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [showModal, setShowModal] = useState<boolean>(false);
   const debouncedSearchText = useDebounce(searchText);
 
-  const [title, setTitle] = useState<string>("");
-  const [id, setId] = useState<string>("");
-  const [eventTitle, setEventTitle] = useState<string>("");
-  const [start, setStart] = useState<string>("");
-  const [end, setEnd] = useState<string>("");
+  const [title, setTitle] = useState<string>('');
+  const [id, setId] = useState<string>('');
+  const [eventTitle, setEventTitle] = useState<string>('');
+  const [start, setStart] = useState<string>('');
+  const [end, setEnd] = useState<string>('');
   const [isPrivate, setIsPrivate] = useState<boolean>(false);
-  const [description, setDescription] = useState<string>("");
+  const [description, setDescription] = useState<string>('');
 
   const [displayDeleteBtn, setDisplayDeleteBtn] = useState<boolean>(false);
   const [hideSaveBtn, setHideSaveBtn] = useState<boolean>(true);
@@ -60,7 +60,7 @@ const SearchBox: FC = () => {
   const { loading, data, error, refetch, networkStatus } = useQuery<EventsType>(
     GET_EVENTS,
     {
-      fetchPolicy: "no-cache",
+      fetchPolicy: 'no-cache',
       notifyOnNetworkStatusChange: true,
       variables: {
         filter: {
@@ -82,24 +82,24 @@ const SearchBox: FC = () => {
 
   const handleOnSubmit = (event: ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log("value2 ", searchText);
+    console.log('value2 ', searchText);
     refetch();
   };
 
   const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchText(event.target.value);
-    console.log("value ", event.target.value);
+    console.log('value ', event.target.value);
   };
 
   const getExSubTitle = (endTime: string) => {
     const today = new Date();
     const endDate = new Date(endTime);
 
-    return endDate.getTime() < today.getTime() ? "Expired" : "";
+    return endDate.getTime() < today.getTime() ? 'Expired' : '';
   };
 
   const clickEventHandler = (event: IEvent) => {
-    setTitle("Update Event");
+    setTitle('Update Event');
 
     const auth = authCtx.getAuth();
 
@@ -113,7 +113,7 @@ const SearchBox: FC = () => {
       setHideSaveBtn(true);
     }
 
-    setId(event.id ?? "");
+    setId(event.id ?? '');
     setEventTitle(event.title);
     setStart(event.start);
     setEnd(event.end);
@@ -224,30 +224,24 @@ const SearchBox: FC = () => {
         {loading || networkStatus === NetworkStatus.refetch ? (
           <Spinner />
         ) : data?.eventsData?.events?.length ? (
-          data.eventsData.events
-            .sort(
-              (a, b) =>
-                new Date(b.end as string).getTime() -
-                new Date(a.end as string).getTime()
-            )
-            .map((event) => {
-              return (
-                <div className="event-card" key={event.id}>
-                  <Card
-                    isPrivate={event.isPrivate}
-                    title={event.title ?? ""}
-                    subtitle={`${new Date(
-                      event.start as string
-                    ).toLocaleString()} - ${new Date(
-                      event.end as string
-                    ).toLocaleString()}`}
-                    exSubTitle={getExSubTitle(event.end as string)}
-                    content={event.description}
-                    onClick={() => clickEventHandler(event as IEvent)}
-                  />
-                </div>
-              );
-            })
+          data.eventsData.events.map((event) => {
+            return (
+              <div className="event-card" key={event.id}>
+                <Card
+                  isPrivate={event.isPrivate}
+                  title={event.title ?? ''}
+                  subtitle={`${new Date(
+                    event.start as string
+                  ).toLocaleString()} - ${new Date(
+                    event.end as string
+                  ).toLocaleString()}`}
+                  exSubTitle={getExSubTitle(event.end as string)}
+                  content={event.description}
+                  onClick={() => clickEventHandler(event as IEvent)}
+                />
+              </div>
+            );
+          })
         ) : !error ? (
           <div className="event-card">
             <Alert

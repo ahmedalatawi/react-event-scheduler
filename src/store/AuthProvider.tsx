@@ -9,12 +9,14 @@ const AuthProvider: FC = (props) => {
 
   const { getAuth, addAuth, removeAuth } = useAuth();
 
-  useEffect(() => {
-    const storedAuth = getAuth();
-    setAuth(storedAuth)
-  },
+  useEffect(
+    () => {
+      const storedAuth = getAuth();
+      setAuth(storedAuth);
+    },
     // eslint-disable-next-line
-    []);
+    []
+  );
 
   const addAuthHandler = (auth: IAuth) => {
     addAuth(auth);
@@ -24,7 +26,7 @@ const AuthProvider: FC = (props) => {
   const removeAuthHandler = () => {
     removeAuth();
     setAuth(null);
-  }
+  };
 
   const authContext = {
     auth,

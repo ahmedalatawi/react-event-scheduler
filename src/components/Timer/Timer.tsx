@@ -1,15 +1,15 @@
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useEffect, useRef, useState } from 'react';
 
 type TimerProps = {
   seconds: number;
   onTimeout: () => void;
-}
+};
 
 const Timer: FC<TimerProps> = ({ seconds, onTimeout }) => {
   const [timeLeft, setTimeLeft] = useState<number>(seconds);
   const intervalRef = useRef<any>({});
 
-  console.log('Timer...')
+  console.log('Timer...');
 
   useEffect(() => {
     intervalRef.current = setInterval(() => {

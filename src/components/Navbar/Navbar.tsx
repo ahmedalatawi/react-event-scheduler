@@ -1,27 +1,27 @@
-import { useState, Fragment, useContext, useEffect, FC } from "react";
-import { Container, Form, Nav, Navbar } from "react-bootstrap";
-import { NavLink } from "react-router-dom";
-import AuthContext from "../../store/auth-context";
-import LoginContainer from "../LoginContainer/LoginContainer";
+import { useState, Fragment, useContext, useEffect, FC } from 'react';
+import { Container, Form, Nav, Navbar } from 'react-bootstrap';
+import { NavLink } from 'react-router-dom';
+import AuthContext from '../../store/auth-context';
+import LoginContainer from '../LoginContainer/LoginContainer';
 
 const MainNavbar: FC = () => {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
-  const [view, setView] = useState<string>("Login");
+  const [view, setView] = useState<string>('Login');
 
   const authCtx = useContext(AuthContext);
 
-  console.log("Navbar...");
+  console.log('Navbar...');
 
   useEffect(() => setLoggedIn(!!authCtx.getAuth()), [authCtx]);
 
   const handleLoginBtnClick = () => {
-    setView("Login");
+    setView('Login');
     setShowModal(true);
   };
 
   const handleSignupBtnClick = () => {
-    setView("Signup");
+    setView('Signup');
     setShowModal(true);
   };
 
@@ -31,9 +31,9 @@ const MainNavbar: FC = () => {
   };
 
   const isActiveStyle = {
-    textDecoration: "none",
+    textDecoration: 'none',
     fontWeight: 600,
-    color: "black",
+    color: 'black',
   };
 
   return (

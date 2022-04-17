@@ -1,132 +1,172 @@
-import { useState, useRef, Fragment, useContext, useEffect, FC } from "react";
-import useValidation from "../../hooks/useValidation";
-import { IAuth, ILoginInput, ISignupInput } from "../../interfaces/types";
-import Login from "../Login/Login";
-import Signup from "../Signup/Signup";
-import Alert from "../UI/Alert/Alert";
-import Modal from "../UI/Modal/Modal";
+import { useState, useRef, Fragment, useContext, useEffect, FC } from 'react';
+import useValidation from '../../hooks/useValidation';
+import { IAuth, ILoginInput, ISignupInput } from '../../interfaces/types';
+import Login from '../Login/Login';
+import Signup from '../Signup/Signup';
+import Alert from '../UI/Alert/Alert';
+import Modal from '../UI/Modal/Modal';
 
 import LOGIN_USER from '../../gql/loginUser';
 import SIGNUP_USER from '../../gql/signupUser';
-import { useLazyQuery, useMutation } from "@apollo/client";
-import AuthContext from "../../store/auth-context";
+import { useLazyQuery, useMutation } from '@apollo/client';
+import AuthContext from '../../store/auth-context';
 
 type LoginContainerProps = {
-    view: string;
-    onClose: () => void;
-    onSuccess: () => void;
-}
+  view: string;
+  onClose: () => void;
+  onSuccess: () => void;
+};
 
-const LoginContainer: FC<LoginContainerProps> = ({ view, onClose, onSuccess }) => {
-    const [viewType, setViewType] = useState<string>('');
-    const [errorMsg, setErrorMsg] = useState<string>('');
-    const [displayLoginError, setDisplayLoginError] = useState<boolean>(false);
-    const [closeOnSuccess, setCloseOnSuccess] = useState<boolean>(false);
+const LoginContainer: FC<LoginContainerProps> = ({
+  view,
+  onClose,
+  onSuccess,
+}) => {
+  const [viewType, setViewType] = useState<string>('');
+  const [errorMsg, setErrorMsg] = useState<string>('');
+  const [displayLoginError, setDisplayLoginError] = useState<boolean>(false);
+  const [closeOnSuccess, setCloseOnSuccess] = useState<boolean>(false);
 
-    const usernameRef = useRef<any>({});
-    const passwordRef = useRef<any>({});
-    const confirmPasswordRef = useRef<any>({});
+  const usernameRef = useRef<any>({});
+  const passwordRef = useRef<any>({});
+  const confirmPasswordRef = useRef<any>({});
 
-    const [validate] = useValidation(setErrorMsg);
+  const [validate] = useValidation(setErrorMsg);
 
-    const [login, { error: loginError, data: loginData, loading: loginLoading }] = useLazyQuery<{ auth: IAuth }, { login: ILoginInput }>(LOGIN_USER);
-    const [signup, { error: signupError, data: signupData, loading: signupLoading, reset }] = useMutation<{ auth: IAuth }, { signup: ISignupInput }>(SIGNUP_USER);
+  const [login, { error: loginError, data: loginData, loading: loginLoading }] =
+    useLazyQuery<{ auth: IAuth }, { login: ILoginInput }>(LOGIN_USER);
+  const [
+    signup,
+    { error: signupError, data: signupData, loading: signupLoading, reset },
+  ] = useMutation<{ auth: IAuth }, { signup: ISignupInput }>(SIGNUP_USER);
 
-    const authCtx = useContext(AuthContext);
+  const authCtx = useContext(AuthContext);
 
-    console.log('LoginContainer...');
+  console.log('LoginContainer...');
 
-    useEffect(() => {
-        const auth: any = loginData || signupData;
+  useEffect(
+    () => {
+      const auth: any = loginData || signupData;
 
-        if (auth) {
-            const { userId, token, tokenExpiration, username } = auth.login || auth.signup;
+      if (auth) {
+        const { userId, token, tokenExpiration, username } =
+          auth.login || auth.signup;
 
-            authCtx.addAuth({ userId, token, tokenExpiration, username });
+        authCtx.addAuth({ userId, token, tokenExpiration, username });
 
-            setCloseOnSuccess(true);
-            onSuccess();
-        }
-
+        setCloseOnSuccess(true);
+        onSuccess();
+      }
     },
-        // eslint-disable-next-line
-        [loginData, signupData]);
+    // eslint-disable-next-line
+    [loginData, signupData]
+  );
 
-    const handleSubmit = () => {
-        const view = getViewType();
-        const username = usernameRef.current?.value;
-        const password = passwordRef.current?.value;
-        const confirmPassword = confirmPasswordRef.current?.value;
+  const handleSubmit = () => {
+    const view = getViewType();
+    const username = usernameRef.current?.value;
+    const password = passwordRef.current?.value;
+    const confirmPassword = confirmPasswordRef.current?.value;
 
+    setDisplayLoginError(false);
+    reset();
+    setCloseOnSuccess(false);
+
+    const isValid = validate(username, password, confirmPassword, view);
+
+    if (isValid) {
+      if (view === 'Signup') {
         setDisplayLoginError(false);
-        reset();
-        setCloseOnSuccess(false);
-
-        const isValid = validate(username, password, confirmPassword, view);
-
-        if (isValid) {
-            if (view === 'Signup') {
-                setDisplayLoginError(false)
-                signup({ variables: { signup: { username, password, confirmPassword } } });
-            } else {
-                setDisplayLoginError(true)
-                login({ variables: { login: { username, password } } });
-            }
-        }
-    };
-
-    const handleUsernameChange = (username: string) => {
-        usernameRef.current.value = username;
-        setErrorMsg('')
-    };
-
-    const handlePasswordChange = (password: string) => {
-        passwordRef.current.value = password;
-        setErrorMsg('')
-    };
-
-    const handleConfirmPasswordChange = (confirmPassword: string) => {
-        confirmPasswordRef.current.value = confirmPassword;
-        setErrorMsg('')
-    };
-
-    const getViewType = (): string => {
-        return viewType ? viewType : view;
+        signup({
+          variables: { signup: { username, password, confirmPassword } },
+        });
+      } else {
+        setDisplayLoginError(true);
+        login({ variables: { login: { username, password } } });
+      }
     }
+  };
 
-    const handleToggleView = (view: string) => {
-        setErrorMsg('');
-        setViewType(view);
-        reset();
-        setDisplayLoginError(false);
-    }
+  const handleUsernameChange = (username: string) => {
+    usernameRef.current.value = username;
+    setErrorMsg('');
+  };
 
-    return <Modal
-        title={getViewType()}
-        submitBtnName={getViewType()}
-        closeOnSubmit={closeOnSuccess}
-        disableSubmitBtn={false}
-        isSubmitLoading={loginLoading || signupLoading}
-        onClose={() => onClose()}
-        onSubmit={handleSubmit}
-        children={
-            <Fragment>
-                {errorMsg && <Alert msg={errorMsg} type="warning" ariaLabel="Warning:" fillType="#exclamation-triangle-fill" />}
-                {(displayLoginError && loginError) && <Alert msg={loginError.message} type="danger" ariaLabel="Danger:" fillType="#exclamation-triangle-fill" />}
-                {signupError && <Alert msg={signupError.message} type="danger" ariaLabel="Danger:" fillType="#exclamation-triangle-fill" />}
+  const handlePasswordChange = (password: string) => {
+    passwordRef.current.value = password;
+    setErrorMsg('');
+  };
 
-                {getViewType() === 'Login' ?
-                    <Login onChangeUsername={handleUsernameChange}
-                        onChangePassword={handlePasswordChange}
-                        onToggleLogin={() => handleToggleView('Signup')} /> :
+  const handleConfirmPasswordChange = (confirmPassword: string) => {
+    confirmPasswordRef.current.value = confirmPassword;
+    setErrorMsg('');
+  };
 
-                    <Signup onChangeUsername={handleUsernameChange}
-                        onChangePassword={handlePasswordChange}
-                        onChangeConfirmPassword={handleConfirmPasswordChange}
-                        onToggleSignup={() => handleToggleView('Login')} />}
-            </Fragment>
-        }
+  const getViewType = (): string => {
+    return viewType ? viewType : view;
+  };
+
+  const handleToggleView = (view: string) => {
+    setErrorMsg('');
+    setViewType(view);
+    reset();
+    setDisplayLoginError(false);
+  };
+
+  return (
+    <Modal
+      title={getViewType()}
+      submitBtnName={getViewType()}
+      closeOnSubmit={closeOnSuccess}
+      disableSubmitBtn={false}
+      isSubmitLoading={loginLoading || signupLoading}
+      onClose={() => onClose()}
+      onSubmit={handleSubmit}
+      children={
+        <Fragment>
+          {errorMsg && (
+            <Alert
+              msg={errorMsg}
+              type="warning"
+              ariaLabel="Warning:"
+              fillType="#exclamation-triangle-fill"
+            />
+          )}
+          {displayLoginError && loginError && (
+            <Alert
+              msg={loginError.message}
+              type="danger"
+              ariaLabel="Danger:"
+              fillType="#exclamation-triangle-fill"
+            />
+          )}
+          {signupError && (
+            <Alert
+              msg={signupError.message}
+              type="danger"
+              ariaLabel="Danger:"
+              fillType="#exclamation-triangle-fill"
+            />
+          )}
+
+          {getViewType() === 'Login' ? (
+            <Login
+              onChangeUsername={handleUsernameChange}
+              onChangePassword={handlePasswordChange}
+              onToggleLogin={() => handleToggleView('Signup')}
+            />
+          ) : (
+            <Signup
+              onChangeUsername={handleUsernameChange}
+              onChangePassword={handlePasswordChange}
+              onChangeConfirmPassword={handleConfirmPasswordChange}
+              onToggleSignup={() => handleToggleView('Login')}
+            />
+          )}
+        </Fragment>
+      }
     />
+  );
 };
 
 export default LoginContainer;

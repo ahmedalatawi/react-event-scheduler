@@ -9,8 +9,8 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 // must manually import the stylesheets for each plugin
 //import "@fullcalendar/core/main.css";
-import "@fullcalendar/daygrid/main.css";
-import "@fullcalendar/timegrid/main.css";
+import '@fullcalendar/daygrid/main.css';
+import '@fullcalendar/timegrid/main.css';
 
 import reportWebVitals from './reportWebVitals';
 import AuthProvider from './store/AuthProvider';

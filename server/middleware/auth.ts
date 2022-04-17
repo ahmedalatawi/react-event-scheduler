@@ -15,7 +15,6 @@ export const context = ({ req, res }) => {
 
   try {
     decodedToken = jwt.verify(auth.token, JWT_SECRET);
-
   } catch (err) {
     req.isAuthorized = false;
     return req;

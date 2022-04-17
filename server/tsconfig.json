@@ -5,7 +5,7 @@
     "target": "es6",
     "moduleResolution": "node",
     "noUnusedLocals": false
-  },
+  }
   //"include": ["graphql/**/*", "models/**/*", "utils/**/*", "server.ts"]
   //"include": ["server.ts"]
 }

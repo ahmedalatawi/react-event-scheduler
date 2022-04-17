@@ -59,7 +59,7 @@ const Pagination: FC<PaginationProps> = ({
         );
       } else {
         pages.push(
-          <ReactBootstrapPagination.Ellipsis key={i} className='muted' />
+          <ReactBootstrapPagination.Ellipsis key={i} className="muted" />
         );
       }
     }

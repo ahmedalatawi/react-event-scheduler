@@ -17,7 +17,7 @@ function App() {
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
 
   const authCtx = useContext(AuthContext);
-  
+
   useEffect(() => setLoggedIn(!!authCtx.getAuth()), [authCtx]);
 
   return (
@@ -37,7 +37,6 @@ function App() {
             <Route path="/addEvent" element={<AddEvent />} />
             <Route path="/calendar" element={<Calendar />} />
           </Routes>
-
         </BrowserRouter>
       </ApolloProvider>
     </div>

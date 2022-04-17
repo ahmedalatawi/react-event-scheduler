@@ -7,6 +7,6 @@
 }
 
 .required .form-label:after {
-  content:"*";
-  color:red;
+  content: '*';
+  color: red;
 }
