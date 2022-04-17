@@ -25,7 +25,7 @@ import AuthContext from '../../store/auth-context';
 import Modal from '../UI/Modal/Modal';
 import EventBody from '../EventBody/EventBody';
 
-const EVENTS_PER_PAGE = 2;
+const EVENTS_PER_PAGE = 20;
 
 type EventsDataType = {
   totalCount: number;
