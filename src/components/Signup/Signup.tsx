@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import { ChangeEvent, FC } from "react";
 
 type SignupProps = {
@@ -45,7 +46,7 @@ const Signup: FC<SignupProps> = ({ onChangeUsername, onChangePassword, onChangeC
                 onChange={(e: ChangeEvent<HTMLInputElement>) => onChangeConfirmPassword(e.target.value.trim())} />
         </div>
         <div className="col-12">
-            <p className="mb-0">Already have an account? <a onClick={onToggleSignup} href="/#">Login</a></p>
+            <p className="mb-0">Already have an account? <a onClick={onToggleSignup} href="#">Login</a></p>
         </div>
     </div>
 };

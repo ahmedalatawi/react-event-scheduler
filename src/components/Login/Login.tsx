@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import { ChangeEvent, FC } from "react";
 
 type LoginProps = {
@@ -32,7 +33,7 @@ const Login: FC<LoginProps> = ({ onChangePassword, onChangeUsername, onToggleLog
                 onChange={(e: ChangeEvent<HTMLInputElement>) => onChangePassword(e.target.value.trim())} />
         </div>
         <div className="col-12">
-            <p className="mb-0">Don't have an account yet? <a onClick={onToggleLogin} href="/#">Signup</a></p>
+            <p className="mb-0">Don't have an account yet? <a onClick={onToggleLogin} href="#">Signup</a></p>
         </div>
     </div>
 };
