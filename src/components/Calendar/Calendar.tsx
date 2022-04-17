@@ -129,6 +129,9 @@ const Calendar: FC = () => {
             extendedProps: {
               isPrivate,
               description,
+              createdBy: {
+                _id: authCtx.auth?.userId,
+              },
             },
           });
         }
