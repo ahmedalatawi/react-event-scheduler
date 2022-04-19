@@ -4,7 +4,15 @@ import { UserModel } from '../../models/user';
 
 export const Events = {
   eventsData: async (
-    { filterInput: { searchText = '', pageNumber = 0, pageSize = 0 } },
+    {
+      filterInput: {
+        searchText = '',
+        pageNumber = 0,
+        pageSize = 0,
+        expiredCheck,
+        currentCheck,
+      },
+    },
     { isAuthorized, userId }
   ) => {
     const filter =
@@ -16,12 +24,21 @@ export const Events = {
       title: { $regex: searchText, $options: 'six' },
     };
 
+    const statusFilter = currentCheck
+      ? { end: { $gte: new Date().toISOString() } }
+      : expiredCheck
+      ? { end: { $lt: new Date().toISOString() } }
+      : {};
+
     try {
-      const events = await EventModel.find(regexFilter)
+      const events = await EventModel.find({ ...regexFilter, ...statusFilter })
         .sort({ end: -1 })
         .limit(pageSize)
         .skip(pageNumber > 0 ? (pageNumber - 1) * pageSize : 0);
-      const totalCount = await EventModel.countDocuments(regexFilter);
+      const totalCount = await EventModel.countDocuments({
+        ...regexFilter,
+        ...statusFilter,
+      });
 
       return { totalCount, events };
     } catch (err) {

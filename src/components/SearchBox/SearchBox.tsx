@@ -24,6 +24,7 @@ import { IEvent } from '../../interfaces/types';
 import AuthContext from '../../store/auth-context';
 import Modal from '../UI/Modal/Modal';
 import EventBody from '../EventBody/EventBody';
+import { Form } from 'react-bootstrap';
 
 const EVENTS_PER_PAGE = 20;
 
@@ -55,6 +56,10 @@ const SearchBox: FC = () => {
   const [disableSaveBtn, setDisableSaveBtn] = useState<boolean>(false);
   const [disableDeleteBtn, setDisableDeleteBtn] = useState<boolean>(false);
 
+  const [allCheck, setAllCheck] = useState<boolean>(true);
+  const [currentCheck, setCurrentCheck] = useState<boolean>(false);
+  const [expiredCheck, setExpiredCheck] = useState<boolean>(false);
+
   const authCtx = useContext(AuthContext);
 
   const { loading, data, error, refetch, networkStatus } = useQuery<EventsType>(
@@ -67,6 +72,8 @@ const SearchBox: FC = () => {
           searchText: debouncedSearchText.trim(),
           pageSize: EVENTS_PER_PAGE,
           pageNumber: currentPage,
+          currentCheck,
+          expiredCheck,
         },
       },
     }
@@ -175,6 +182,27 @@ const SearchBox: FC = () => {
     [authCtx]
   );
 
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    e.persist();
+    setAllCheck(!allCheck);
+    setCurrentCheck(false);
+    setExpiredCheck(false);
+  };
+
+  const handleChange2 = (e: ChangeEvent<HTMLInputElement>) => {
+    e.persist();
+    setCurrentCheck(!currentCheck);
+    setAllCheck(false);
+    setExpiredCheck(false);
+  };
+
+  const handleChange3 = (e: ChangeEvent<HTMLInputElement>) => {
+    e.persist();
+    setExpiredCheck(!expiredCheck);
+    setAllCheck(false);
+    setCurrentCheck(false);
+  };
+
   return (
     <>
       {error && (
@@ -203,6 +231,36 @@ const SearchBox: FC = () => {
           fillType="#exclamation-triangle-fill"
         />
       )}
+
+      <Form>
+        <div className="mb-4 mt-3">
+          <span className="me-3 fs-5">Filter by: </span>
+          <Form.Check
+            inline
+            label="All"
+            name="group"
+            type="radio"
+            defaultChecked={allCheck}
+            onChange={handleChange}
+          />
+          <Form.Check
+            inline
+            label="Current"
+            name="group"
+            type="radio"
+            defaultChecked={currentCheck}
+            onChange={handleChange2}
+          />
+          <Form.Check
+            inline
+            label="Expired"
+            name="group"
+            type="radio"
+            defaultChecked={expiredCheck}
+            onChange={handleChange3}
+          />
+        </div>
+      </Form>
 
       <form
         className="d-flex"

@@ -55,6 +55,8 @@ export const typeDefs = gql`
     searchText: String
     pageNumber: Int
     pageSize: Int
+    expiredCheck: Boolean
+    currentCheck: Boolean
   }
 
   type Query {
