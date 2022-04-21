@@ -182,22 +182,29 @@ const SearchBox: FC = () => {
     [authCtx]
   );
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleFilterByAllEventsChange = (e: ChangeEvent<HTMLInputElement>) => {
     e.persist();
+    setCurrentPage(1);
     setAllCheck(!allCheck);
     setCurrentCheck(false);
     setExpiredCheck(false);
   };
 
-  const handleChange2 = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleFilterByCurrentEventsChange = (
+    e: ChangeEvent<HTMLInputElement>
+  ) => {
     e.persist();
+    setCurrentPage(1);
     setCurrentCheck(!currentCheck);
     setAllCheck(false);
     setExpiredCheck(false);
   };
 
-  const handleChange3 = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleFilterByExpiredEventsChange = (
+    e: ChangeEvent<HTMLInputElement>
+  ) => {
     e.persist();
+    setCurrentPage(1);
     setExpiredCheck(!expiredCheck);
     setAllCheck(false);
     setCurrentCheck(false);
@@ -241,7 +248,7 @@ const SearchBox: FC = () => {
             name="group"
             type="radio"
             defaultChecked={allCheck}
-            onChange={handleChange}
+            onChange={handleFilterByAllEventsChange}
           />
           <Form.Check
             inline
@@ -249,7 +256,7 @@ const SearchBox: FC = () => {
             name="group"
             type="radio"
             defaultChecked={currentCheck}
-            onChange={handleChange2}
+            onChange={handleFilterByCurrentEventsChange}
           />
           <Form.Check
             inline
@@ -257,7 +264,7 @@ const SearchBox: FC = () => {
             name="group"
             type="radio"
             defaultChecked={expiredCheck}
-            onChange={handleChange3}
+            onChange={handleFilterByExpiredEventsChange}
           />
         </div>
       </Form>
