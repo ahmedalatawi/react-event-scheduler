@@ -40,6 +40,7 @@ const Calendar: FC = () => {
   const [end, setEnd] = useState<string>('');
   const [isPrivate, setIsPrivate] = useState<boolean>(false);
   const [description, setDescription] = useState<string>('');
+  const [createdById, setCreatedById] = useState<string>('');
 
   const [displayDeleteBtn, setDisplayDeleteBtn] = useState<boolean>(false);
   const [disableSaveBtn, setDisableSaveBtn] = useState<boolean>(true);
@@ -159,6 +160,7 @@ const Calendar: FC = () => {
     setDisableEdit(!auth);
     setDisableDeleteBtn(!auth);
     setHideSaveBtn(!auth);
+    setCreatedById('');
     setShowModal(true);
   };
 
@@ -199,6 +201,7 @@ const Calendar: FC = () => {
     setEnd(endDate);
     setIsPrivate(clickInfo.event.extendedProps.isPrivate);
     setDescription(clickInfo.event.extendedProps.description);
+    setCreatedById(clickInfo.event.extendedProps.createdBy._id);
     setShowModal(true);
   };
 
@@ -278,6 +281,7 @@ const Calendar: FC = () => {
                 isPrivate={isPrivate}
                 description={description}
                 disableEdit={disableEdit}
+                createdById={createdById}
                 onTitle={(title) => setEventTitle(title)}
                 onDescription={(description) => setDescription(description)}
                 onStart={(start) => setStart(start)}

@@ -50,6 +50,7 @@ const SearchBox: FC = () => {
   const [end, setEnd] = useState<string>('');
   const [isPrivate, setIsPrivate] = useState<boolean>(false);
   const [description, setDescription] = useState<string>('');
+  const [createdById, setCreatedById] = useState<string>('');
 
   const [displayDeleteBtn, setDisplayDeleteBtn] = useState<boolean>(false);
   const [hideSaveBtn, setHideSaveBtn] = useState<boolean>(true);
@@ -126,6 +127,7 @@ const SearchBox: FC = () => {
     setEnd(event.end);
     setIsPrivate(event.isPrivate);
     setDescription(event.description);
+    setCreatedById(event.createdBy._id);
     setShowModal(true);
   };
 
@@ -344,30 +346,21 @@ const SearchBox: FC = () => {
           onDelete={handleDeleteEvent}
           onSubmit={handleSaveEvent}
           children={
-            <Fragment>
-              {!authCtx.getAuth() && (
-                <Alert
-                  msg="You must log in to be able to edit events."
-                  type="warning"
-                  ariaLabel="Warning:"
-                  fillType="#exclamation-triangle-fill"
-                />
-              )}
-              <EventBody
-                title={eventTitle}
-                start={start}
-                end={end}
-                isPrivate={isPrivate}
-                description={description}
-                disableEdit={false}
-                onTitle={(title) => setEventTitle(title)}
-                onDescription={(description) => setDescription(description)}
-                onStart={(start) => setStart(start)}
-                onEnd={(end) => setEnd(end)}
-                onIsPrivate={(isPrivate) => setIsPrivate(isPrivate)}
-                onValidate={(valid) => setDisableSaveBtn(!valid)}
-              />
-            </Fragment>
+            <EventBody
+              title={eventTitle}
+              start={start}
+              end={end}
+              isPrivate={isPrivate}
+              description={description}
+              disableEdit={false}
+              createdById={createdById}
+              onTitle={(title) => setEventTitle(title)}
+              onDescription={(description) => setDescription(description)}
+              onStart={(start) => setStart(start)}
+              onEnd={(end) => setEnd(end)}
+              onIsPrivate={(isPrivate) => setIsPrivate(isPrivate)}
+              onValidate={(valid) => setDisableSaveBtn(!valid)}
+            />
           }
         />
       )}

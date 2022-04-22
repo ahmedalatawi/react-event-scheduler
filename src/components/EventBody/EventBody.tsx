@@ -1,4 +1,5 @@
-import { useEffect, useState, ChangeEvent, FC } from 'react';
+import { useEffect, useState, ChangeEvent, FC, useContext } from 'react';
+import AuthContext from '../../store/auth-context';
 import Alert from '../UI/Alert/Alert';
 
 type EventBodyProps = {
@@ -8,6 +9,7 @@ type EventBodyProps = {
   isPrivate: boolean;
   description: string;
   disableEdit: boolean;
+  createdById?: string;
   onTitle: (title: string) => void;
   onStart: (date: string) => void;
   onEnd: (date: string) => void;
@@ -24,6 +26,8 @@ const EventBody: FC<EventBodyProps> = (props) => {
   const [description, setDescription] = useState<string>(props.description);
 
   const [errorMsg, setErrorMsg] = useState<string>('');
+
+  const authCtx = useContext(AuthContext);
 
   console.log('EventBody...');
 
@@ -87,15 +91,18 @@ const EventBody: FC<EventBodyProps> = (props) => {
 
   useEffect(
     () => {
+      const auth = authCtx.getAuth();
       const today = new Date();
       const startDate = new Date(start);
 
       // today.setHours(0,0,0,0)
       // startDate.setHours(0,0,0,0)
 
-      if (startDate.getTime() < today.getTime()) {
-        setErrorMsg("Event can't be saved in the past.");
-        props.onValidate(false);
+      if (auth?.userId === props.createdById || props.createdById === '') {
+        if (startDate.getTime() < today.getTime()) {
+          setErrorMsg("Event can't be saved in the past.");
+          props.onValidate(false);
+        }
       }
     },
     // eslint-disable-next-line
