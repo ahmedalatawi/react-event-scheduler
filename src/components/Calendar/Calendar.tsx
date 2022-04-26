@@ -165,6 +165,7 @@ const Calendar: FC = () => {
   };
 
   const handleEventClick = (clickInfo: EventClickArg) => {
+    clickInfo.jsEvent.preventDefault();
     clickInfoRef.current.value = clickInfo;
 
     setTitle('Update Event');
