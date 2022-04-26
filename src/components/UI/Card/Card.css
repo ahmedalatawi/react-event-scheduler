@@ -1,9 +1,9 @@
-.card:hover {
+.card-custom:hover {
   background-color: rgba(242, 241, 239);
   cursor: pointer;
 }
 
-.small-font {
+.card-small-font {
   font-size: small !important;
   font-weight: 500 !important;
 }

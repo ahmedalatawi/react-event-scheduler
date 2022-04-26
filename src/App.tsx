@@ -12,6 +12,7 @@ import PageNotFound from './components/PageNotFound/PageNotFound';
 import UserIdleTimer from './components/UserIdleTimer/UserIdleTimer';
 import { useContext, useEffect, useState } from 'react';
 import AuthContext from './store/auth-context';
+import SharedEvent from './components/SharedEvent/SharedEvent';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
@@ -36,6 +37,7 @@ function App() {
             <Route path="/searchEvents" element={<SearchBox />} />
             <Route path="/addEvent" element={<AddEvent />} />
             <Route path="/calendar" element={<Calendar />} />
+            <Route path="/sharedEvent/:id" element={<SharedEvent />} />
           </Routes>
         </BrowserRouter>
       </ApolloProvider>

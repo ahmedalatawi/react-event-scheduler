@@ -4,7 +4,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ![](./images/react-event-pic.gif)
 
-Event Scheduler is a React app that allows users to create events. An event can be anything, such as a sport event, team meeting, personal note, etc. An event consists of title, start and end date/time, and description. All events are public by default (visible to everyone). They can also be private (only visible to you) by checking the private checkmark.
+Event Scheduler is a React app that allows users to create events. An event can be anything, such as a sport event, team meeting, party announcement, personal advertisement, etc. An event consists of title, start and end date/time, and description. All events are public by default (visible to everyone). They can also be private (only visible to you) by checking the private checkmark.
 
 > You can only edit or remove an event if you're the owner of that event.
 
@@ -36,7 +36,7 @@ Event Scheduler is a React app that allows users to create events. An event can 
 
 In the project directory, you can run:
 
-### `npm start`
+### `npm start` or `yarn start`
 
 Runs the backend and frontend apps simultaneously in the development mode.\
 
@@ -54,12 +54,12 @@ You will also see any lint errors in the console.
 - Search & pagination
 - Make events as private (only visible to creators)
 - Session expiry warning (displayed when being idle for 3 minutes after logging in)
+- Share events with family & friends on Facebook and Twitter
 
 ### Coming soon
 
 - User profile
 - Admin tab & profile
-- Share events with family & friends on Facebook
 
 ## Run unit tests
 

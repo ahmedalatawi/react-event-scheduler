@@ -7,6 +7,7 @@ export const typeDefs = gql`
 
   type User {
     _id: String!
+    username: String!
   }
 
   type EventFull {
@@ -14,9 +15,12 @@ export const typeDefs = gql`
     title: String!
     start: String!
     end: String!
+    url: String
     isPrivate: Boolean!
     description: String!
     createdBy: User
+    createdAt: Float
+    updatedAt: Float
   }
 
   type Events {
@@ -67,6 +71,7 @@ export const typeDefs = gql`
   type Mutation {
     signup(userInput: UserInput!): Auth!
     saveEvent(event: EventInput!): Event
+    getEvent(id: ID!): EventFull!
     deleteEvent(id: ID!): Boolean!
   }
 `;

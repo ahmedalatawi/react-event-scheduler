@@ -93,13 +93,10 @@ const EventBody: FC<EventBodyProps> = (props) => {
     () => {
       const auth = authCtx.getAuth();
       const today = new Date();
-      const startDate = new Date(start);
-
-      // today.setHours(0,0,0,0)
-      // startDate.setHours(0,0,0,0)
+      const endDate = new Date(end);
 
       if (auth?.userId === props.createdById || props.createdById === '') {
-        if (startDate.getTime() < today.getTime()) {
+        if (endDate.getTime() < today.getTime()) {
           setErrorMsg("Event can't be saved in the past.");
           props.onValidate(false);
         }

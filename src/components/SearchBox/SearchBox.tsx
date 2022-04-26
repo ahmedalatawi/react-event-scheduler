@@ -1,12 +1,5 @@
 import { NetworkStatus, useMutation, useQuery } from '@apollo/client';
-import {
-  ChangeEvent,
-  FC,
-  Fragment,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import { ChangeEvent, FC, useContext, useEffect, useState } from 'react';
 import { EventInput } from '@fullcalendar/react';
 import useDebounce from '../../hooks/useDebounce';
 
@@ -90,13 +83,11 @@ const SearchBox: FC = () => {
 
   const handleOnSubmit = (event: ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log('value2 ', searchText);
     refetch();
   };
 
   const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchText(event.target.value);
-    console.log('value ', event.target.value);
   };
 
   const getExSubTitle = (endTime: string) => {
@@ -304,6 +295,10 @@ const SearchBox: FC = () => {
                   ).toLocaleString()}`}
                   exSubTitle={getExSubTitle(event.end as string)}
                   content={event.description}
+                  url={event.url ?? ''}
+                  createdBy={event.createdBy.username}
+                  createdAt={event.createdAt}
+                  updatedAt={event.updatedAt}
                   onClick={() => clickEventHandler(event as IEvent)}
                 />
               </div>
@@ -342,6 +337,9 @@ const SearchBox: FC = () => {
           disableDeleteBtn={disableDeleteBtn}
           isSubmitLoading={saveEventLoading}
           isDeleteLoading={deleteEventLoading}
+          closeBtnName={
+            authCtx.auth?.userId === createdById ? 'Cancel' : 'Close'
+          }
           onClose={() => setShowModal(false)}
           onDelete={handleDeleteEvent}
           onSubmit={handleSaveEvent}

@@ -1,6 +1,7 @@
 import { AuthenticationError } from 'apollo-server-express';
 import { EventModel } from '../../models/event';
 import { UserModel } from '../../models/user';
+import { constants } from '../../config/constants';
 
 export const Events = {
   eventsData: async (
@@ -34,7 +35,8 @@ export const Events = {
       const events = await EventModel.find({ ...regexFilter, ...statusFilter })
         .sort({ end: -1 })
         .limit(pageSize)
-        .skip(pageNumber > 0 ? (pageNumber - 1) * pageSize : 0);
+        .skip(pageNumber > 0 ? (pageNumber - 1) * pageSize : 0)
+        .populate('createdBy');
       const totalCount = await EventModel.countDocuments({
         ...regexFilter,
         ...statusFilter,
@@ -45,10 +47,33 @@ export const Events = {
       throw err;
     }
   },
+  getEvent: async ({ id }) => {
+    // const { URI } = constants;
+
+    try {
+      const event = await EventModel.findOne({ _id: id }).populate('createdBy');
+
+      if (!event) {
+        throw new Error('Event could not be found');
+      }
+
+      // await EventModel.findOneAndUpdate({ _id: id }, { url: `${URI}/sharedEvent/${id}` });
+
+      // const updatedEvent = await EventModel.findOne({ _id: id }).populate('createdBy');
+
+      // console.log(updatedEvent)
+
+      return event;
+    } catch (err) {
+      throw err;
+    }
+  },
   saveEvent: async (
     { event: { id, title, start, end, isPrivate, description } },
     { isAuthorized, userId }
   ) => {
+    const { URI } = constants;
+
     if (!isAuthorized) {
       throw new AuthenticationError('Unauthenticated');
     }
@@ -84,6 +109,8 @@ export const Events = {
         });
 
         savedEvent = await event.save();
+        savedEvent.url = `${URI}/sharedEvent/${savedEvent._id}`;
+        await savedEvent.save({ timestamps: false });
       }
 
       return { id: id || savedEvent._id };

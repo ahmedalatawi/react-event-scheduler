@@ -3,9 +3,13 @@ export interface IEvent {
   title: string;
   start: string;
   end: string;
+  url?: string;
   isPrivate: boolean;
   description: string;
   createdBy?: any;
+  subtitle?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface IUser {

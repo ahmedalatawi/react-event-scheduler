@@ -9,10 +9,14 @@ export default gql`
         title
         start
         end
+        url
         isPrivate
         description
+        createdAt
+        updatedAt
         createdBy {
           _id
+          username
         }
       }
     }

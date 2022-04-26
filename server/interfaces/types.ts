@@ -6,6 +6,7 @@ export interface IEvent {
   start: string;
   end: string;
   description: string;
+  url: string;
   isPrivate: boolean;
   createdBy: Types.ObjectId;
 }
