@@ -89,17 +89,23 @@ const LoginContainer: FC<LoginContainerProps> = ({
 
   const handleUsernameChange = (username: string) => {
     usernameRef.current.value = username;
+    reset();
     setErrorMsg('');
+    setDisplayLoginError(false);
   };
 
   const handlePasswordChange = (password: string) => {
     passwordRef.current.value = password;
+    reset();
     setErrorMsg('');
+    setDisplayLoginError(false);
   };
 
   const handleConfirmPasswordChange = (confirmPassword: string) => {
     confirmPasswordRef.current.value = confirmPassword;
+    reset();
     setErrorMsg('');
+    setDisplayLoginError(false);
   };
 
   const getViewType = (): string => {

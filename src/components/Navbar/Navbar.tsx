@@ -1,8 +1,13 @@
 import { useState, Fragment, useContext, useEffect, FC } from 'react';
-import { Container, Form, Nav, Navbar } from 'react-bootstrap';
-import { NavLink } from 'react-router-dom';
+import { Container, Form, Nav, Navbar, NavDropdown } from 'react-bootstrap';
+import { Link, NavLink } from 'react-router-dom';
+import { FaUser, FaUserEdit } from 'react-icons/fa';
+import { FiLogOut, FiSettings } from 'react-icons/fi';
+import { MdEventNote } from 'react-icons/md';
 import AuthContext from '../../store/auth-context';
 import LoginContainer from '../LoginContainer/LoginContainer';
+
+import navbarStyles from './Navbar.module.css';
 
 const MainNavbar: FC = () => {
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -101,16 +106,46 @@ const MainNavbar: FC = () => {
                 </Fragment>
               ) : (
                 <Fragment>
-                  <span className="nav-link">
-                    Hello {authCtx.auth?.username}
+                  <span className="nav-link text-secondary">
+                    Welcome, <b>{authCtx.auth?.username}</b>
                   </span>
-                  <button
+                  {/* <button
                     className="btn btn-outline-dark me-2"
                     type="button"
                     onClick={handleLogoutBtnClick}
                   >
                     Logout
-                  </button>
+                  </button> */}
+                  <NavDropdown
+                    title={<FaUser className="text-secondary" />}
+                    className={[
+                      navbarStyles.dropdown,
+                      navbarStyles['dropdown-menu'],
+                    ].join(' , ')}
+                  >
+                    <NavDropdown.Item
+                      as={Link}
+                      to={`/user/${authCtx.auth?.userId}/profile`}
+                    >
+                      My profile <FaUserEdit />
+                    </NavDropdown.Item>
+                    <NavDropdown.Item
+                      as={Link}
+                      to={`/user/${authCtx.auth?.userId}/events`}
+                    >
+                      My events <MdEventNote />
+                    </NavDropdown.Item>
+                    <NavDropdown.Item
+                      as={Link}
+                      to={`/user/${authCtx.auth?.userId}/settings`}
+                    >
+                      Settings <FiSettings />
+                    </NavDropdown.Item>
+                    <NavDropdown.Divider />
+                    <NavDropdown.Item onClick={handleLogoutBtnClick}>
+                      Logout <FiLogOut />
+                    </NavDropdown.Item>
+                  </NavDropdown>
                 </Fragment>
               )}
             </Form>

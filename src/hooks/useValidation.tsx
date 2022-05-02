@@ -12,7 +12,7 @@ const useValidation = (callback: Function) => {
         /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
 
       if (!username || !password || !confirmPassword) {
-        callback('Please fill out all required fields.');
+        callback('Please fill out required fields.');
       } else if (username.length < 3) {
         callback('Username must be at least 3 characters.');
       } else if (!passwordRegex.test(password)) {

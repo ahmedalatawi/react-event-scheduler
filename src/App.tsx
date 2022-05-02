@@ -13,6 +13,7 @@ import UserIdleTimer from './components/UserIdleTimer/UserIdleTimer';
 import { useContext, useEffect, useState } from 'react';
 import AuthContext from './store/auth-context';
 import SharedEvent from './components/SharedEvent/SharedEvent';
+import MyProfile from './components/MyProfile/MyProfile';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
@@ -38,6 +39,7 @@ function App() {
             <Route path="/addEvent" element={<AddEvent />} />
             <Route path="/calendar" element={<Calendar />} />
             <Route path="/sharedEvent/:id" element={<SharedEvent />} />
+            <Route path="/user/:id/profile" element={<MyProfile />} />
           </Routes>
         </BrowserRouter>
       </ApolloProvider>

@@ -8,6 +8,7 @@ import {
   useState,
 } from 'react';
 import { IEvent } from '../../interfaces/types';
+import { MdSaveAlt } from 'react-icons/md';
 import EventBody from '../EventBody/EventBody';
 import SAVE_EVENT from '../../gql/saveEvent';
 import Spinner from '../UI/Spinner/Spinner';
@@ -109,7 +110,7 @@ const AddEvent: FC = () => {
               className="btn btn-primary"
               disabled={disableSaveBtn || loading || !loggedIn}
             >
-              Save
+              Save <MdSaveAlt />
             </button>
           </div>
         </form>

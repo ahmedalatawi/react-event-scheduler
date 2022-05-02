@@ -13,12 +13,19 @@ export interface IEvent {
 }
 
 export interface IUser {
-  id?: string;
+  _id?: string;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  phoneNumber?: string;
+  bio?: string;
   token?: string;
   tokenExpiration?: number;
   username: string;
-  password: string;
-  confirmPassword: string;
+  password?: string;
+  confirmPassword?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface ILoginInput {

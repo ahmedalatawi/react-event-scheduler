@@ -14,5 +14,10 @@ export interface IEvent {
 export interface IUser {
   username: string;
   password: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber: string;
+  bio: string;
   createdEvents: Types.ObjectId[];
 }

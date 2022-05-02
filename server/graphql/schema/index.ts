@@ -10,6 +10,18 @@ export const typeDefs = gql`
     username: String!
   }
 
+  type UserFull {
+    _id: ID!
+    username: String!
+    firstName: String
+    lastName: String
+    email: String
+    phoneNumber: String
+    bio: String
+    createdAt: Float
+    updatedAt: Float
+  }
+
   type EventFull {
     id: ID!
     title: String!
@@ -41,6 +53,16 @@ export const typeDefs = gql`
     confirmPassword: String!
   }
 
+  input UserInputFull {
+    _id: String!
+    username: String!
+    firstName: String
+    lastName: String
+    email: String
+    phoneNumber: String
+    bio: String
+  }
+
   input LoginInput {
     username: String!
     password: String!
@@ -64,12 +86,14 @@ export const typeDefs = gql`
   }
 
   type Query {
+    getUser(id: ID!): UserFull!
     eventsData(filterInput: FilterInput): Events!
     login(loginInput: LoginInput!): Auth!
   }
 
   type Mutation {
     signup(userInput: UserInput!): Auth!
+    saveUser(user: UserInputFull!): UserFull!
     saveEvent(event: EventInput!): Event
     getEvent(id: ID!): EventFull!
     deleteEvent(id: ID!): Boolean!

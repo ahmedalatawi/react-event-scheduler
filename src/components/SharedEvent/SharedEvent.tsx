@@ -21,10 +21,6 @@ const SharedEvent: FC = () => {
     getEvent({ variables: { id: id ?? '' } });
   }, [getEvent, id]);
 
-  //   useEffect(() => {
-  //     console.log(data);
-  //   }, [data]);
-
   if (loading) {
     return <Spinner />;
   }

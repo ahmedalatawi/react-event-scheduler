@@ -17,7 +17,7 @@ export const Auth = {
 
       if (userExist) {
         throw new Error(
-          'Username is already being used. Please try a different one.'
+          'Username is already being used, please try a different username.'
         );
       }
 

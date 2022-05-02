@@ -48,20 +48,12 @@ export const Events = {
     }
   },
   getEvent: async ({ id }) => {
-    // const { URI } = constants;
-
     try {
       const event = await EventModel.findOne({ _id: id }).populate('createdBy');
 
       if (!event) {
         throw new Error('Event could not be found');
       }
-
-      // await EventModel.findOneAndUpdate({ _id: id }, { url: `${URI}/sharedEvent/${id}` });
-
-      // const updatedEvent = await EventModel.findOne({ _id: id }).populate('createdBy');
-
-      // console.log(updatedEvent)
 
       return event;
     } catch (err) {

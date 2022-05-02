@@ -94,7 +94,7 @@ const Calendar: FC = () => {
     const auth = authCtx.getAuth();
     refetch();
     setLoggedIn(!!auth);
-    setDisableSaveBtn(!auth);
+    setDisableSaveBtn(true);
     setDisableEdit(!auth);
     setDisableDeleteBtn(!auth);
   }, [authCtx, refetch]);
@@ -156,7 +156,7 @@ const Calendar: FC = () => {
     setEnd(`${selectedDate.dateStr}T01:00:00`);
     setIsPrivate(false);
     setDisplayDeleteBtn(false);
-    setDisableSaveBtn(!auth);
+    setDisableSaveBtn(true);
     setDisableEdit(!auth);
     setDisableDeleteBtn(!auth);
     setHideSaveBtn(!auth);

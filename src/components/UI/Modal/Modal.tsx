@@ -3,6 +3,8 @@ import { Modal as ModalBootstrap } from 'bootstrap';
 import ReactDOM from 'react-dom';
 
 import './Modal.css';
+import { MdSaveAlt } from 'react-icons/md';
+import { FiLogIn, FiTrash2 } from 'react-icons/fi';
 
 const portalElement: any = document.getElementById('modal-root');
 
@@ -115,7 +117,7 @@ const Modal: FC<ModalProps> = (props) => {
                     role="status"
                   ></div>
                 )}{' '}
-                Remove
+                Remove <FiTrash2 />
               </button>
             )}
             {!hideSubmitBtn && (
@@ -131,7 +133,8 @@ const Modal: FC<ModalProps> = (props) => {
                     role="status"
                   ></div>
                 )}{' '}
-                {submitBtnName || 'Save'}
+                {submitBtnName || 'Save'}{' '}
+                {submitBtnName ? <FiLogIn /> : <MdSaveAlt />}
               </button>
             )}
           </div>
