@@ -62,8 +62,6 @@ export const Users = {
         { new: true }
       );
 
-      console.log(updatedUser);
-
       return updatedUser;
     } catch (err) {
       throw err;

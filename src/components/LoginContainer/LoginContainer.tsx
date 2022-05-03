@@ -34,7 +34,9 @@ const LoginContainer: FC<LoginContainerProps> = ({
   const [validate] = useValidation(setErrorMsg);
 
   const [login, { error: loginError, data: loginData, loading: loginLoading }] =
-    useLazyQuery<{ auth: IAuth }, { login: ILoginInput }>(LOGIN_USER);
+    useLazyQuery<{ auth: IAuth }, { login: ILoginInput }>(LOGIN_USER, {
+      fetchPolicy: 'no-cache',
+    });
   const [
     signup,
     { error: signupError, data: signupData, loading: signupLoading, reset },
