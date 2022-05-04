@@ -38,10 +38,9 @@ const EditMyProfile: FC<EditMyProfileType> = ({ user, onReadOnlyMode }) => {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     const form = event.currentTarget;
-    //if (form.checkValidity() === false) {
+
     event.preventDefault();
     event.stopPropagation();
-    //}
 
     reset();
 

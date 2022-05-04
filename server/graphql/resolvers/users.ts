@@ -52,7 +52,7 @@ export const Users = {
 
       if (userByUsername && userByUsername._id.toString() !== _id) {
         throw new Error(
-          'Username is already being used, please try a different username.'
+          `"${username}" is already being used, please try a different username.`
         );
       }
 
