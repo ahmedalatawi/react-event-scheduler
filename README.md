@@ -34,7 +34,7 @@ Event Scheduler is a React app that allows users to create events. An event can 
 
 > Make sure MongoDB is up and running
 
-In the project directory, you can run:
+In the project directory, run `yarn` or `npm i`, and then run:
 
 ### `npm start` or `yarn start`
 
@@ -44,7 +44,7 @@ Runs the backend and frontend apps simultaneously in the development mode.\
 
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.\
+The page will reload if you make changes.\
 You will also see any lint errors in the console.
 
 ## Current functionality
