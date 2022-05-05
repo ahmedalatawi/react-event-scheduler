@@ -9,6 +9,7 @@ import AuthContext from '../../store/auth-context';
 import SAVE_USER from '../../gql/saveUser';
 import Spinner from '../UI/Spinner/Spinner';
 import Alert from '../UI/Alert/Alert';
+import TitledCard from '../UI/TitledCard/TitledCard';
 
 type EditMyProfileType = {
   user: IUser | undefined;
@@ -93,102 +94,95 @@ const EditMyProfile: FC<EditMyProfileType> = ({ user, onReadOnlyMode }) => {
         />
       )}
 
-      <div className="card">
-        <h5 className="card-header">Edit My Profile</h5>
-        <div className="card-body">
-          <Form noValidate validated={validated} onSubmit={handleSubmit}>
-            <Row className="mb-3">
-              <Form.Group as={Col} md="12" controlId="validationCustomUsername">
-                <Form.Label>Username</Form.Label>
-                <InputGroup hasValidation>
-                  <InputGroup.Text id="inputGroupPrepend">@</InputGroup.Text>
-                  <Form.Control
-                    type="text"
-                    placeholder="Username"
-                    aria-describedby="inputGroupPrepend"
-                    defaultValue={username}
-                    ref={usernameRef}
-                    required
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    Username is required.
-                  </Form.Control.Feedback>
-                </InputGroup>
-              </Form.Group>
-            </Row>
-            <Row className="mb-3">
-              <Form.Group as={Col} md="6">
-                <Form.Label>First name</Form.Label>
+      <TitledCard title="Edit My Profile">
+        <Form noValidate validated={validated} onSubmit={handleSubmit}>
+          <Row className="mb-3">
+            <Form.Group as={Col} md="12" controlId="validationCustomUsername">
+              <Form.Label>Username</Form.Label>
+              <InputGroup hasValidation>
+                <InputGroup.Text id="inputGroupPrepend">@</InputGroup.Text>
                 <Form.Control
                   type="text"
-                  placeholder="First name"
-                  defaultValue={firstName}
-                  ref={firstNameRef}
-                />
-              </Form.Group>
-              <Form.Group as={Col} md="6">
-                <Form.Label>Last name</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Last name"
-                  defaultValue={lastName}
-                  ref={lastNameRef}
-                />
-              </Form.Group>
-            </Row>
-            <Row className="mb-3">
-              <Form.Group as={Col} md="12" controlId="validationCustomEmail">
-                <Form.Label>Email</Form.Label>
-                <Form.Control
-                  type="email"
-                  placeholder="Email"
-                  defaultValue={email}
-                  ref={emailRef}
+                  placeholder="Username"
+                  aria-describedby="inputGroupPrepend"
+                  defaultValue={username}
+                  ref={usernameRef}
+                  required
                 />
                 <Form.Control.Feedback type="invalid">
-                  Please provide a valid email.
+                  Username is required.
                 </Form.Control.Feedback>
-              </Form.Group>
-            </Row>
-            <Row className="mb-3">
-              <Form.Group as={Col} md="12">
-                <Form.Label>Phone number</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Phone number"
-                  defaultValue={phoneNumber}
-                  ref={phoneNumberRef}
-                />
-              </Form.Group>
-            </Row>
-            <Row className="mb-3">
-              <Form.Group as={Col} md="12">
-                <Form.Label>Bio</Form.Label>
-                <Form.Control
-                  as="textarea"
-                  rows={5}
-                  placeholder="Bio"
-                  defaultValue={bio}
-                  ref={bioRef}
-                />
-              </Form.Group>
-            </Row>
+              </InputGroup>
+            </Form.Group>
+          </Row>
+          <Row className="mb-3">
+            <Form.Group as={Col} md="6">
+              <Form.Label>First name</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="First name"
+                defaultValue={firstName}
+                ref={firstNameRef}
+              />
+            </Form.Group>
+            <Form.Group as={Col} md="6">
+              <Form.Label>Last name</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Last name"
+                defaultValue={lastName}
+                ref={lastNameRef}
+              />
+            </Form.Group>
+          </Row>
+          <Row className="mb-3">
+            <Form.Group as={Col} md="12" controlId="validationCustomEmail">
+              <Form.Label>Email</Form.Label>
+              <Form.Control
+                type="email"
+                placeholder="Email"
+                defaultValue={email}
+                ref={emailRef}
+              />
+              <Form.Control.Feedback type="invalid">
+                Please provide a valid email.
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Row>
+          <Row className="mb-3">
+            <Form.Group as={Col} md="12">
+              <Form.Label>Phone number</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Phone number"
+                defaultValue={phoneNumber}
+                ref={phoneNumberRef}
+              />
+            </Form.Group>
+          </Row>
+          <Row className="mb-3">
+            <Form.Group as={Col} md="12">
+              <Form.Label>Bio</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={5}
+                placeholder="Bio"
+                defaultValue={bio}
+                ref={bioRef}
+              />
+            </Form.Group>
+          </Row>
 
-            <div className="mt-4">
-              <Button type="submit" className="me-3">
-                Save <MdSaveAlt />
-              </Button>
-              <Button
-                type="button"
-                onClick={onReadOnlyMode}
-                variant="secondary"
-              >
-                Cancel
-              </Button>
-            </div>
-          </Form>
-        </div>
-      </div>
+          <div className="mt-4">
+            <Button type="submit" className="me-3">
+              Save <MdSaveAlt />
+            </Button>
+            <Button type="button" onClick={onReadOnlyMode} variant="secondary">
+              Cancel
+            </Button>
+          </div>
+        </Form>
+      </TitledCard>
     </>
   );
 };

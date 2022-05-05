@@ -3,11 +3,11 @@ import { UserModel } from '../../models/user';
 
 export const Users = {
   getUser: async ({ id }, { isAuthorized, userId }) => {
-    try {
-      if (!isAuthorized) {
-        throw new AuthenticationError('Unauthenticated');
-      }
+    if (!isAuthorized) {
+      throw new AuthenticationError('Unauthenticated');
+    }
 
+    try {
       const user = await UserModel.findById(userId);
 
       if (!user) {
@@ -29,11 +29,11 @@ export const Users = {
     { user: { _id, username, firstName, lastName, email, phoneNumber, bio } },
     { isAuthorized, userId }
   ) => {
-    try {
-      if (!isAuthorized) {
-        throw new AuthenticationError('Unauthenticated');
-      }
+    if (!isAuthorized) {
+      throw new AuthenticationError('Unauthenticated');
+    }
 
+    try {
       const user = await UserModel.findById(userId);
 
       if (!user) {

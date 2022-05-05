@@ -12,6 +12,8 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import '@fullcalendar/daygrid/main.css';
 import '@fullcalendar/timegrid/main.css';
 
+import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
+
 import reportWebVitals from './reportWebVitals';
 import AuthProvider from './store/AuthProvider';
 

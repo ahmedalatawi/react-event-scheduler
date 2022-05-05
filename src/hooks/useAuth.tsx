@@ -3,11 +3,8 @@ import { IAuth } from '../interfaces/types';
 
 const getCookie = (name: string) => Cookies.get(name);
 
-const setCookie = (
-  name: string,
-  value: string | object,
-  expires?: number | Date
-) => Cookies.set(name, value, { expires });
+const setCookie = (name: string, value: string, expires?: number | Date) =>
+  Cookies.set(name, value, { expires });
 
 const removeCookie = (name: string) => Cookies.remove(name);
 

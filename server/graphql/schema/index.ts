@@ -87,6 +87,7 @@ export const typeDefs = gql`
 
   type Query {
     getUser(id: ID!): UserFull!
+    getUserEvents(id: ID!): Events!
     eventsData(filterInput: FilterInput): Events!
     login(loginInput: LoginInput!): Auth!
   }

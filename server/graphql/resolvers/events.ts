@@ -60,6 +60,26 @@ export const Events = {
       throw err;
     }
   },
+  getUserEvents: async ({ id }, { isAuthorized, userId }) => {
+    if (!isAuthorized) {
+      throw new AuthenticationError('Unauthenticated');
+    }
+
+    if (!id || id !== userId) {
+      throw new AuthenticationError('Unauthenticated');
+    }
+
+    try {
+      const events = await EventModel.find({ createdBy: id }).populate(
+        'createdBy'
+      );
+      const totalCount = await EventModel.countDocuments({ createdBy: id });
+
+      return { totalCount, events };
+    } catch (err) {
+      throw err;
+    }
+  },
   saveEvent: async (
     { event: { id, title, start, end, isPrivate, description } },
     { isAuthorized, userId }

@@ -14,6 +14,7 @@ import { useContext, useEffect, useState } from 'react';
 import AuthContext from './store/auth-context';
 import SharedEvent from './components/SharedEvent/SharedEvent';
 import MyProfile from './components/MyProfile/MyProfile';
+import MyEvents from './components/MyEvents/MyEvents';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
@@ -40,6 +41,7 @@ function App() {
             <Route path="/calendar" element={<Calendar />} />
             <Route path="/sharedEvent/:id" element={<SharedEvent />} />
             <Route path="/user/:id/profile" element={<MyProfile />} />
+            <Route path="/user/:id/events" element={<MyEvents />} />
           </Routes>
         </BrowserRouter>
       </ApolloProvider>
