@@ -85,9 +85,14 @@ export const typeDefs = gql`
     currentCheck: Boolean
   }
 
+  input PaginationFilter {
+    pageNumber: Int
+    pageSize: Int
+  }
+
   type Query {
     getUser(id: ID!): UserFull!
-    getUserEvents(id: ID!): Events!
+    getUserEvents(id: ID!, paginationFilter: PaginationFilter): Events!
     eventsData(filterInput: FilterInput): Events!
     login(loginInput: LoginInput!): Auth!
   }

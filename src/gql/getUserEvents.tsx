@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 export default gql`
-  query getUserEvents($id: ID!) {
-    getUserEvents(id: $id) {
+  query getUserEvents($id: ID!, $filter: PaginationFilter) {
+    getUserEvents(id: $id, paginationFilter: $filter) {
       totalCount
       events {
         id

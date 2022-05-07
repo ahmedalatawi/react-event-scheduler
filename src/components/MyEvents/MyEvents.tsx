@@ -1,5 +1,5 @@
-import { useQuery } from '@apollo/client';
-import { FC, useContext, useEffect } from 'react';
+import { NetworkStatus, useQuery } from '@apollo/client';
+import { FC, useContext, useEffect, useState } from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
 import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
@@ -10,6 +10,9 @@ import AuthContext from '../../store/auth-context';
 import Alert from '../UI/Alert/Alert';
 import Spinner from '../UI/Spinner/Spinner';
 import TitledCard from '../UI/TitledCard/TitledCard';
+import Pagination from '../Pagination/Pagination';
+
+const ITEMS_PER_PAGE = 10;
 
 type EventsType = {
   totalCount: number;
@@ -20,10 +23,19 @@ const MyEvents: FC = () => {
   const { id } = useParams();
   const { SearchBar } = Search;
 
-  const { data, loading, error } = useQuery<
+  const [pageNumber, setPageNumber] = useState<number>(1);
+
+  const { data, loading, error, networkStatus } = useQuery<
     { getUserEvents: EventsType },
-    { id: string }
-  >(GET_USER_EVENTS, { variables: { id: id ?? '' } });
+    { id: string; filter: { pageNumber: number; pageSize: number } }
+  >(GET_USER_EVENTS, {
+    fetchPolicy: 'no-cache',
+    notifyOnNetworkStatusChange: true,
+    variables: {
+      id: id ?? '',
+      filter: { pageNumber, pageSize: ITEMS_PER_PAGE },
+    },
+  });
 
   const columns = [
     {
@@ -96,10 +108,6 @@ const MyEvents: FC = () => {
     !authCtx.auth && navigate('/');
   }, [authCtx, navigate]);
 
-  if (loading) {
-    return <Spinner />;
-  }
-
   if (error) {
     return (
       <Alert
@@ -140,35 +148,46 @@ const MyEvents: FC = () => {
   });
 
   return (
-    <TitledCard title="My Events">
-      <ToolkitProvider
-        bootstrap4
-        keyField="id"
-        data={updatedEvents ?? []}
-        columns={columns}
-        search
-      >
-        {(props) => (
-          <div>
-            <SearchBar {...props.searchProps} />
-            <hr />
-            <BootstrapTable
-              {...props.baseProps}
-              striped
-              hover
-              bordered={false}
-              selectRow={selectRow}
-              wrapperClasses="table-responsive"
-              rowStyle={{ overflowWrap: 'break-word' }}
-              // keyField="id"
-              // data={updatedEvents?? []}
-              // columns={columns}
-              filter={filterFactory()}
+    <>
+      {loading || networkStatus === NetworkStatus.refetch ? (
+        <Spinner />
+      ) : (
+        <TitledCard title="My Events">
+          <ToolkitProvider
+            bootstrap4
+            keyField="id"
+            data={updatedEvents ?? []}
+            columns={columns}
+            search
+          >
+            {(props) => (
+              <div>
+                <SearchBar {...props.searchProps} />
+                <hr />
+                <BootstrapTable
+                  {...props.baseProps}
+                  striped
+                  hover
+                  bordered={false}
+                  selectRow={selectRow}
+                  wrapperClasses="table-responsive"
+                  rowStyle={{ overflowWrap: 'break-word' }}
+                  filter={filterFactory()}
+                />
+              </div>
+            )}
+          </ToolkitProvider>
+          <div className="float-end">
+            <Pagination
+              total={data?.getUserEvents.totalCount || 0}
+              itemsPerPage={ITEMS_PER_PAGE}
+              currentPage={pageNumber}
+              onPageChange={(page) => setPageNumber(page)}
             />
           </div>
-        )}
-      </ToolkitProvider>
-    </TitledCard>
+        </TitledCard>
+      )}
+    </>
   );
 };
 

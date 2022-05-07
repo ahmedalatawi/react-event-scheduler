@@ -60,7 +60,10 @@ export const Events = {
       throw err;
     }
   },
-  getUserEvents: async ({ id }, { isAuthorized, userId }) => {
+  getUserEvents: async (
+    { id, paginationFilter: { pageNumber = 0, pageSize = 0 } },
+    { isAuthorized, userId }
+  ) => {
     if (!isAuthorized) {
       throw new AuthenticationError('Unauthenticated');
     }
@@ -70,9 +73,10 @@ export const Events = {
     }
 
     try {
-      const events = await EventModel.find({ createdBy: id }).populate(
-        'createdBy'
-      );
+      const events = await EventModel.find({ createdBy: id })
+        .limit(pageSize)
+        .skip(pageNumber > 0 ? (pageNumber - 1) * pageSize : 0)
+        .populate('createdBy');
       const totalCount = await EventModel.countDocuments({ createdBy: id });
 
       return { totalCount, events };
