@@ -1,10 +1,5 @@
 # React Event Scheduler App
 
-[![Lint, Test and Build](https://github.com/reymon359/up-to-date-react-template/actions/workflows/build-test-workflow.yml/badge.svg)](https://github.com/AhmedAlatawi/react-event-scheduler/actions/workflows/main.yml)
-[![License: MIT](https://img.shields.io/github/license/reymon359/up-to-date-react-template?color=blue&logo=github)](https://github.com/AhmedAlatawi/react-event-scheduler/blob/master/LICENSE)
-[![Last commit](https://img.shields.io/github/last-commit/reymon359/up-to-date-react-template?logo=github)](https://github.com/AhmedAlatawi/react-event-scheduler/commits/main)
-[![GitHub Pages Deploy](https://img.shields.io/github/deployments/reymon359/up-to-date-react-template/github-pages?label=deploy&logo=github)](https://github.com/AhmedAlatawi/react-event-scheduler/deployments)
-
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ![](./images/react-event-pic.gif)
