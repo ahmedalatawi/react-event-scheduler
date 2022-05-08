@@ -1,5 +1,11 @@
 # React Event Scheduler App
 
+[![](https://img.shields.io/github/workflow/status/AhmedAlatawi/react-event-scheduler/Build%20and%20Test)](https://github.com/AhmedAlatawi/react-event-scheduler/actions/workflows/main.yml)
+[![Depfu](https://badges.depfu.com/badges/e9fb7e6c5e5b18f9b1dbf2c05736f034/status.svg)](https://depfu.com)
+[![Depfu](https://badges.depfu.com/badges/e9fb7e6c5e5b18f9b1dbf2c05736f034/overview.svg)](https://depfu.com/github/AhmedAlatawi/react-event-scheduler?project_id=35359)
+[![Depfu](https://badges.depfu.com/badges/e9fb7e6c5e5b18f9b1dbf2c05736f034/count.svg)](https://depfu.com/github/AhmedAlatawi/react-event-scheduler?project_id=35359)
+[![License: MIT](https://img.shields.io/github/license/AhmedAlatawi/react-event-scheduler)](https://github.com/AhmedAlatawi/react-event-scheduler/blob/master/LICENSE)
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ![](./images/react-event-pic.gif)
