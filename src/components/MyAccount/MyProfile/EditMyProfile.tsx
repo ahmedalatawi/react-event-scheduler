@@ -3,13 +3,13 @@ import { FC, FormEvent, useContext, useEffect, useRef, useState } from 'react';
 import { Button, Col, Form, InputGroup, Row } from 'react-bootstrap';
 import { MdSaveAlt } from 'react-icons/md';
 import { useNavigate } from 'react-router';
-import { IUser } from '../../interfaces/types';
-import AuthContext from '../../store/auth-context';
+import { IUser } from '../../../interfaces/types';
+import AuthContext from '../../../store/auth-context';
 
-import SAVE_USER from '../../gql/saveUser';
-import Spinner from '../UI/Spinner/Spinner';
-import Alert from '../UI/Alert/Alert';
-import TitledCard from '../UI/TitledCard/TitledCard';
+import SAVE_USER from '../../../gql/saveUser';
+import Spinner from '../../UI/Spinner/Spinner';
+import Alert from '../../UI/Alert/Alert';
+import TitledCard from '../../UI/TitledCard/TitledCard';
 
 type EditMyProfileType = {
   user: IUser | undefined;

@@ -61,7 +61,7 @@ export const Events = {
     }
   },
   getUserEvents: async (
-    { id, paginationFilter: { pageNumber = 0, pageSize = 0 } },
+    { id, paginationFilter: { searchText = '', pageNumber = 0, pageSize = 0 } },
     { isAuthorized, userId }
   ) => {
     if (!isAuthorized) {
@@ -72,12 +72,20 @@ export const Events = {
       throw new AuthenticationError('Unauthenticated');
     }
 
+    const filter = {
+      createdBy: id,
+      $or: [
+        { title: { $regex: searchText, $options: 'six' } },
+        { description: { $regex: searchText, $options: 'six' } },
+      ],
+    };
+
     try {
-      const events = await EventModel.find({ createdBy: id })
+      const events = await EventModel.find(filter)
         .limit(pageSize)
         .skip(pageNumber > 0 ? (pageNumber - 1) * pageSize : 0)
         .populate('createdBy');
-      const totalCount = await EventModel.countDocuments({ createdBy: id });
+      const totalCount = await EventModel.countDocuments(filter);
 
       return { totalCount, events };
     } catch (err) {

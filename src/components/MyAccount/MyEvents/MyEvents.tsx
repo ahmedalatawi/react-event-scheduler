@@ -4,13 +4,13 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import { useNavigate, useParams } from 'react-router';
-import GET_USER_EVENTS from '../../gql/getUserEvents';
-import { IEvent } from '../../interfaces/types';
-import AuthContext from '../../store/auth-context';
-import Alert from '../UI/Alert/Alert';
-import Spinner from '../UI/Spinner/Spinner';
-import TitledCard from '../UI/TitledCard/TitledCard';
-import Pagination from '../Pagination/Pagination';
+import GET_USER_EVENTS from '../../../gql/getUserEvents';
+import { IEvent } from '../../../interfaces/types';
+import AuthContext from '../../../store/auth-context';
+import Alert from '../../UI/Alert/Alert';
+import Spinner from '../../UI/Spinner/Spinner';
+import TitledCard from '../../UI/TitledCard/TitledCard';
+import Pagination from '../../Pagination/Pagination';
 
 const ITEMS_PER_PAGE = 10;
 
@@ -23,17 +23,21 @@ const MyEvents: FC = () => {
   const { id } = useParams();
   const { SearchBar } = Search;
 
+  const [searchText, setSearchText] = useState<string>('');
   const [pageNumber, setPageNumber] = useState<number>(1);
 
   const { data, loading, error, networkStatus } = useQuery<
     { getUserEvents: EventsType },
-    { id: string; filter: { pageNumber: number; pageSize: number } }
+    {
+      id: string;
+      filter: { searchText: string; pageNumber: number; pageSize: number };
+    }
   >(GET_USER_EVENTS, {
     fetchPolicy: 'no-cache',
     notifyOnNetworkStatusChange: true,
     variables: {
       id: id ?? '',
-      filter: { pageNumber, pageSize: ITEMS_PER_PAGE },
+      filter: { searchText, pageNumber, pageSize: ITEMS_PER_PAGE },
     },
   });
 
@@ -101,6 +105,11 @@ const MyEvents: FC = () => {
     },
   };
 
+  const setSearchTextHandler = (text: string) => {
+    setPageNumber(1);
+    setSearchText(text);
+  };
+
   const authCtx = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -162,7 +171,12 @@ const MyEvents: FC = () => {
           >
             {(props) => (
               <div>
-                <SearchBar {...props.searchProps} />
+                <SearchBar
+                  {...props.searchProps}
+                  onSearch={setSearchTextHandler}
+                  searchText={searchText}
+                  delay={800}
+                />
                 <hr />
                 <BootstrapTable
                   {...props.baseProps}

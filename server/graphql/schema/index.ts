@@ -86,6 +86,7 @@ export const typeDefs = gql`
   }
 
   input PaginationFilter {
+    searchText: String
     pageNumber: Int
     pageSize: Int
   }
