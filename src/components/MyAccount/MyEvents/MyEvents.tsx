@@ -1,23 +1,17 @@
-import { NetworkStatus, useQuery } from '@apollo/client';
+import { NetworkStatus } from '@apollo/client';
 import { FC, useContext, useEffect, useState } from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
 import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
 import { useNavigate, useParams } from 'react-router';
-import GET_USER_EVENTS from '../../../gql/getUserEvents';
-import { IEvent } from '../../../interfaces/types';
 import AuthContext from '../../../store/auth-context';
 import Alert from '../../UI/Alert/Alert';
 import Spinner from '../../UI/Spinner/Spinner';
 import TitledCard from '../../UI/TitledCard/TitledCard';
 import Pagination from '../../Pagination/Pagination';
+import { useGetUserEventsQuery } from '../../../generated/graphql';
 
 const ITEMS_PER_PAGE = 10;
-
-type EventsType = {
-  totalCount: number;
-  events: IEvent[];
-};
 
 const MyEvents: FC = () => {
   const { id } = useParams();
@@ -26,13 +20,7 @@ const MyEvents: FC = () => {
   const [searchText, setSearchText] = useState<string>('');
   const [pageNumber, setPageNumber] = useState<number>(1);
 
-  const { data, loading, error, networkStatus } = useQuery<
-    { getUserEvents: EventsType },
-    {
-      id: string;
-      filter: { searchText: string; pageNumber: number; pageSize: number };
-    }
-  >(GET_USER_EVENTS, {
+  const { data, loading, error, networkStatus } = useGetUserEventsQuery({
     fetchPolicy: 'no-cache',
     notifyOnNetworkStatusChange: true,
     variables: {
@@ -148,7 +136,7 @@ const MyEvents: FC = () => {
       description,
       start: new Date(start).toLocaleString(),
       end: new Date(end).toLocaleString(),
-      createdBy: createdBy.username,
+      createdBy: createdBy?.username,
       isPrivate: isPrivate ? 'Yes' : 'No',
       url: url ? <a href={url}>Link</a> : '',
       createdAt: createdAt ? new Date(createdAt).toLocaleString() : '',

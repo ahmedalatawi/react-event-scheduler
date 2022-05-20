@@ -1,0 +1,26 @@
+#import "./fragments.graphql"
+
+mutation saveEvent($event: EventInput!) {
+  saveEvent(event: $event) {
+    id
+  }
+}
+
+mutation saveUser($user: UserInputFull!) {
+  saveUser(user: $user) {
+    ...UserFull
+  }
+}
+
+mutation signup($signup: UserInput!) {
+  signup(userInput: $signup) {
+    userId
+    username
+    token
+    tokenExpiration
+  }
+}
+
+mutation deleteEvent($id: ID!) {
+  deleteEvent(id: $id)
+}

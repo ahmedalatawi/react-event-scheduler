@@ -1,15 +1,13 @@
-import { useMutation } from '@apollo/client';
 import { FC, FormEvent, useContext, useEffect, useRef, useState } from 'react';
 import { Button, Col, Form, InputGroup, Row } from 'react-bootstrap';
 import { MdSaveAlt } from 'react-icons/md';
 import { useNavigate } from 'react-router';
 import { IUser } from '../../../interfaces/types';
 import AuthContext from '../../../store/auth-context';
-
-import SAVE_USER from '../../../gql/saveUser';
 import Spinner from '../../UI/Spinner/Spinner';
 import Alert from '../../UI/Alert/Alert';
 import TitledCard from '../../UI/TitledCard/TitledCard';
+import { useSaveUserMutation } from '../../../generated/graphql';
 
 type EditMyProfileType = {
   user: IUser | undefined;
@@ -32,10 +30,7 @@ const EditMyProfile: FC<EditMyProfileType> = ({ user, onReadOnlyMode }) => {
   const authCtx = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const [saveUser, { error, loading, reset }] = useMutation<
-    { saveUser: IUser },
-    { user: IUser }
-  >(SAVE_USER);
+  const [saveUser, { error, loading, reset }] = useSaveUserMutation();
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     const form = event.currentTarget;
@@ -51,7 +46,7 @@ const EditMyProfile: FC<EditMyProfileType> = ({ user, onReadOnlyMode }) => {
       saveUser({
         variables: {
           user: {
-            _id,
+            _id: _id ?? '',
             username: usernameRef.current?.value.trim(),
             firstName: firstNameRef.current?.value.trim(),
             lastName: lastNameRef.current?.value.trim(),
@@ -60,19 +55,24 @@ const EditMyProfile: FC<EditMyProfileType> = ({ user, onReadOnlyMode }) => {
             bio: bioRef.current?.value.trim(),
           },
         },
-      }).then((res) => {
-        const { userId, token, tokenExpiration } = authCtx.getAuth() ?? {
-          token: '',
-          userId: '',
-        };
-        authCtx.addAuth({
-          userId,
-          token,
-          tokenExpiration,
-          username: res.data?.saveUser.username ?? '',
+      })
+        .then((res) => {
+          const { userId, token, tokenExpiration } = authCtx.getAuth() ?? {
+            token: '',
+            userId: '',
+          };
+          authCtx.addAuth({
+            userId,
+            token,
+            tokenExpiration,
+            username: res.data?.saveUser.username ?? '',
+          });
+          onReadOnlyMode();
+        })
+        .catch((error) => {
+          console.error(error);
+          setValidated(false);
         });
-        onReadOnlyMode();
-      });
   };
 
   useEffect(() => {

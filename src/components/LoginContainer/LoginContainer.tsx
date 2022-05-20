@@ -1,15 +1,11 @@
 import { useState, useRef, Fragment, useContext, useEffect, FC } from 'react';
 import useValidation from '../../hooks/useValidation';
-import { IAuth, ILoginInput, ISignupInput } from '../../interfaces/types';
 import Login from '../Login/Login';
 import Signup from '../Signup/Signup';
 import Alert from '../UI/Alert/Alert';
 import Modal from '../UI/Modal/Modal';
-
-import LOGIN_USER from '../../gql/loginUser';
-import SIGNUP_USER from '../../gql/signupUser';
-import { useLazyQuery, useMutation } from '@apollo/client';
 import AuthContext from '../../store/auth-context';
+import { useLoginLazyQuery, useSignupMutation } from '../../generated/graphql';
 
 type LoginContainerProps = {
   view: string;
@@ -34,13 +30,13 @@ const LoginContainer: FC<LoginContainerProps> = ({
   const [validate] = useValidation(setErrorMsg);
 
   const [login, { error: loginError, data: loginData, loading: loginLoading }] =
-    useLazyQuery<{ auth: IAuth }, { login: ILoginInput }>(LOGIN_USER, {
+    useLoginLazyQuery({
       fetchPolicy: 'no-cache',
     });
   const [
     signup,
     { error: signupError, data: signupData, loading: signupLoading, reset },
-  ] = useMutation<{ auth: IAuth }, { signup: ISignupInput }>(SIGNUP_USER);
+  ] = useSignupMutation();
 
   const authCtx = useContext(AuthContext);
 

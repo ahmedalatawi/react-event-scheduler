@@ -1,16 +1,8 @@
-import { NetworkStatus, useMutation, useQuery } from '@apollo/client';
+import { NetworkStatus } from '@apollo/client';
 import { ChangeEvent, FC, useContext, useEffect, useState } from 'react';
-import { EventInput } from '@fullcalendar/react';
 import useDebounce from '../../hooks/useDebounce';
-
-import GET_EVENTS from '../../gql/getEvents';
-import SAVE_EVENT from '../../gql/saveEvent';
-import DELETE_EVENT from '../../gql/deleteEvent';
-
 import Spinner from '../UI/Spinner/Spinner';
 import Card from '../UI/Card/Card';
-
-import './SearchBox.css';
 import Alert from '../UI/Alert/Alert';
 import Pagination from '../Pagination/Pagination';
 import { IEvent } from '../../interfaces/types';
@@ -18,17 +10,15 @@ import AuthContext from '../../store/auth-context';
 import Modal from '../UI/Modal/Modal';
 import EventBody from '../EventBody/EventBody';
 import { Form } from 'react-bootstrap';
+import {
+  useDeleteEventMutation,
+  useGetEventsQuery,
+  useSaveEventMutation,
+} from '../../generated/graphql';
+
+import './SearchBox.css';
 
 const EVENTS_PER_PAGE = 20;
-
-type EventsDataType = {
-  totalCount: number;
-  events: EventInput[];
-};
-
-type EventsType = {
-  eventsData: EventsDataType;
-};
 
 const SearchBox: FC = () => {
   const [searchText, setSearchText] = useState<string>('');
@@ -56,30 +46,27 @@ const SearchBox: FC = () => {
 
   const authCtx = useContext(AuthContext);
 
-  const { loading, data, error, refetch, networkStatus } = useQuery<EventsType>(
-    GET_EVENTS,
-    {
-      fetchPolicy: 'no-cache',
-      notifyOnNetworkStatusChange: true,
-      variables: {
-        filter: {
-          searchText: debouncedSearchText.trim(),
-          pageSize: EVENTS_PER_PAGE,
-          pageNumber: currentPage,
-          currentCheck,
-          expiredCheck,
-        },
+  const { loading, data, error, refetch, networkStatus } = useGetEventsQuery({
+    fetchPolicy: 'no-cache',
+    notifyOnNetworkStatusChange: true,
+    variables: {
+      filter: {
+        searchText: debouncedSearchText.trim(),
+        pageSize: EVENTS_PER_PAGE,
+        pageNumber: currentPage,
+        currentCheck,
+        expiredCheck,
       },
-    }
-  );
+    },
+  });
 
   const [saveEvent, { error: saveEventError, loading: saveEventLoading }] =
-    useMutation<{ saveEvent: IEvent }, { event: IEvent }>(SAVE_EVENT);
+    useSaveEventMutation();
 
   const [
     deleteEvent,
     { error: deleteEventError, loading: deleteEventLoading },
-  ] = useMutation<{ deleteEvent: boolean }, { id: string }>(DELETE_EVENT);
+  ] = useDeleteEventMutation();
 
   const handleOnSubmit = (event: ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -296,9 +283,9 @@ const SearchBox: FC = () => {
                   exSubTitle={getExSubTitle(event.end as string)}
                   content={event.description}
                   url={event.url ?? ''}
-                  createdBy={event.createdBy.username}
-                  createdAt={event.createdAt}
-                  updatedAt={event.updatedAt}
+                  createdBy={event?.createdBy?.username ?? ''}
+                  createdAt={event.createdAt as any}
+                  updatedAt={event.updatedAt as any}
                   onClick={() => clickEventHandler(event as IEvent)}
                 />
               </div>

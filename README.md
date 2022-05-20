@@ -36,6 +36,12 @@ Event Scheduler is a React app that allows users to create events. An event can 
 
 > APIs implemented using GraphQL
 
+Note that `graphql` schemas are generated using [GraphQL Code Generator](https://www.graphql-code-generator.com/docs/getting-started). This means that if you make any changes to the schema (server/graphql/schema/index.ts), make sure that the `.graphql` files in the frontend are also updated accordingly. Next, run `yarn codegen` to re-generate the gueries and mutations on the frontend (Note: before you do this, make sure the server is up and running by either running `yarn start` or `yarn start:server`)
+
+[GraphQL Playground](https://www.electronjs.org/apps/graphql-playground) is a powerful GraphQL IDE enabling better (local) development workflows. It helps test your schemas locally. See image below:
+
+![](./images/graphql_playground.PNG)
+
 ## Run app locally
 
 > Make sure MongoDB is up and running

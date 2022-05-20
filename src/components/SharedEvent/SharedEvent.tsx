@@ -1,18 +1,12 @@
-import { useMutation } from '@apollo/client';
 import { FC, useEffect } from 'react';
 import { useParams } from 'react-router';
-import { IEvent } from '../../interfaces/types';
 import CardView from '../UI/CardView/CardView';
-
-import GET_EVENT from '../../gql/getEvent';
 import Alert from '../UI/Alert/Alert';
 import Spinner from '../UI/Spinner/Spinner';
+import { useGetEventMutation } from '../../generated/graphql';
 
 const SharedEvent: FC = () => {
-  const [getEvent, { data, loading, error }] = useMutation<
-    { getEvent: IEvent },
-    { id: string }
-  >(GET_EVENT);
+  const [getEvent, { data, loading, error }] = useGetEventMutation();
 
   const { id } = useParams();
 
@@ -45,9 +39,9 @@ const SharedEvent: FC = () => {
         data?.getEvent.end as string
       ).toLocaleString()}`}
       content={data?.getEvent.description ?? ''}
-      createdBy={data?.getEvent.createdBy?.username}
-      createdAt={data?.getEvent.createdAt}
-      updatedAt={data?.getEvent.updatedAt}
+      createdBy={data?.getEvent.createdBy?.username ?? ''}
+      createdAt={data?.getEvent.createdAt as any}
+      updatedAt={data?.getEvent.updatedAt as any}
     />
   );
 };

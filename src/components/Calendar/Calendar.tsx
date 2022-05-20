@@ -1,35 +1,22 @@
 import { useState, useRef, Fragment, useContext, useEffect, FC } from 'react';
 import Modal from '../UI/Modal/Modal';
-
-import FullCalendar, { EventClickArg, EventInput } from '@fullcalendar/react';
+import FullCalendar, { EventClickArg } from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
-
 import EventBody from '../EventBody/EventBody';
-import { NetworkStatus, useMutation, useQuery } from '@apollo/client';
-
-import GET_EVENTS from '../../gql/getEvents';
-import SAVE_EVENT from '../../gql/saveEvent';
-import DELETE_EVENT from '../../gql/deleteEvent';
-
+import { NetworkStatus } from '@apollo/client';
 import Spinner from '../UI/Spinner/Spinner';
 import Alert from '../UI/Alert/Alert';
-
 import { IEvent } from '../../interfaces/types';
+import AuthContext from '../../store/auth-context';
+import {
+  useDeleteEventMutation,
+  useGetEventsQuery,
+  useSaveEventMutation,
+} from '../../generated/graphql';
 
 import './Calendar.css';
-
-import AuthContext from '../../store/auth-context';
-
-type EventsDataType = {
-  totalCount: number;
-  events: EventInput[];
-};
-
-type EventsType = {
-  eventsData: EventsDataType;
-};
 
 const Calendar: FC = () => {
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -59,14 +46,14 @@ const Calendar: FC = () => {
     error: getEventsError,
     refetch,
     networkStatus,
-  } = useQuery<EventsType>(GET_EVENTS, {
+  } = useGetEventsQuery({
     fetchPolicy: 'no-cache',
     notifyOnNetworkStatusChange: true,
     variables: { filter: {} },
   });
 
   const [saveEvent, { error: saveEventError, loading: saveEventLoading }] =
-    useMutation<{ saveEvent: IEvent }, { event: IEvent }>(SAVE_EVENT, {
+    useSaveEventMutation({
       variables: {
         event: {
           id: clickInfoRef.current.value?.event?.id || '',
@@ -82,7 +69,7 @@ const Calendar: FC = () => {
   const [
     deleteEvent,
     { error: deleteEventError, loading: deleteEventLoading },
-  ] = useMutation<{ deleteEvent: boolean }, { id: string }>(DELETE_EVENT, {
+  ] = useDeleteEventMutation({
     variables: { id: clickInfoRef.current.value?.event?.id },
   });
 
@@ -301,7 +288,7 @@ const Calendar: FC = () => {
         events && (
           <FullCalendar
             initialView="dayGridMonth"
-            initialEvents={events.eventsData.events}
+            initialEvents={events.eventsData.events as any}
             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
             eventClick={handleEventClick}
             dateClick={handleDateClick}

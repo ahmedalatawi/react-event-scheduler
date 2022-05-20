@@ -1,4 +1,3 @@
-import { useMutation } from '@apollo/client';
 import {
   ChangeEvent,
   FC,
@@ -7,13 +6,12 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { IEvent } from '../../interfaces/types';
 import { MdSaveAlt } from 'react-icons/md';
 import EventBody from '../EventBody/EventBody';
-import SAVE_EVENT from '../../gql/saveEvent';
 import Spinner from '../UI/Spinner/Spinner';
 import Alert from '../UI/Alert/Alert';
 import AuthContext from '../../store/auth-context';
+import { useSaveEventMutation } from '../../generated/graphql';
 
 const AddEvent: FC = () => {
   const [title, setTitle] = useState<string>('');
@@ -26,10 +24,7 @@ const AddEvent: FC = () => {
 
   const [loggedIn, setLoggedIn] = useState<boolean>(true);
 
-  const [saveEvent, { error, data, loading }] = useMutation<
-    { saveEvent: IEvent },
-    { event: IEvent }
-  >(SAVE_EVENT, {
+  const [saveEvent, { error, data, loading }] = useSaveEventMutation({
     variables: { event: { id: '', title, start, end, isPrivate, description } },
     // refetchQueries: [
     //     { query: GET_EVENTS }

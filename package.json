@@ -2,6 +2,17 @@
   "name": "event-scheduler",
   "version": "0.1.0",
   "private": true,
+  "scripts": {
+    "start": "run-p --race start:server start:web",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "start:server": "cd server && ts-node-dev --respawn --transpile-only ./server.ts && wait-on tcp:4000",
+    "start:web": "react-scripts start",
+    "prepare": "husky install",
+    "pretty": "prettier --write \"./**/*.{js,jsx,css,tsx,ts,json}\"",
+    "codegen": "graphql-codegen --config codegen.yml"
+  },
   "dependencies": {
     "apollo-server-express": "^3.5.0",
     "bcryptjs": "^2.4.3",
@@ -38,6 +49,12 @@
     "@fullcalendar/interaction": "^5.10.1",
     "@fullcalendar/react": "^5.10.1",
     "@fullcalendar/timegrid": "^5.10.1",
+    "@graphql-codegen/cli": "^2.6.2",
+    "@graphql-codegen/introspection": "2.1.1",
+    "@graphql-codegen/typescript": "2.4.11",
+    "@graphql-codegen/typescript-operations": "2.4.0",
+    "@graphql-codegen/typescript-react-apollo": "3.2.14",
+    "@graphql-codegen/typescript-resolvers": "2.6.4",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
@@ -70,16 +87,6 @@
     "ts-node-dev": "^1.1.8",
     "wait-on": "^6.0.0",
     "web-vitals": "^1.0.1"
-  },
-  "scripts": {
-    "start": "run-p --race start:server start:web",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "start:server": "cd server && ts-node-dev --respawn --transpile-only ./server.ts && wait-on tcp:4000",
-    "start:web": "react-scripts start",
-    "prepare": "husky install",
-    "pretty": "prettier --write \"./**/*.{js,jsx,css,tsx,ts,json}\""
   },
   "proxy": "http://localhost:4000/",
   "eslintConfig": {

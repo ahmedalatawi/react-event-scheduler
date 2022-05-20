@@ -1,9 +1,18 @@
-import { FC, useState } from 'react';
+import { FC, useContext, useEffect, useState } from 'react';
 import { Tab, Tabs } from 'react-bootstrap';
+import { useNavigate } from 'react-router';
+import AuthContext from '../../../store/auth-context';
 import TitledCard from '../../UI/TitledCard/TitledCard';
 
 const MySettings: FC = () => {
   const [key, setKey] = useState('inbox');
+
+  const authCtx = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    !authCtx.auth && navigate('/');
+  }, [authCtx, navigate]);
 
   return (
     <TitledCard title="My Settings">

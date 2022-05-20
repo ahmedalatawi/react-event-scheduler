@@ -1,23 +1,19 @@
-import { useQuery } from '@apollo/client';
 import { FC, useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
-import { IUser } from '../../../interfaces/types';
 import { BiEditAlt } from 'react-icons/bi';
-
-import GET_USER from '../../../gql/getUser';
 import Alert from '../../UI/Alert/Alert';
 import Spinner from '../../UI/Spinner/Spinner';
 import EditMyProfile from './EditMyProfile';
 import AuthContext from '../../../store/auth-context';
 import TitledCard from '../../UI/TitledCard/TitledCard';
+import { useGetUserQuery } from '../../../generated/graphql';
 
 const MyProfile: FC = () => {
   const { id } = useParams();
 
-  const { data, loading, error } = useQuery<{ getUser: IUser }, { id: string }>(
-    GET_USER,
-    { variables: { id: id ?? '' } }
-  );
+  const { data, loading, error } = useGetUserQuery({
+    variables: { id: id ?? '' },
+  });
 
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
 
@@ -110,15 +106,8 @@ const MyProfile: FC = () => {
           </div>
         </TitledCard>
       ) : (
-        // <div className="card">
-        //   <h5 className="card-header">My Profile</h5>
-
-        //   <div className="card-body">
-
-        //   </div>
-        // </div>
         <EditMyProfile
-          user={data?.getUser}
+          user={data?.getUser as any}
           onReadOnlyMode={() => setIsEditMode(false)}
         />
       )}
