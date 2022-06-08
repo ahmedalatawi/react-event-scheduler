@@ -153,14 +153,10 @@ const SearchBox: FC = () => {
     setCurrentPage(1);
   }, [debouncedSearchText]);
 
-  useEffect(
-    () => {
-      setCurrentPage(1);
-      refetch();
-    },
-    // eslint-disable-next-line
-    [authCtx]
-  );
+  useEffect(() => {
+    setCurrentPage(1);
+    refetch();
+  }, [authCtx, refetch]);
 
   const handleFilterByAllEventsChange = (e: ChangeEvent<HTMLInputElement>) => {
     e.persist();

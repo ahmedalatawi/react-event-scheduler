@@ -29,8 +29,6 @@ const EventBody: FC<EventBodyProps> = (props) => {
 
   const authCtx = useContext(AuthContext);
 
-  console.log('EventBody...');
-
   const validateEventDates = (start: string, end: string, title: string) => {
     const today = new Date();
     const startDate = new Date(start);
@@ -89,22 +87,20 @@ const EventBody: FC<EventBodyProps> = (props) => {
     props.onIsPrivate(checked);
   };
 
-  useEffect(
-    () => {
-      const auth = authCtx.getAuth();
-      const today = new Date();
-      const endDate = new Date(end);
+  const { onValidate, createdById } = props;
 
-      if (auth?.userId === props.createdById || props.createdById === '') {
-        if (endDate.getTime() < today.getTime()) {
-          setErrorMsg("Event can't be saved in the past.");
-          props.onValidate(false);
-        }
+  useEffect(() => {
+    const auth = authCtx.getAuth();
+    const today = new Date();
+    const endDate = new Date(end);
+
+    if (auth?.userId === createdById || createdById === '') {
+      if (endDate.getTime() < today.getTime()) {
+        setErrorMsg("Event can't be saved in the past.");
+        onValidate(false);
       }
-    },
-    // eslint-disable-next-line
-    []
-  );
+    }
+  }, [authCtx, createdById, end, onValidate]);
 
   return (
     <div className="row g-3">

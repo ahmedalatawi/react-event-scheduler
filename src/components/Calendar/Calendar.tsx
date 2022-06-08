@@ -75,8 +75,6 @@ const Calendar: FC = () => {
 
   const authCtx = useContext(AuthContext);
 
-  console.log('Calendar...');
-
   useEffect(() => {
     const auth = authCtx.getAuth();
     refetch();

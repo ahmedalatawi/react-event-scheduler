@@ -45,8 +45,6 @@ const Modal: FC<ModalProps> = (props) => {
     onClose,
   } = props;
 
-  console.log('Modal...');
-
   useEffect(
     () => {
       const modal = new ModalBootstrap(modalRef.current, { keyboard: false });
@@ -55,11 +53,11 @@ const Modal: FC<ModalProps> = (props) => {
 
       const modalEl = modalRef.current;
 
-      modalEl.addEventListener('hidden.bs.modal', () => onClose());
+      modalEl.addEventListener('hidden.bs.modal', onClose);
 
       return () => modalEl.removeEventListener('hidden.bs.modal', () => {});
     },
-    //eslint-disable-next-line
+    // eslint-disable-next-line
     []
   );
 

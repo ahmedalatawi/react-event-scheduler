@@ -8,8 +8,6 @@ type AlertProps = {
 };
 
 const Alert: FC<AlertProps> = ({ type, msg, ariaLabel, fillType }) => {
-  console.log('Alert...');
-
   return (
     <>
       <svg xmlns="http://www.w3.org/2000/svg" style={{ display: 'none' }}>

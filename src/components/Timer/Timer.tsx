@@ -9,8 +9,6 @@ const Timer: FC<TimerProps> = ({ seconds, onTimeout }) => {
   const [timeLeft, setTimeLeft] = useState<number>(seconds);
   const intervalRef = useRef<any>({});
 
-  console.log('Timer...');
-
   useEffect(() => {
     intervalRef.current = setInterval(() => {
       setTimeLeft((t) => t - 1);

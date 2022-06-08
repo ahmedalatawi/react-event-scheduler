@@ -12,8 +12,6 @@ const MainNavbar: FC = () => {
 
   const authCtx = useContext(AuthContext);
 
-  console.log('Navbar...');
-
   useEffect(() => setLoggedIn(!!authCtx.getAuth()), [authCtx]);
 
   const handleLoginBtnClick = () => {

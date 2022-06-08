@@ -40,25 +40,21 @@ const LoginContainer: FC<LoginContainerProps> = ({
 
   const authCtx = useContext(AuthContext);
 
-  console.log('LoginContainer...');
+  const { addAuth } = authCtx;
 
-  useEffect(
-    () => {
-      const auth: any = loginData || signupData;
+  useEffect(() => {
+    const auth: any = loginData || signupData;
 
-      if (auth) {
-        const { userId, token, tokenExpiration, username } =
-          auth.login || auth.signup;
+    if (auth) {
+      const { userId, token, tokenExpiration, username } =
+        auth.login || auth.signup;
 
-        authCtx.addAuth({ userId, token, tokenExpiration, username });
+      addAuth({ userId, token, tokenExpiration, username });
 
-        setCloseOnSuccess(true);
-        onSuccess();
-      }
-    },
-    // eslint-disable-next-line
-    [loginData, signupData]
-  );
+      setCloseOnSuccess(true);
+      onSuccess();
+    }
+  }, [addAuth, loginData, onSuccess, signupData]);
 
   const handleSubmit = () => {
     const view = getViewType();

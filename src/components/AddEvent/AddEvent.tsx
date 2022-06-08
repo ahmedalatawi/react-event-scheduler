@@ -33,8 +33,6 @@ const AddEvent: FC = () => {
 
   const authCtx = useContext(AuthContext);
 
-  console.log('AddEvent...');
-
   useEffect(() => setLoggedIn(!!authCtx.getAuth()), [authCtx]);
 
   const handleOnSubmit = (event: ChangeEvent<HTMLFormElement>) => {
@@ -49,6 +47,7 @@ const AddEvent: FC = () => {
         setIsPrivate(false);
         setDisableSaveBtn(true);
       })
+      .catch((error) => console.error(error.message))
       .finally(() => setDisplayForm(true));
   };
 
