@@ -2891,10 +2891,10 @@
     "@types/react" "*"
     "@types/react-bootstrap-table-next" "*"
 
-"@types/react-bootstrap-table2-toolkit@^2.1.6":
-  version "2.1.6"
-  resolved "https://registry.yarnpkg.com/@types/react-bootstrap-table2-toolkit/-/react-bootstrap-table2-toolkit-2.1.6.tgz#e9497aa6faacbddcf4d918f552a736bee28c0cb3"
-  integrity sha512-bu4naldgN6KYuKl3Dca0SDYkf610nurbSxm3kwcol2MUW3QFc1KgBynhNtCgvZJByGpiUAmvt0nmC14o7/T0Iw==
+"@types/react-bootstrap-table2-toolkit@^2.1.7":
+  version "2.1.7"
+  resolved "https://registry.yarnpkg.com/@types/react-bootstrap-table2-toolkit/-/react-bootstrap-table2-toolkit-2.1.7.tgz#b3c0aae80306533019c87be4819441ce13516c6c"
+  integrity sha512-Jr4rjcnzqy1srSrrTaO0xMjP0MJdenJx5yOO/Rwo6mkru9hID7omEHfZeer0tRhPrN2QOFmCqe+sHYjZnUqKmw==
   dependencies:
     "@types/react" "*"
     "@types/react-bootstrap-table-next" "*"
