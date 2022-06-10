@@ -10,9 +10,8 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ![](./images/react-event-pic.gif)
 
-Event Scheduler is a React app that allows users to create events. An event can be anything, such as a sport event, team meeting, party announcement, personal advertisement, etc. An event consists of title, start and end date/time, and description. All events are public by default (visible to everyone). They can also be private (only visible to you) by checking the private checkmark.
-
-> You can only edit or remove an event if you're the owner of that event.
+Event Scheduler is a React app that allows users to create events. An event can be anything, such as a sport event, team meeting, party announcement, personal advertisement, etc. An event consists of title, start and end date/time, and description. Events can also be shared on FB or Twitter.
+All events are public by default (visible to everyone). They can also be private (only visible to you) by checking the private checkbox.
 
 ### [Demo](https://event-scheduler-demo.herokuapp.com/) :movie_camera:
 
@@ -20,9 +19,9 @@ Event Scheduler is a React app that allows users to create events. An event can 
 
 ### Frontend
 
-- React
+- React (react hooks)
 - Typescript
-- Bootstrap
+- Bootstrap/react-bootstrap
 - Apollo client
 - JS cookie
 
@@ -33,8 +32,6 @@ Event Scheduler is a React app that allows users to create events. An event can 
 - Apollo server express
 - JSON web token
 - MongoDB with mongoose
-
-> APIs implemented using GraphQL
 
 Note that `graphql` schemas are generated using [GraphQL Code Generator](https://www.graphql-code-generator.com/docs/getting-started). This means that if you make any changes to the schema (server/graphql/schema/index.ts), make sure that the `.graphql` files in the frontend are also updated accordingly. Next, run `yarn codegen` to re-generate the gueries and mutations on the frontend (Note: before you do this, make sure the server is up and running by either running `yarn start` or `yarn start:server`)
 
