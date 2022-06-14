@@ -47,7 +47,7 @@
     "typescript": "^4.7.3"
   },
   "devDependencies": {
-    "@apollo/client": "^3.6.7",
+    "@apollo/client": "^3.6.8",
     "@fullcalendar/daygrid": "^5.10.1",
     "@fullcalendar/interaction": "^5.10.1",
     "@fullcalendar/react": "^5.10.1",
