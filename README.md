@@ -22,6 +22,7 @@ All events are public by default (visible to everyone). They can also be private
 - React (react hooks)
 - Typescript
 - Bootstrap/react-bootstrap
+- Styled components
 - Apollo client
 - JS cookie
 
