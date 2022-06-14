@@ -4,11 +4,16 @@ import { NavLink } from 'react-router-dom';
 import AuthContext from '../../store/auth-context';
 import LoginContainer from '../LoginContainer/LoginContainer';
 import MyAccount from '../MyAccount/MyAccount';
+import { Switch, useDarkreader } from 'react-darkreader';
+import { SwitchWrapper } from './styles';
 
 const MainNavbar: FC = () => {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
   const [view, setView] = useState<string>('Login');
+  const [isDark, { toggle }] = useDarkreader(
+    localStorage.getItem('react-event-scheduler-theme') === 'dark'
+  );
 
   const authCtx = useContext(AuthContext);
 
@@ -37,6 +42,18 @@ const MainNavbar: FC = () => {
 
   return (
     <Fragment>
+      <SwitchWrapper>
+        <Switch
+          checked={isDark}
+          onChange={(isDark) => {
+            localStorage.setItem(
+              'react-event-scheduler-theme',
+              isDark ? 'dark' : 'light'
+            );
+            toggle();
+          }}
+        />
+      </SwitchWrapper>
       {showModal && (
         <LoginContainer
           view={view}

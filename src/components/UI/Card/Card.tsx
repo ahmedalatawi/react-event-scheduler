@@ -1,8 +1,7 @@
 import { FC, Fragment } from 'react';
 import { FacebookShareButton, TwitterShareButton } from 'react-share';
 import { FacebookIcon, TwitterIcon } from 'react-share';
-
-import './Card.css';
+import { StyledCard, StyledPrivateBadge, StyledSubTitle } from './styles';
 
 type CardProps = {
   title: string;
@@ -30,20 +29,11 @@ const Card: FC<CardProps> = ({
   onClick,
 }) => {
   return (
-    <div className="card card-custom" onClick={onClick}>
+    <StyledCard onClick={onClick}>
       <div className="card-body">
         <h5 className="card-title">
-          {title}{' '}
-          {exSubTitle && (
-            <span className="badge rounded-pill bg-warning text-dark card-small-font">
-              {exSubTitle}
-            </span>
-          )}{' '}
-          {isPrivate && (
-            <span className="badge rounded-pill bg-danger card-small-font">
-              Private
-            </span>
-          )}
+          {title} {exSubTitle && <StyledSubTitle>{exSubTitle}</StyledSubTitle>}{' '}
+          {isPrivate && <StyledPrivateBadge>Private</StyledPrivateBadge>}
         </h5>
         <h6 className="card-subtitle mb-2 text-muted">{subtitle}</h6>
         <p className="card-text">{content}</p>
@@ -83,7 +73,7 @@ const Card: FC<CardProps> = ({
           <TwitterIcon size={32} round /> Share on Twitter
         </TwitterShareButton>
       </div>
-    </div>
+    </StyledCard>
   );
 };
 

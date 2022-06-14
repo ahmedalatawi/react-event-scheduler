@@ -5,8 +5,7 @@ import { FiLogOut, FiSettings } from 'react-icons/fi';
 import { MdEventNote } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 import AuthContext from '../../store/auth-context';
-
-import myAccountStyles from './MyAccount.module.css';
+import { StyledNavDropdown } from './styles';
 
 type MyAccountProps = {
   onLogout: () => void;
@@ -20,12 +19,12 @@ const MyAccount: FC<MyAccountProps> = ({ onLogout }) => {
       <span className="nav-link text-secondary">
         Welcome, <b>{authCtx.auth?.username}</b>
       </span>
-      <NavDropdown
+      <StyledNavDropdown
         title={<FaUser className="text-secondary" />}
-        className={[
-          myAccountStyles.dropdown,
-          myAccountStyles['dropdown-menu'],
-        ].join(' , ')}
+        // className={[
+        //   myAccountStyles.dropdown,
+        //   myAccountStyles['dropdown-menu'],
+        // ].join(' , ')}
       >
         <NavDropdown.Item
           as={Link}
@@ -46,7 +45,7 @@ const MyAccount: FC<MyAccountProps> = ({ onLogout }) => {
         <NavDropdown.Item onClick={onLogout}>
           Logout <FiLogOut />
         </NavDropdown.Item>
-      </NavDropdown>
+      </StyledNavDropdown>
     </Fragment>
   );
 };

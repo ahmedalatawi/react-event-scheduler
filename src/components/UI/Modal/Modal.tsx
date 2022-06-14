@@ -1,10 +1,9 @@
 import { FC, useEffect, useRef, useState } from 'react';
 import { Modal as ModalBootstrap } from 'bootstrap';
 import ReactDOM from 'react-dom';
-
-import './Modal.css';
 import { MdSaveAlt } from 'react-icons/md';
 import { FiLogIn, FiTrash2 } from 'react-icons/fi';
+import { StyledModal } from './styles';
 
 const portalElement: any = document.getElementById('modal-root');
 
@@ -77,7 +76,7 @@ const Modal: FC<ModalProps> = (props) => {
       aria-hidden="true"
       ref={modalRef}
     >
-      <div className="modal-dialog">
+      <StyledModal>
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title" id="exampleModalLabel">
@@ -137,7 +136,7 @@ const Modal: FC<ModalProps> = (props) => {
             )}
           </div>
         </div>
-      </div>
+      </StyledModal>
     </div>,
     portalElement
   );

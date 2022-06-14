@@ -14,8 +14,6 @@ const UserIdleTimer: FC<UserIdleTimerProps> = ({ onLogout }) => {
     useState<boolean>(false);
   const resetTimerRef = useRef<any>({});
 
-  console.log('UserIdleTimer...');
-
   const authCtx = useContext(AuthContext);
 
   const handleOnIdle = () => {

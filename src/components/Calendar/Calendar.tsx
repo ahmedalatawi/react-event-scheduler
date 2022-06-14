@@ -15,8 +15,7 @@ import {
   useGetEventsQuery,
   useSaveEventMutation,
 } from '../../generated/graphql';
-
-import './Calendar.css';
+import { FullCalendarWrapper } from './styles';
 
 const Calendar: FC = () => {
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -284,14 +283,16 @@ const Calendar: FC = () => {
         <Spinner />
       ) : (
         events && (
-          <FullCalendar
-            initialView="dayGridMonth"
-            initialEvents={events.eventsData.events as any}
-            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-            eventClick={handleEventClick}
-            dateClick={handleDateClick}
-            //validRange={handleValidRange}
-          />
+          <FullCalendarWrapper>
+            <FullCalendar
+              initialView="dayGridMonth"
+              initialEvents={events.eventsData.events as any}
+              plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+              eventClick={handleEventClick}
+              dateClick={handleDateClick}
+              //validRange={handleValidRange}
+            />
+          </FullCalendarWrapper>
         )
       )}
     </Fragment>

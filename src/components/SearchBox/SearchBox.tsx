@@ -15,8 +15,7 @@ import {
   useGetEventsQuery,
   useSaveEventMutation,
 } from '../../generated/graphql';
-
-import './SearchBox.css';
+import { EventCardContainer, EventCardWrapper } from './styles';
 
 const EVENTS_PER_PAGE = 20;
 
@@ -261,13 +260,13 @@ const SearchBox: FC = () => {
         />
       </form>
 
-      <div className="event-card-container">
+      <EventCardContainer>
         {loading || networkStatus === NetworkStatus.refetch ? (
           <Spinner />
         ) : data?.eventsData?.events?.length ? (
           data.eventsData.events.map((event) => {
             return (
-              <div className="event-card" key={event.id}>
+              <EventCardWrapper key={event.id}>
                 <Card
                   isPrivate={event.isPrivate}
                   title={event.title ?? ''}
@@ -284,7 +283,7 @@ const SearchBox: FC = () => {
                   updatedAt={event.updatedAt as any}
                   onClick={() => clickEventHandler(event as IEvent)}
                 />
-              </div>
+              </EventCardWrapper>
             );
           })
         ) : !error ? (
@@ -297,7 +296,7 @@ const SearchBox: FC = () => {
             />
           </div>
         ) : null}
-      </div>
+      </EventCardContainer>
 
       {!loading && (
         <div className="float-end">
