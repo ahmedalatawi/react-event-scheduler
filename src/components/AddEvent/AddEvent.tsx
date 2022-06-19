@@ -1,11 +1,4 @@
-import {
-  ChangeEvent,
-  FC,
-  Fragment,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import { ChangeEvent, FC, useContext, useEffect, useState } from 'react';
 import { MdSaveAlt } from 'react-icons/md';
 import EventBody from '../EventBody/EventBody';
 import Spinner from '../UI/Spinner/Spinner';
