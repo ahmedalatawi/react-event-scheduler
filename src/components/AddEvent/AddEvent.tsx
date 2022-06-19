@@ -52,7 +52,7 @@ const AddEvent: FC = () => {
   };
 
   return (
-    <Fragment>
+    <div>
       {!loggedIn && (
         <Alert
           msg="You must log in to be able to add events."
@@ -80,7 +80,7 @@ const AddEvent: FC = () => {
       {loading ? (
         <Spinner />
       ) : (
-        <form className="row g-3" onSubmit={handleOnSubmit}>
+        <form onSubmit={handleOnSubmit}>
           {displayForm && (
             <EventBody
               title={title}
@@ -109,7 +109,7 @@ const AddEvent: FC = () => {
           </div>
         </form>
       )}
-    </Fragment>
+    </div>
   );
 };
 
