@@ -19,9 +19,6 @@ const AddEvent: FC = () => {
 
   const [saveEvent, { error, data, loading }] = useSaveEventMutation({
     variables: { event: { id: '', title, start, end, isPrivate, description } },
-    // refetchQueries: [
-    //     { query: GET_EVENTS }
-    // ]
   });
 
   const authCtx = useContext(AuthContext);
@@ -73,22 +70,24 @@ const AddEvent: FC = () => {
       {loading ? (
         <Spinner />
       ) : (
-        <form onSubmit={handleOnSubmit}>
+        <form className="row g-3" onSubmit={handleOnSubmit}>
           {displayForm && (
-            <EventBody
-              title={title}
-              start={start}
-              end={end}
-              isPrivate={false}
-              description={description}
-              disableEdit={!loggedIn}
-              onTitle={(title) => setTitle(title)}
-              onDescription={(description) => setDescription(description)}
-              onStart={(start) => setStart(start)}
-              onEnd={(end) => setEnd(end)}
-              onIsPrivate={(isPrivate) => setIsPrivate(isPrivate)}
-              onValidate={(valid) => setDisableSaveBtn(!valid)}
-            />
+            <div className="col-12">
+              <EventBody
+                title={title}
+                start={start}
+                end={end}
+                isPrivate={false}
+                description={description}
+                disableEdit={!loggedIn}
+                onTitle={(title) => setTitle(title)}
+                onDescription={(description) => setDescription(description)}
+                onStart={(start) => setStart(start)}
+                onEnd={(end) => setEnd(end)}
+                onIsPrivate={(isPrivate) => setIsPrivate(isPrivate)}
+                onValidate={(valid) => setDisableSaveBtn(!valid)}
+              />
+            </div>
           )}
 
           <div className="col-12">

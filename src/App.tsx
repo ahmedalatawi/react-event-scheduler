@@ -1,21 +1,17 @@
 import './App.css';
 
 import { ApolloProvider } from '@apollo/client';
-import { Routes, Route, BrowserRouter } from 'react-router-dom';
-
-import Navbar from './components/Navbar/Navbar';
-import Calendar from './components/Calendar/Calendar';
 import client from './apollo';
-import SearchBox from './components/SearchBox/SearchBox';
-import AddEvent from './components/AddEvent/AddEvent';
-import PageNotFound from './components/PageNotFound/PageNotFound';
 import UserIdleTimer from './components/UserIdleTimer/UserIdleTimer';
 import { useContext, useEffect, useState } from 'react';
 import AuthContext from './store/auth-context';
-import SharedEvent from './components/SharedEvent/SharedEvent';
-import MyProfile from './components/MyAccount/MyProfile/MyProfile';
-import MyEvents from './components/MyAccount/MyEvents/MyEvents';
-import MySettings from './components/MyAccount/MySettings/MySettings';
+import AppRoutes from './Routes';
+import styled from 'styled-components';
+import { Container } from 'react-bootstrap';
+
+const AppContainer = styled(Container)({
+  paddingTop: 20,
+});
 
 function App() {
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
@@ -25,29 +21,13 @@ function App() {
   useEffect(() => setLoggedIn(!!authCtx.getAuth()), [authCtx]);
 
   return (
-    <div className="container">
+    <AppContainer>
       {loggedIn && <UserIdleTimer onLogout={authCtx.removeAuth} />}
 
       <ApolloProvider client={client}>
-        <BrowserRouter>
-          <div className="navbar-custom">
-            <Navbar />
-          </div>
-
-          <Routes>
-            <Route path="*" element={<PageNotFound />} />
-            <Route path="/" element={<SearchBox />} />
-            <Route path="/searchEvents" element={<SearchBox />} />
-            <Route path="/addEvent" element={<AddEvent />} />
-            <Route path="/calendar" element={<Calendar />} />
-            <Route path="/sharedEvent/:id" element={<SharedEvent />} />
-            <Route path="/user/:id/profile" element={<MyProfile />} />
-            <Route path="/user/:id/events" element={<MyEvents />} />
-            <Route path="/user/:id/settings" element={<MySettings />} />
-          </Routes>
-        </BrowserRouter>
+        <AppRoutes />
       </ApolloProvider>
-    </div>
+    </AppContainer>
   );
 }
 
