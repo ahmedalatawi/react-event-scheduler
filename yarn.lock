@@ -10,7 +10,7 @@
     "@jridgewell/gen-mapping" "^0.1.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
-"@apollo/client@^3.6.8":
+"@apollo/client@3.6.8":
   version "3.6.8"
   resolved "https://registry.yarnpkg.com/@apollo/client/-/client-3.6.8.tgz#97e876fdbc4c287652a61895fd2b6f0b157a7667"
   integrity sha512-p/J6KRHZZPGX0bZtMLvRFAIcReYsRYGg+Jz9MkgabWPy0L8rwgyolq9fvKsNqkH888Tj9Yvwrxz9V84KfcORJA==
@@ -3763,7 +3763,7 @@ apollo-server-errors@^3.3.1:
   resolved "https://registry.yarnpkg.com/apollo-server-errors/-/apollo-server-errors-3.3.1.tgz#ba5c00cdaa33d4cbd09779f8cb6f47475d1cd655"
   integrity sha512-xnZJ5QWs6FixHICXHxUfm+ZWqqxrNuPlQ+kj5m6RtEgIpekOPssH/SD9gf2B4HuWV0QozorrygwZnux8POvyPA==
 
-apollo-server-express@^3.9.0:
+apollo-server-express@3.9.0:
   version "3.9.0"
   resolved "https://registry.yarnpkg.com/apollo-server-express/-/apollo-server-express-3.9.0.tgz#1ff3b53fe76e4e8be04b8477ea8a3d9586313af1"
   integrity sha512-scSeHy9iB7W3OiF3uLQEzad9Jm9tEfDF8ACsJb2P+xX69uqg6zizsrQvj3qRhazCO7FKMcMu9zQFR0hy7zKbUA==
