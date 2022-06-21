@@ -2,13 +2,13 @@ import { useState, Fragment, useContext, useEffect, FC } from 'react';
 import { Container, Form, Nav, Navbar } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import AuthContext from '../../store/auth-context';
-import LoginContainer from '../LoginContainer/LoginContainer';
-import MyAccount from '../MyAccount/MyAccount';
+import LoginContainer from '../../pages/user/LoginContainer/LoginContainer';
+import MyAccount from '../../pages/user/MyAccount/MyAccount';
 import { Switch, useDarkreader } from 'react-darkreader';
-import { SwitchWrapper } from './styles';
 
 const MainNavbar: FC = () => {
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
   const [view, setView] = useState<string>('Login');
   const [isDark, { toggle }] = useDarkreader(
@@ -22,11 +22,13 @@ const MainNavbar: FC = () => {
   const handleLoginBtnClick = () => {
     setView('Login');
     setShowModal(true);
+    setIsExpanded(false);
   };
 
   const handleSignupBtnClick = () => {
     setView('Signup');
     setShowModal(true);
+    setIsExpanded(false);
   };
 
   const handleLogoutBtnClick = () => {
@@ -40,20 +42,16 @@ const MainNavbar: FC = () => {
     color: 'black',
   };
 
+  const onToggleHandler = (expanded: boolean) => {
+    setIsExpanded(expanded);
+  };
+
+  const onSelectNavLinkHandler = () => {
+    setIsExpanded(false);
+  };
+
   return (
     <Fragment>
-      <SwitchWrapper>
-        <Switch
-          checked={isDark}
-          onChange={(isDark) => {
-            localStorage.setItem(
-              'react-event-scheduler-theme',
-              isDark ? 'dark' : 'light'
-            );
-            toggle();
-          }}
-        />
-      </SwitchWrapper>
       {showModal && (
         <LoginContainer
           view={view}
@@ -61,11 +59,18 @@ const MainNavbar: FC = () => {
           onSuccess={() => setLoggedIn(true)}
         />
       )}
-      <Navbar bg="light" expand="lg" sticky="top">
+      <Navbar
+        bg="light"
+        expand="lg"
+        fixed="top"
+        expanded={isExpanded}
+        onToggle={onToggleHandler}
+      >
         <Container fluid>
           <NavLink
             className="navbar-brand"
             to="/"
+            onClick={onSelectNavLinkHandler}
             style={({ isActive }) => (isActive ? isActiveStyle : {})}
           >
             Event Scheduler
@@ -77,6 +82,7 @@ const MainNavbar: FC = () => {
                 className="nav-link"
                 style={({ isActive }) => (isActive ? isActiveStyle : {})}
                 to="/searchEvents"
+                onClick={onSelectNavLinkHandler}
               >
                 Search events
               </NavLink>
@@ -85,6 +91,7 @@ const MainNavbar: FC = () => {
                 className="nav-link"
                 style={({ isActive }) => (isActive ? isActiveStyle : {})}
                 to="/addEvent"
+                onClick={onSelectNavLinkHandler}
               >
                 Add event
               </NavLink>
@@ -93,10 +100,23 @@ const MainNavbar: FC = () => {
                 className="nav-link"
                 style={({ isActive }) => (isActive ? isActiveStyle : {})}
                 to="/calendar"
+                onClick={onSelectNavLinkHandler}
               >
                 Calendar
               </NavLink>
             </Nav>
+            <div className="me-2">
+              <Switch
+                checked={isDark}
+                onChange={(isDark) => {
+                  localStorage.setItem(
+                    'react-event-scheduler-theme',
+                    isDark ? 'dark' : 'light'
+                  );
+                  toggle();
+                }}
+              />
+            </div>
             <Form className="d-flex">
               {!loggedIn ? (
                 <Fragment>

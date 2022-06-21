@@ -1,5 +1,3 @@
-import './App.css';
-
 import { ApolloProvider } from '@apollo/client';
 import client from './apollo';
 import UserIdleTimer from './components/UserIdleTimer/UserIdleTimer';
@@ -8,9 +6,12 @@ import AuthContext from './store/auth-context';
 import AppRoutes from './Routes';
 import styled from 'styled-components';
 import { Container } from 'react-bootstrap';
+import Footer from './components/Footer/Footer';
+
+import './App.css';
 
 const AppContainer = styled(Container)({
-  paddingTop: 20,
+  minHeight: '100vh',
 });
 
 function App() {
@@ -21,13 +22,16 @@ function App() {
   useEffect(() => setLoggedIn(!!authCtx.getAuth()), [authCtx]);
 
   return (
-    <AppContainer>
-      {loggedIn && <UserIdleTimer onLogout={authCtx.removeAuth} />}
+    <>
+      <AppContainer>
+        {loggedIn && <UserIdleTimer onLogout={authCtx.removeAuth} />}
 
-      <ApolloProvider client={client}>
-        <AppRoutes />
-      </ApolloProvider>
-    </AppContainer>
+        <ApolloProvider client={client}>
+          <AppRoutes />
+        </ApolloProvider>
+      </AppContainer>
+      <Footer />
+    </>
   );
 }
 

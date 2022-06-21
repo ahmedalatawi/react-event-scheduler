@@ -1,30 +1,24 @@
 import { FC } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import styled from 'styled-components';
-import AddEvent from './components/AddEvent/AddEvent';
-import Calendar from './components/Calendar/Calendar';
-import MyEvents from './components/MyAccount/MyEvents/MyEvents';
-import MyProfile from './components/MyAccount/MyProfile/MyProfile';
-import MySettings from './components/MyAccount/MySettings/MySettings';
+import AddEvent from './pages/events/AddEvent/AddEvent';
+import Calendar from './pages/calendar/Calendar/Calendar';
+import MyEvents from './pages/user/MyAccount/MyEvents/MyEvents';
+import MyProfile from './pages/user/MyAccount/MyProfile/MyProfile';
+import MySettings from './pages/user/MyAccount/MySettings/MySettings';
 import Navbar from './components/Navbar/Navbar';
 import PageNotFound from './components/PageNotFound/PageNotFound';
-import SearchBox from './components/SearchBox/SearchBox';
-import SharedEvent from './components/SharedEvent/SharedEvent';
-
-const NavbarWrapper = styled.div({
-  paddingBottom: 20,
-});
+import SearchEvents from './pages/events/SearchEvents/SearchEvents';
+import SharedEvent from './pages/events/ShareEvent/SharedEvent';
+import Welcome from './pages/home/welcome/Welcome';
 
 const AppRoutes: FC = () => (
   <BrowserRouter>
-    <NavbarWrapper>
-      <Navbar />
-    </NavbarWrapper>
+    <Navbar />
 
     <Routes>
       <Route path="*" element={<PageNotFound />} />
-      <Route path="/" element={<SearchBox />} />
-      <Route path="/searchEvents" element={<SearchBox />} />
+      <Route path="/" element={<Welcome />} />
+      <Route path="/searchEvents" element={<SearchEvents />} />
       <Route path="/addEvent" element={<AddEvent />} />
       <Route path="/calendar" element={<Calendar />} />
       <Route path="/sharedEvent/:id" element={<SharedEvent />} />
