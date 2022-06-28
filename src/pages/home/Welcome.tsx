@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { Col, Row } from 'react-bootstrap';
-import WelcomeImage from '../../../assests/images/mtb.jpg';
+import WelcomeImage from '../../assests/images/mtb.jpg';
 
 const Welcome: FC = () => {
   return (
@@ -9,6 +9,28 @@ const Welcome: FC = () => {
       <br />
       <Row>
         <Col md={6}>
+          <p>
+            <a
+              title="GDPR-compliant Web Analytics"
+              href="https://clicky.com/101370668"
+            >
+              <img
+                alt="Clicky"
+                src="//static.getclicky.com/media/links/badge.gif"
+              />
+            </a>
+            <script async src="//static.getclicky.com/101370668.js"></script>
+            <noscript>
+              <p>
+                <img
+                  alt="Clicky"
+                  width="1"
+                  height="1"
+                  src="//in.getclicky.com/101370668ns.gif"
+                />
+              </p>
+            </noscript>
+          </p>
           <p>
             Event Scheduler is a fullstack React app that allows users to create
             events. An event can be anything, such as a sport event, team

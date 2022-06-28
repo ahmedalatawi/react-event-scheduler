@@ -1,20 +1,20 @@
 import { useState, useRef, Fragment, useContext, useEffect, FC } from 'react';
-import Modal from '../../../components/UI/Modal/Modal';
+import Modal from '../../components/UI/Modal/Modal';
 import FullCalendar, { EventClickArg } from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
-import EventBody from '../../../components/EventBody/EventBody';
+import EventBody from '../../components/EventBody/EventBody';
 import { NetworkStatus } from '@apollo/client';
-import Spinner from '../../../components/UI/Spinner/Spinner';
-import Alert from '../../../components/UI/Alert/Alert';
-import { IEvent } from '../../../interfaces/types';
-import AuthContext from '../../../store/auth-context';
+import Spinner from '../../components/UI/Spinner/Spinner';
+import Alert from '../../components/UI/Alert/Alert';
+import { IEvent } from '../../interfaces/types';
+import AuthContext from '../../store/auth-context';
 import {
   useDeleteEventMutation,
   useGetEventsQuery,
   useSaveEventMutation,
-} from '../../../generated/graphql';
+} from '../../generated/graphql';
 import { FullCalendarWrapper } from './styles';
 
 const Calendar: FC = () => {
