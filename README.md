@@ -6,11 +6,7 @@
 [![Depfu](https://badges.depfu.com/badges/e9fb7e6c5e5b18f9b1dbf2c05736f034/count.svg)](https://depfu.com/github/AhmedAlatawi/react-event-scheduler?project_id=35359)
 [![License: MIT](https://img.shields.io/github/license/AhmedAlatawi/react-event-scheduler)](https://github.com/AhmedAlatawi/react-event-scheduler/blob/master/LICENSE)
 
-<a title="GDPR-compliant Web Analytics" href="https://clicky.com/101371476"><img alt="Clicky" src="//static.getclicky.com/media/links/badge.gif" border="0" /></a>
-
-<script async src="//static.getclicky.com/101371476.js"></script>
-
-<noscript><p><img alt="Clicky" width="1" height="1" src="//in.getclicky.com/101371476ns.gif" /></p></noscript>
+![](./images/clicky.svg)
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
