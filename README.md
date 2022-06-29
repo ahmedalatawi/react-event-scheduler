@@ -6,8 +6,6 @@
 [![Depfu](https://badges.depfu.com/badges/e9fb7e6c5e5b18f9b1dbf2c05736f034/count.svg)](https://depfu.com/github/AhmedAlatawi/react-event-scheduler?project_id=35359)
 [![License: MIT](https://img.shields.io/github/license/AhmedAlatawi/react-event-scheduler)](https://github.com/AhmedAlatawi/react-event-scheduler/blob/master/LICENSE)
 
-![](./images/clicky.svg)
-
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ![](./images/react-event-pic.gif)
