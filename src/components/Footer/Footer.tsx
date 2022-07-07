@@ -33,7 +33,11 @@ const Footer: FC = () => (
           <p className="mt-3">
             2022 Copyright &copy;{' '}
             <a href="https://github.com/AhmedAlatawi">Ahmed Alatawi</a>. All
-            rights reserved.
+            rights reserved under{' '}
+            <a href="https://github.com/AhmedAlatawi/react-event-scheduler/blob/main/LICENSE">
+              MIT license
+            </a>
+            .
           </p>
           <span>
             Give this{' '}
