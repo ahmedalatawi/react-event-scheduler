@@ -63,7 +63,7 @@ describe('AddEvent', () => {
     });
 
     const tree = component.toJSON();
-    expect(JSON.stringify(tree)).toContain('Event was added successfully.');
+    expect(JSON.stringify(tree)).toContain('Event was successfully added.');
   });
 
   xit('should display a generic error message when a network or graphgql error occurs', async () => {
