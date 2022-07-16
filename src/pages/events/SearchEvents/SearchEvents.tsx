@@ -46,7 +46,7 @@ const SearchEvents: FC = () => {
   const authCtx = useContext(AuthContext);
 
   const { loading, data, error, refetch, networkStatus } = useGetEventsQuery({
-    fetchPolicy: 'no-cache',
+    fetchPolicy: 'cache-and-network',
     notifyOnNetworkStatusChange: true,
     variables: {
       filter: {

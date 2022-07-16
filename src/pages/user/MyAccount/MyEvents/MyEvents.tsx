@@ -21,7 +21,7 @@ const MyEvents: FC = () => {
   const [pageNumber, setPageNumber] = useState<number>(1);
 
   const { data, loading, error, networkStatus } = useGetUserEventsQuery({
-    fetchPolicy: 'no-cache',
+    fetchPolicy: 'cache-and-network',
     notifyOnNetworkStatusChange: true,
     variables: {
       id: id ?? '',

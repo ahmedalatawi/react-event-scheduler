@@ -46,7 +46,7 @@ const Calendar: FC = () => {
     refetch,
     networkStatus,
   } = useGetEventsQuery({
-    fetchPolicy: 'no-cache',
+    fetchPolicy: 'cache-and-network',
     notifyOnNetworkStatusChange: true,
     variables: { filter: {} },
   });

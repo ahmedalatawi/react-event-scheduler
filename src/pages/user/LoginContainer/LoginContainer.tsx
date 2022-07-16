@@ -1,4 +1,12 @@
-import { useState, useRef, Fragment, useContext, useEffect, FC } from 'react';
+import {
+  useState,
+  useRef,
+  Fragment,
+  useContext,
+  useEffect,
+  FC,
+  useCallback,
+} from 'react';
 import useValidation from '../../../hooks/useValidation';
 import Login from '../../../components/Login/Login';
 import Signup from '../../../components/Signup/Signup';
@@ -34,7 +42,7 @@ const LoginContainer: FC<LoginContainerProps> = ({
 
   const [login, { error: loginError, data: loginData, loading: loginLoading }] =
     useLoginLazyQuery({
-      fetchPolicy: 'no-cache',
+      fetchPolicy: 'cache-and-network',
     });
   const [
     signup,
@@ -45,19 +53,23 @@ const LoginContainer: FC<LoginContainerProps> = ({
 
   const { addAuth } = authCtx;
 
+  const addAuthHandler = useCallback(() => {
+    const auth: any = loginData || signupData;
+    const { userId, token, tokenExpiration, username } =
+      auth.login || auth.signup;
+
+    addAuth({ userId, token, tokenExpiration, username });
+  }, [addAuth, loginData, signupData]);
+
   useEffect(() => {
     const auth: any = loginData || signupData;
 
     if (auth) {
-      const { userId, token, tokenExpiration, username } =
-        auth.login || auth.signup;
-
-      addAuth({ userId, token, tokenExpiration, username });
-
+      addAuthHandler();
       setCloseOnSuccess(true);
       onSuccess();
     }
-  }, [addAuth, loginData, onSuccess, signupData]);
+  }, [addAuthHandler, loginData, onSuccess, signupData]);
 
   const handleSubmit = () => {
     const view = getViewType();

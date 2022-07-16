@@ -1,22 +1,13 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import useAuth from '../hooks/useAuth';
 import { IAuth } from '../interfaces/types';
 
 import AuthContext from './auth-context';
 
 const AuthProvider: FC = (props) => {
-  const [auth, setAuth] = useState<IAuth | null>(null);
-
   const { getAuth, addAuth, removeAuth } = useAuth();
 
-  useEffect(
-    () => {
-      const storedAuth = getAuth();
-      setAuth(storedAuth);
-    },
-    // eslint-disable-next-line
-    []
-  );
+  const [auth, setAuth] = useState<IAuth | null>(getAuth());
 
   const addAuthHandler = (auth: IAuth) => {
     addAuth(auth);

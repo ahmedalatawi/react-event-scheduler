@@ -53,7 +53,7 @@ const AddEvent: FC = () => {
       )}
       {data && (
         <Alert
-          msg="Event was added successfully."
+          msg="Event was successfully added."
           type="success"
           ariaLabel="Success:"
           fillType="#check-circle-fill"
