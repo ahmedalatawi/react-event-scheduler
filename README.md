@@ -44,9 +44,9 @@ Note that `graphql` schemas are generated using [GraphQL Code Generator](https:/
 
 > Make sure MongoDB is up and running
 
-In the project directory, run `yarn` or `npm i`, and then run:
+In the project directory, run `yarn`, then:
 
-### `npm start` or `yarn start`
+### `yarn start`
 
 Runs the backend and frontend apps simultaneously in the development mode.\
 

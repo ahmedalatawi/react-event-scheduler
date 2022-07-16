@@ -44,21 +44,19 @@ const Modal: FC<ModalProps> = (props) => {
     onClose,
   } = props;
 
-  useEffect(
-    () => {
-      const modal = new ModalBootstrap(modalRef.current, { keyboard: false });
-      setModal(modal);
-      modal.show();
+  useEffect(() => {
+    const modal = new ModalBootstrap(modalRef.current, { keyboard: false });
+    setModal(modal);
+    modal.show();
+  }, []);
 
-      const modalEl = modalRef.current;
+  useEffect(() => {
+    const modalEl = modalRef.current;
 
-      modalEl.addEventListener('hidden.bs.modal', onClose);
+    modalEl.addEventListener('hidden.bs.modal', onClose);
 
-      return () => modalEl.removeEventListener('hidden.bs.modal', () => {});
-    },
-    // eslint-disable-next-line
-    []
-  );
+    return () => modalEl.removeEventListener('hidden.bs.modal', null);
+  }, [onClose]);
 
   useEffect(() => {
     !isSubmitLoading && closeOnSubmit && modal?.hide();

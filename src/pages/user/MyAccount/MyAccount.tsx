@@ -9,9 +9,10 @@ import { StyledNavDropdown } from './styles';
 
 type MyAccountProps = {
   onLogout: () => void;
+  onSelect: () => void;
 };
 
-const MyAccount: FC<MyAccountProps> = ({ onLogout }) => {
+const MyAccount: FC<MyAccountProps> = ({ onLogout, onSelect }) => {
   const authCtx = useContext(AuthContext);
 
   return (
@@ -21,15 +22,21 @@ const MyAccount: FC<MyAccountProps> = ({ onLogout }) => {
       </span>
       <StyledNavDropdown title={<FaUser className="text-secondary" />}>
         <NavDropdown.Item
+          onClick={onSelect}
           as={Link}
           to={`/user/${authCtx.auth?.userId}/profile`}
         >
           <FaUserEdit /> My profile
         </NavDropdown.Item>
-        <NavDropdown.Item as={Link} to={`/user/${authCtx.auth?.userId}/events`}>
+        <NavDropdown.Item
+          onClick={onSelect}
+          as={Link}
+          to={`/user/${authCtx.auth?.userId}/events`}
+        >
           <MdEventNote /> My events
         </NavDropdown.Item>
         <NavDropdown.Item
+          onClick={onSelect}
           as={Link}
           to={`/user/${authCtx.auth?.userId}/settings`}
         >

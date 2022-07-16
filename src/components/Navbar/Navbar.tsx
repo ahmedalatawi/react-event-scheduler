@@ -31,11 +31,6 @@ const MainNavbar: FC = () => {
     setIsExpanded(false);
   };
 
-  const handleLogoutBtnClick = () => {
-    authCtx.removeAuth();
-    setLoggedIn(false);
-  };
-
   const isActiveStyle = {
     textDecoration: 'none',
     fontWeight: 600,
@@ -48,6 +43,12 @@ const MainNavbar: FC = () => {
 
   const onSelectNavLinkHandler = () => {
     setIsExpanded(false);
+  };
+
+  const handleLogoutBtnClick = () => {
+    authCtx.removeAuth();
+    setLoggedIn(false);
+    onSelectNavLinkHandler();
   };
 
   return (
@@ -136,7 +137,10 @@ const MainNavbar: FC = () => {
                   </button>
                 </Fragment>
               ) : (
-                <MyAccount onLogout={handleLogoutBtnClick} />
+                <MyAccount
+                  onSelect={onSelectNavLinkHandler}
+                  onLogout={handleLogoutBtnClick}
+                />
               )}
             </Form>
           </Navbar.Collapse>

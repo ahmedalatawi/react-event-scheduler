@@ -3,6 +3,11 @@ import { Tab, Tabs } from 'react-bootstrap';
 import { useNavigate } from 'react-router';
 import AuthContext from '../../../../store/auth-context';
 import TitledCard from '../../../../components/UI/TitledCard/TitledCard';
+import styled from 'styled-components';
+
+const BodyContainer = styled.div({
+  minHeight: '15rem',
+});
 
 const MySettings: FC = () => {
   const [key, setKey] = useState('inbox');
@@ -23,13 +28,19 @@ const MySettings: FC = () => {
         className="mb-3"
       >
         <Tab eventKey="inbox" title="Inbox">
-          <p>Coming soon (inbox) ...</p>
+          <BodyContainer>
+            <p>Coming soon (inbox) ...</p>
+          </BodyContainer>
         </Tab>
         <Tab eventKey="changePassword" title="Change Password">
-          <p>Coming soon (Change Password) ...</p>
+          <BodyContainer>
+            <p>Coming soon (Change Password) ...</p>
+          </BodyContainer>
         </Tab>
         <Tab eventKey="notifications" title="Notifications">
-          <p>Coming soon (Notifications) ...</p>
+          <BodyContainer>
+            <p>Coming soon (Notifications) ...</p>
+          </BodyContainer>
         </Tab>
       </Tabs>
     </TitledCard>

@@ -10,6 +10,7 @@ import Spinner from '../../../../components/UI/Spinner/Spinner';
 import TitledCard from '../../../../components/UI/TitledCard/TitledCard';
 import Pagination from '../../../../components/Pagination/Pagination';
 import { useGetUserEventsQuery } from '../../../../generated/graphql';
+import { BootstrapTableWrapper } from '../styles';
 
 const ITEMS_PER_PAGE = 10;
 
@@ -150,6 +151,14 @@ const MyEvents: FC = () => {
         <Spinner />
       ) : (
         <TitledCard title="My Events">
+          {!updatedEvents?.length && (
+            <Alert
+              msg={'No events were found'}
+              type="warning"
+              ariaLabel="Warning"
+              fillType="#exclamation-triangle-fill"
+            />
+          )}
           <ToolkitProvider
             bootstrap4
             keyField="id"
@@ -166,16 +175,18 @@ const MyEvents: FC = () => {
                   delay={800}
                 />
                 <hr />
-                <BootstrapTable
-                  {...props.baseProps}
-                  striped
-                  hover
-                  bordered={false}
-                  selectRow={selectRow}
-                  wrapperClasses="table-responsive"
-                  rowStyle={{ overflowWrap: 'break-word' }}
-                  filter={filterFactory()}
-                />
+                <BootstrapTableWrapper>
+                  <BootstrapTable
+                    {...props.baseProps}
+                    striped
+                    hover
+                    bordered={false}
+                    selectRow={selectRow}
+                    wrapperClasses="table-responsive"
+                    rowStyle={{ overflowWrap: 'break-word' }}
+                    filter={filterFactory()}
+                  />
+                </BootstrapTableWrapper>
               </div>
             )}
           </ToolkitProvider>

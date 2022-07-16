@@ -20,3 +20,14 @@ export const StyledNavDropdown = styled(NavDropdown)`
     left: auto;
   }
 `;
+
+export const BootstrapTableWrapper = styled.div`
+  .table {
+    overflow: auto;
+    table-layout: auto !important;
+  }
+
+  .react-bootstrap-table {
+    min-height: 15rem;
+  }
+`;

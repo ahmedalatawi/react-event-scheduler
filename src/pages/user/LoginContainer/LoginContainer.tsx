@@ -1,12 +1,4 @@
-import {
-  useState,
-  useRef,
-  Fragment,
-  useContext,
-  useEffect,
-  FC,
-  useCallback,
-} from 'react';
+import { useState, useRef, Fragment, useContext, useEffect, FC } from 'react';
 import useValidation from '../../../hooks/useValidation';
 import Login from '../../../components/Login/Login';
 import Signup from '../../../components/Signup/Signup';
@@ -51,25 +43,21 @@ const LoginContainer: FC<LoginContainerProps> = ({
 
   const authCtx = useContext(AuthContext);
 
-  const { addAuth } = authCtx;
-
-  const addAuthHandler = useCallback(() => {
-    const auth: any = loginData || signupData;
-    const { userId, token, tokenExpiration, username } =
-      auth.login || auth.signup;
-
-    addAuth({ userId, token, tokenExpiration, username });
-  }, [addAuth, loginData, signupData]);
+  const { addAuth, getAuth } = authCtx;
 
   useEffect(() => {
     const auth: any = loginData || signupData;
+    const storedAuth = getAuth();
 
-    if (auth) {
-      addAuthHandler();
+    if (auth && !storedAuth) {
+      const { userId, token, tokenExpiration, username } =
+        auth.login || auth.signup;
+
+      addAuth({ userId, token, tokenExpiration, username });
       setCloseOnSuccess(true);
       onSuccess();
     }
-  }, [addAuthHandler, loginData, onSuccess, signupData]);
+  }, [addAuth, getAuth, loginData, onSuccess, signupData]);
 
   const handleSubmit = () => {
     const view = getViewType();
