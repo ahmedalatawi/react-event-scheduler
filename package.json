@@ -10,7 +10,7 @@
     "start:server": "cd server && ts-node-dev --respawn --transpile-only ./server.ts && wait-on tcp:4000",
     "start:web": "react-scripts start",
     "prepare": "husky install",
-    "pretty": "prettier --write \"./**/*.{js,jsx,css,tsx,ts,json}\"",
+    "pretty": "prettier --write \"./**/*.{js,jsx,css,tsx,ts,json,yml}\"",
     "codegen": "graphql-codegen --config codegen.yml"
   },
   "dependencies": {
