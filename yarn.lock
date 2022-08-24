@@ -1300,12 +1300,27 @@
   dependencies:
     tslib "^2.1.0"
 
-"@fullcalendar/daygrid@^5.10.1", "@fullcalendar/daygrid@~5.11.0":
+"@fullcalendar/common@~5.11.3":
+  version "5.11.3"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/common/-/common-5.11.3.tgz#6d555a06925b8a6d1556570c9f039960539908d5"
+  integrity sha512-welVwyfQOXQQGfDwBMSfYEPbiO1cPfUD+C7jd3ZoweJR+dSO11ddFugxIQ7dGfABAGZ63oq/+LW9FsmAJezVNg==
+  dependencies:
+    tslib "^2.1.0"
+
+"@fullcalendar/daygrid@^5.10.1":
   version "5.11.0"
   resolved "https://registry.yarnpkg.com/@fullcalendar/daygrid/-/daygrid-5.11.0.tgz#fd10391dfc2b6caa3538e0826f8d8f3e83e0e22a"
   integrity sha512-Ybh/dfHn/VL0qOVIRVyJc9I8oYiqqHl6xQONk8xXCe456QbPzAQLsAxpLLJLH+3smWNCfoQgvDKzR9e9XTzLMQ==
   dependencies:
     "@fullcalendar/common" "~5.11.0"
+    tslib "^2.1.0"
+
+"@fullcalendar/daygrid@~5.11.3":
+  version "5.11.3"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/daygrid/-/daygrid-5.11.3.tgz#6bc1f956c95f84438428aa6e7a106c863a791a70"
+  integrity sha512-PCK0y80DRNCzWuC5lGpIWqCgKDvql1ah7rXql5lu+Gn2EeFj15ZQ8diMFjtNIQucEmFaNOXnR05Pgcry1n6Shg==
+  dependencies:
+    "@fullcalendar/common" "~5.11.3"
     tslib "^2.1.0"
 
 "@fullcalendar/interaction@^5.10.1":
@@ -1324,13 +1339,13 @@
     "@fullcalendar/common" "~5.11.0"
     tslib "^2.1.0"
 
-"@fullcalendar/timegrid@^5.10.1":
-  version "5.11.0"
-  resolved "https://registry.yarnpkg.com/@fullcalendar/timegrid/-/timegrid-5.11.0.tgz#b41153ef301f21f8c1e19a65023493c48c8bacf5"
-  integrity sha512-GNy+/PwAj510PS4Fu18Mf/CytNBVftFU7M8XwsUXOCJ6ouyroHZje0a7k5cH/nE5IQ6NJZfH2eAPBlxGath1MQ==
+"@fullcalendar/timegrid@^5.11.3":
+  version "5.11.3"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/timegrid/-/timegrid-5.11.3.tgz#77c45b6596da54bfa9b7f7d2ab3f2ad42aa1d2b4"
+  integrity sha512-SjIj2ZQ7nTyL1RxZkCPvNbuUQ0xHT+gfYJdUL3FT4bPjPJCxWtQ2CL8hxaeNmVozYYuy0yrGTW5Oup2+9IplbA==
   dependencies:
-    "@fullcalendar/common" "~5.11.0"
-    "@fullcalendar/daygrid" "~5.11.0"
+    "@fullcalendar/common" "~5.11.3"
+    "@fullcalendar/daygrid" "~5.11.3"
     tslib "^2.1.0"
 
 "@gar/promisify@^1.0.1":
