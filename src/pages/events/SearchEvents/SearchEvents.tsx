@@ -8,7 +8,7 @@ import Pagination from '../../../components/Pagination/Pagination';
 import { IEvent } from '../../../interfaces/types';
 import AuthContext from '../../../store/auth-context';
 import Modal from '../../../components/UI/Modal/Modal';
-import EventBody from '../../../components/EventBody/EventBody';
+import EventBody, { EventType } from '../../../components/EventBody/EventBody';
 import { Form } from 'react-bootstrap';
 import {
   useDeleteEventMutation,
@@ -20,30 +20,45 @@ import { EventCardContainer, EventCardWrapper } from './styles';
 const EVENTS_PER_PAGE = 20;
 
 const SearchEvents: FC = () => {
-  const [searchText, setSearchText] = useState<string>('');
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [showModal, setShowModal] = useState<boolean>(false);
-  const debouncedSearchText = useDebounce(searchText);
+  const [modal, setModal] = useState({
+    title: '',
+    show: false,
+  });
 
-  const [title, setTitle] = useState<string>('');
-  const [id, setId] = useState<string>('');
-  const [eventTitle, setEventTitle] = useState<string>('');
-  const [start, setStart] = useState<string>('');
-  const [end, setEnd] = useState<string>('');
-  const [isPrivate, setIsPrivate] = useState<boolean>(false);
-  const [description, setDescription] = useState<string>('');
-  const [createdById, setCreatedById] = useState<string>('');
+  const [event, setEvent] = useState<EventType>({
+    id: '',
+    title: '',
+    start: '',
+    end: '',
+    isPrivate: false,
+    description: '',
+    createdById: '',
+  });
 
-  const [displayDeleteBtn, setDisplayDeleteBtn] = useState<boolean>(false);
-  const [hideSaveBtn, setHideSaveBtn] = useState<boolean>(true);
-  const [disableSaveBtn, setDisableSaveBtn] = useState<boolean>(false);
-  const [disableDeleteBtn, setDisableDeleteBtn] = useState<boolean>(false);
+  const [actionBtns, setActionBtns] = useState({
+    displayDeleteBtn: false,
+    hideSaveBtn: true,
+    disableSaveBtn: false,
+    disableDeleteBtn: false,
+  });
 
-  const [allCheck, setAllCheck] = useState<boolean>(true);
-  const [currentCheck, setCurrentCheck] = useState<boolean>(false);
-  const [expiredCheck, setExpiredCheck] = useState<boolean>(false);
+  const [formProps, setFormProps] = useState({
+    searchText: '',
+    currentPage: 1,
+    allCheck: true,
+    currentCheck: false,
+    expiredCheck: false,
+  });
 
   const authCtx = useContext(AuthContext);
+
+  const { searchText, currentPage, allCheck, currentCheck, expiredCheck } =
+    formProps;
+  const { id, title, start, end, isPrivate, description, createdById } = event;
+  const { displayDeleteBtn, hideSaveBtn, disableSaveBtn, disableDeleteBtn } =
+    actionBtns;
+
+  const debouncedSearchText = useDebounce(searchText);
 
   const { loading, data, error, refetch, networkStatus } = useGetEventsQuery({
     fetchPolicy: 'cache-and-network',
@@ -73,7 +88,7 @@ const SearchEvents: FC = () => {
   };
 
   const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setSearchText(event.target.value);
+    setFormProps({ ...formProps, searchText: event.target.value });
   };
 
   const getExSubTitle = (endTime: string) => {
@@ -84,56 +99,72 @@ const SearchEvents: FC = () => {
   };
 
   const clickEventHandler = (event: IEvent) => {
-    setTitle('Update Event');
-
     const auth = authCtx.getAuth();
+    const { id, title, start, end, isPrivate, description, createdBy } = event;
 
     if (auth) {
-      const equal = auth.userId === event.createdBy._id;
-      setDisplayDeleteBtn(equal);
-      setHideSaveBtn(!equal);
-      setDisableSaveBtn(!equal);
+      const equal = auth.userId === createdBy._id;
+      setActionBtns({
+        ...actionBtns,
+        displayDeleteBtn: equal,
+        hideSaveBtn: !equal,
+        disableSaveBtn: !equal,
+      });
     } else {
-      setDisplayDeleteBtn(false);
-      setHideSaveBtn(true);
+      setActionBtns({
+        ...actionBtns,
+        displayDeleteBtn: false,
+        hideSaveBtn: true,
+      });
     }
 
-    setId(event.id ?? '');
-    setEventTitle(event.title);
-    setStart(event.start);
-    setEnd(event.end);
-    setIsPrivate(event.isPrivate);
-    setDescription(event.description);
-    setCreatedById(event.createdBy._id);
-    setShowModal(true);
+    setEvent({
+      id: id ?? '',
+      title,
+      start,
+      end,
+      description,
+      isPrivate,
+      createdById: createdBy._id,
+    });
+    setModal({ title: 'Update Event', show: true });
   };
 
   const handleDeleteEvent = () => {
-    setDisableDeleteBtn(true);
-    setDisableSaveBtn(true);
+    setActionBtns({
+      ...actionBtns,
+      disableDeleteBtn: true,
+      disableSaveBtn: true,
+    });
 
     deleteEvent({
-      variables: { id },
+      variables: { id: id ?? '' },
     })
       .then(() => {
-        setCurrentPage(1);
+        resetCurrentPage();
         refetch();
       })
-      .finally(() => {
-        setDisableDeleteBtn(false);
-        setDisableSaveBtn(false);
-      });
+      .finally(() =>
+        setActionBtns({
+          ...actionBtns,
+          disableDeleteBtn: false,
+          disableSaveBtn: false,
+        })
+      );
   };
 
   const handleSaveEvent = () => {
-    setDisableDeleteBtn(true);
-    setDisableSaveBtn(true);
+    setActionBtns({
+      ...actionBtns,
+      disableDeleteBtn: true,
+      disableSaveBtn: true,
+    });
 
     saveEvent({
       variables: {
         event: {
-          id,
-          title: eventTitle,
+          id: id ?? '',
+          title,
           start,
           end,
           isPrivate,
@@ -142,47 +173,72 @@ const SearchEvents: FC = () => {
       },
     })
       .then(() => refetch())
-      .finally(() => {
-        setDisableDeleteBtn(false);
-        setDisableSaveBtn(false);
-      });
+      .finally(() =>
+        setActionBtns({
+          ...actionBtns,
+          disableDeleteBtn: false,
+          disableSaveBtn: false,
+        })
+      );
   };
 
+  const resetCurrentPage = () => setFormProps({ ...formProps, currentPage: 1 });
+
   useEffect(() => {
-    setCurrentPage(1);
+    resetCurrentPage();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearchText]);
 
   useEffect(() => {
-    setCurrentPage(1);
+    resetCurrentPage();
     refetch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authCtx, refetch]);
 
   const handleFilterByAllEventsChange = (e: ChangeEvent<HTMLInputElement>) => {
     e.persist();
-    setCurrentPage(1);
-    setAllCheck(!allCheck);
-    setCurrentCheck(false);
-    setExpiredCheck(false);
+    setFormProps({
+      ...formProps,
+      currentPage: 1,
+      currentCheck: false,
+      allCheck: !allCheck,
+      expiredCheck: false,
+    });
   };
 
   const handleFilterByCurrentEventsChange = (
     e: ChangeEvent<HTMLInputElement>
   ) => {
     e.persist();
-    setCurrentPage(1);
-    setCurrentCheck(!currentCheck);
-    setAllCheck(false);
-    setExpiredCheck(false);
+    setFormProps({
+      ...formProps,
+      currentPage: 1,
+      currentCheck: !currentCheck,
+      allCheck: false,
+      expiredCheck: false,
+    });
   };
 
   const handleFilterByExpiredEventsChange = (
     e: ChangeEvent<HTMLInputElement>
   ) => {
     e.persist();
-    setCurrentPage(1);
-    setExpiredCheck(!expiredCheck);
-    setAllCheck(false);
-    setCurrentCheck(false);
+    setFormProps({
+      ...formProps,
+      currentPage: 1,
+      currentCheck: false,
+      allCheck: false,
+      expiredCheck: !expiredCheck,
+    });
+  };
+
+  const onChangeValueHandler = (prop: string, value: string | boolean) => {
+    setEvent({ ...event, [prop]: value });
+  };
+
+  const disableEditHandler = () => {
+    const auth = authCtx.getAuth();
+    return auth && auth.userId === event.createdById;
   };
 
   return (
@@ -227,7 +283,7 @@ const SearchEvents: FC = () => {
           />
           <Form.Check
             inline
-            label="Current"
+            label="Active"
             name="group"
             type="radio"
             defaultChecked={currentCheck}
@@ -304,14 +360,16 @@ const SearchEvents: FC = () => {
             total={data?.eventsData?.totalCount || 0}
             itemsPerPage={EVENTS_PER_PAGE}
             currentPage={currentPage}
-            onPageChange={(page) => setCurrentPage(page)}
+            onPageChange={(page) =>
+              setFormProps({ ...formProps, currentPage: page })
+            }
           />
         </div>
       )}
 
-      {showModal && (
+      {modal.show && (
         <Modal
-          title={title}
+          title={modal.title}
           closeOnSubmit={true}
           disableSubmitBtn={disableSaveBtn}
           hideSubmitBtn={hideSaveBtn}
@@ -322,24 +380,17 @@ const SearchEvents: FC = () => {
           closeBtnName={
             authCtx.auth?.userId === createdById ? 'Cancel' : 'Close'
           }
-          onClose={() => setShowModal(false)}
+          onClose={() => setModal({ ...modal, show: false })}
           onDelete={handleDeleteEvent}
           onSubmit={handleSaveEvent}
           children={
             <EventBody
-              title={eventTitle}
-              start={start}
-              end={end}
-              isPrivate={isPrivate}
-              description={description}
-              disableEdit={false}
-              createdById={createdById}
-              onTitle={(title) => setEventTitle(title)}
-              onDescription={(description) => setDescription(description)}
-              onStart={(start) => setStart(start)}
-              onEnd={(end) => setEnd(end)}
-              onIsPrivate={(isPrivate) => setIsPrivate(isPrivate)}
-              onValidate={(valid) => setDisableSaveBtn(!valid)}
+              event={event}
+              disableEdit={!disableEditHandler()}
+              onChangeValue={(prop, value) => onChangeValueHandler(prop, value)}
+              onValidate={(valid) =>
+                setActionBtns({ ...actionBtns, disableSaveBtn: !valid })
+              }
             />
           }
         />

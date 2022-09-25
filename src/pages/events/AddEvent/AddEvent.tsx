@@ -1,21 +1,25 @@
 import { ChangeEvent, FC, useContext, useEffect, useState } from 'react';
 import { MdSaveAlt } from 'react-icons/md';
-import EventBody from '../../../components/EventBody/EventBody';
+import EventBody, { EventType } from '../../../components/EventBody/EventBody';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import Alert from '../../../components/UI/Alert/Alert';
 import AuthContext from '../../../store/auth-context';
 import { useSaveEventMutation } from '../../../generated/graphql';
 
 const AddEvent: FC = () => {
-  const [title, setTitle] = useState<string>('');
-  const [start, setStart] = useState<string>('');
-  const [end, setEnd] = useState<string>('');
-  const [isPrivate, setIsPrivate] = useState<boolean>(false);
-  const [description, setDescription] = useState<string>('');
+  const [event, setEvent] = useState<EventType>({
+    title: '',
+    start: '',
+    end: '',
+    isPrivate: false,
+    description: '',
+  });
   const [disableSaveBtn, setDisableSaveBtn] = useState<boolean>(true);
   const [displayForm, setDisplayForm] = useState<boolean>(true);
 
   const [loggedIn, setLoggedIn] = useState<boolean>(true);
+
+  const { title, start, end, isPrivate, description } = event;
 
   const [saveEvent, { error, data, loading }] = useSaveEventMutation({
     variables: { event: { id: '', title, start, end, isPrivate, description } },
@@ -30,15 +34,21 @@ const AddEvent: FC = () => {
     setDisplayForm(false);
     saveEvent()
       .then((_) => {
-        setTitle('');
-        setDescription('');
-        setStart('');
-        setEnd('');
-        setIsPrivate(false);
+        setEvent({
+          title: '',
+          start: '',
+          end: '',
+          isPrivate: false,
+          description: '',
+        });
         setDisableSaveBtn(true);
       })
       .catch((error) => console.error(error.message))
       .finally(() => setDisplayForm(true));
+  };
+
+  const onChangeValueHandler = (prop: string, value: string | boolean) => {
+    setEvent({ ...event, [prop]: value });
   };
 
   return (
@@ -74,17 +84,11 @@ const AddEvent: FC = () => {
           {displayForm && (
             <div className="col-12">
               <EventBody
-                title={title}
-                start={start}
-                end={end}
-                isPrivate={false}
-                description={description}
+                event={event}
                 disableEdit={!loggedIn}
-                onTitle={(title) => setTitle(title)}
-                onDescription={(description) => setDescription(description)}
-                onStart={(start) => setStart(start)}
-                onEnd={(end) => setEnd(end)}
-                onIsPrivate={(isPrivate) => setIsPrivate(isPrivate)}
+                onChangeValue={(prop, value) =>
+                  onChangeValueHandler(prop, value)
+                }
                 onValidate={(valid) => setDisableSaveBtn(!valid)}
               />
             </div>

@@ -4,7 +4,7 @@ import FullCalendar, { EventClickArg } from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
-import EventBody from '../../components/EventBody/EventBody';
+import EventBody, { EventType } from '../../components/EventBody/EventBody';
 import { NetworkStatus } from '@apollo/client';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import Alert from '../../components/UI/Alert/Alert';
@@ -18,26 +18,35 @@ import {
 import { FullCalendarWrapper } from './styles';
 
 const Calendar: FC = () => {
-  const [showModal, setShowModal] = useState<boolean>(false);
-  const [title, setTitle] = useState<string>('');
+  const [modal, setModal] = useState({
+    title: '',
+    show: false,
+  });
 
-  const [eventTitle, setEventTitle] = useState<string>('');
-  const [start, setStart] = useState<string>('');
-  const [end, setEnd] = useState<string>('');
-  const [isPrivate, setIsPrivate] = useState<boolean>(false);
-  const [description, setDescription] = useState<string>('');
-  const [createdById, setCreatedById] = useState<string>('');
+  const [event, setEvent] = useState<EventType>({
+    title: '',
+    start: '',
+    end: '',
+    isPrivate: false,
+    description: '',
+    createdById: '',
+  });
 
-  const [displayDeleteBtn, setDisplayDeleteBtn] = useState<boolean>(false);
-  const [disableSaveBtn, setDisableSaveBtn] = useState<boolean>(true);
-  const [disableDeleteBtn, setDisableDeleteBtn] = useState<boolean>(false);
-  const [hideSaveBtn, setHideSaveBtn] = useState<boolean>(true);
+  const [actionBtns, setActionBtns] = useState({
+    displayDeleteBtn: false,
+    hideSaveBtn: true,
+    disableSaveBtn: true,
+    disableDeleteBtn: false,
+  });
 
   const [loggedIn, setLoggedIn] = useState<boolean>(true);
   const [disableEdit, setDisableEdit] = useState<boolean>(false);
 
   const calendarApiRef = useRef<any>({});
   const clickInfoRef = useRef<any>({});
+
+  const { displayDeleteBtn, hideSaveBtn, disableSaveBtn, disableDeleteBtn } =
+    actionBtns;
 
   const {
     loading: getEventsLoading,
@@ -51,12 +60,15 @@ const Calendar: FC = () => {
     variables: { filter: {} },
   });
 
+  const { title, start, end, isPrivate, description } = event;
+  const id = clickInfoRef.current.value?.event?.id || '';
+
   const [saveEvent, { error: saveEventError, loading: saveEventLoading }] =
     useSaveEventMutation({
       variables: {
         event: {
-          id: clickInfoRef.current.value?.event?.id || '',
-          title: eventTitle,
+          id,
+          title,
           start,
           end,
           isPrivate,
@@ -78,14 +90,21 @@ const Calendar: FC = () => {
     const auth = authCtx.getAuth();
     refetch();
     setLoggedIn(!!auth);
-    setDisableSaveBtn(true);
     setDisableEdit(!auth);
-    setDisableDeleteBtn(!auth);
+    setActionBtns({
+      ...actionBtns,
+      disableSaveBtn: true,
+      disableDeleteBtn: !auth,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authCtx, refetch]);
 
   const handleSaveEvent = () => {
-    setDisableSaveBtn(true);
-    setDisableDeleteBtn(true);
+    setActionBtns({
+      ...actionBtns,
+      disableSaveBtn: true,
+      disableDeleteBtn: true,
+    });
 
     calendarApiRef.current.value?.unselect();
 
@@ -94,7 +113,7 @@ const Calendar: FC = () => {
         const { id } = res.data?.saveEvent as IEvent;
 
         if (clickInfoRef.current.value) {
-          clickInfoRef.current.value.event.setProp('title', eventTitle);
+          clickInfoRef.current.value.event.setProp('title', title);
           clickInfoRef.current.value.event.setExtendedProp(
             'isPrivate',
             isPrivate
@@ -108,7 +127,7 @@ const Calendar: FC = () => {
         } else {
           calendarApiRef.current.value.addEvent({
             id,
-            title: eventTitle,
+            title,
             start,
             end,
             extendedProps: {
@@ -121,10 +140,13 @@ const Calendar: FC = () => {
           });
         }
       })
-      .finally(() => {
-        setDisableSaveBtn(false);
-        setDisableDeleteBtn(false);
-      });
+      .finally(() =>
+        setActionBtns({
+          ...actionBtns,
+          disableSaveBtn: false,
+          disableDeleteBtn: false,
+        })
+      );
   };
 
   const handleDateClick = async (selectedDate: DateClickArg) => {
@@ -133,26 +155,30 @@ const Calendar: FC = () => {
 
     const auth = authCtx.getAuth();
 
-    setTitle('New Event');
-    setEventTitle('');
-    setDescription('');
-    setStart(`${selectedDate.dateStr}T00:00:00`);
-    setEnd(`${selectedDate.dateStr}T01:00:00`);
-    setIsPrivate(false);
-    setDisplayDeleteBtn(false);
-    setDisableSaveBtn(true);
     setDisableEdit(!auth);
-    setDisableDeleteBtn(!auth);
-    setHideSaveBtn(!auth);
-    setCreatedById('');
-    setShowModal(true);
+    setActionBtns({
+      disableSaveBtn: true,
+      disableDeleteBtn: !auth,
+      displayDeleteBtn: false,
+      hideSaveBtn: !auth,
+    });
+    setEvent({
+      title: '',
+      start: `${selectedDate.dateStr}T00:00:00`,
+      end: `${selectedDate.dateStr}T01:00:00`,
+      isPrivate: false,
+      description: '',
+      createdById: '',
+    });
+    setModal({
+      title: 'New Event',
+      show: true,
+    });
   };
 
   const handleEventClick = (clickInfo: EventClickArg) => {
     clickInfo.jsEvent.preventDefault();
     clickInfoRef.current.value = clickInfo;
-
-    setTitle('Update Event');
 
     const auth = authCtx.getAuth();
 
@@ -160,39 +186,54 @@ const Calendar: FC = () => {
       const equal = auth.userId === clickInfo.event.extendedProps.createdBy._id;
 
       setDisableEdit(!equal);
-      setDisableSaveBtn(!equal);
-      setDisableDeleteBtn(!equal);
-      setHideSaveBtn(!equal);
-      setDisplayDeleteBtn(equal);
+      setActionBtns({
+        disableSaveBtn: !equal,
+        disableDeleteBtn: !equal,
+        displayDeleteBtn: equal,
+        hideSaveBtn: !equal,
+      });
     } else {
       setDisableEdit(true);
-      setDisableSaveBtn(true);
-      setDisableDeleteBtn(true);
-      setHideSaveBtn(true);
-      setDisplayDeleteBtn(false);
+      setActionBtns({
+        disableSaveBtn: true,
+        disableDeleteBtn: true,
+        displayDeleteBtn: false,
+        hideSaveBtn: true,
+      });
     }
 
-    const startDate = clickInfo.event.startStr.substring(
+    const start = clickInfo.event.startStr.substring(
       0,
       clickInfo.event.startStr.lastIndexOf('-')
     );
-    const endDate = clickInfo.event.endStr.substring(
+    const end = clickInfo.event.endStr.substring(
       0,
       clickInfo.event.endStr.lastIndexOf('-')
     );
 
-    setEventTitle(clickInfo.event.title);
-    setStart(startDate);
-    setEnd(endDate);
-    setIsPrivate(clickInfo.event.extendedProps.isPrivate);
-    setDescription(clickInfo.event.extendedProps.description);
-    setCreatedById(clickInfo.event.extendedProps.createdBy._id);
-    setShowModal(true);
+    const { title } = clickInfo.event;
+    const { isPrivate, description, createdBy } = clickInfo.event.extendedProps;
+
+    setEvent({
+      title,
+      start,
+      end,
+      isPrivate,
+      description,
+      createdById: createdBy._id,
+    });
+    setModal({
+      title: 'Update Event',
+      show: true,
+    });
   };
 
   const handleDeleteEvent = () => {
-    setDisableDeleteBtn(true);
-    setDisableSaveBtn(true);
+    setActionBtns({
+      ...actionBtns,
+      disableSaveBtn: true,
+      disableDeleteBtn: true,
+    });
 
     deleteEvent()
       .then((res) => {
@@ -201,10 +242,17 @@ const Calendar: FC = () => {
         clickInfoRef.current.value.event.remove();
         clickInfoRef.current.value = null;
       })
-      .finally(() => {
-        setDisableDeleteBtn(false);
-        setDisableSaveBtn(false);
-      });
+      .finally(() =>
+        setActionBtns({
+          ...actionBtns,
+          disableSaveBtn: false,
+          disableDeleteBtn: false,
+        })
+      );
+  };
+
+  const onChangeValueHandler = (prop: string, value: string | boolean) => {
+    setEvent({ ...event, [prop]: value });
   };
 
   return (
@@ -236,9 +284,9 @@ const Calendar: FC = () => {
         />
       )}
 
-      {showModal && (
+      {modal.show && (
         <Modal
-          title={title}
+          title={modal.title}
           closeOnSubmit={true}
           disableSubmitBtn={disableSaveBtn}
           hideSubmitBtn={hideSaveBtn}
@@ -246,7 +294,7 @@ const Calendar: FC = () => {
           displayDeleteBtn={displayDeleteBtn}
           isSubmitLoading={saveEventLoading}
           isDeleteLoading={deleteEventLoading}
-          onClose={() => setShowModal(false)}
+          onClose={() => setModal({ ...modal, show: false })}
           onDelete={handleDeleteEvent}
           onSubmit={handleSaveEvent}
           children={
@@ -260,19 +308,14 @@ const Calendar: FC = () => {
                 />
               )}
               <EventBody
-                title={eventTitle}
-                start={start}
-                end={end}
-                isPrivate={isPrivate}
-                description={description}
+                event={event}
                 disableEdit={disableEdit}
-                createdById={createdById}
-                onTitle={(title) => setEventTitle(title)}
-                onDescription={(description) => setDescription(description)}
-                onStart={(start) => setStart(start)}
-                onEnd={(end) => setEnd(end)}
-                onIsPrivate={(isPrivate) => setIsPrivate(isPrivate)}
-                onValidate={(valid) => setDisableSaveBtn(!valid)}
+                onChangeValue={(prop, value) =>
+                  onChangeValueHandler(prop, value)
+                }
+                onValidate={(valid) =>
+                  setActionBtns({ ...actionBtns, disableSaveBtn: !valid })
+                }
               />
             </Fragment>
           }
@@ -290,7 +333,6 @@ const Calendar: FC = () => {
               plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
               eventClick={handleEventClick}
               dateClick={handleDateClick}
-              //validRange={handleValidRange}
             />
           </FullCalendarWrapper>
         )

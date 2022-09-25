@@ -2,29 +2,30 @@ import { useEffect, useState, ChangeEvent, FC, useContext } from 'react';
 import AuthContext from '../../store/auth-context';
 import Alert from '../UI/Alert/Alert';
 
-type EventBodyProps = {
+export type EventType = {
+  id?: string;
   title: string;
   start: string;
   end: string;
   isPrivate: boolean;
   description: string;
-  disableEdit: boolean;
   createdById?: string;
-  onTitle: (title: string) => void;
-  onStart: (date: string) => void;
-  onEnd: (date: string) => void;
-  onIsPrivate: (isPrivate: boolean) => void;
-  onDescription: (description: string) => void;
+};
+
+type Props = {
+  event: EventType;
+  disableEdit: boolean;
+  onChangeValue: (prop: string, value: string | boolean) => void;
   onValidate: (valid: boolean) => void;
 };
 
-const EventBody: FC<EventBodyProps> = (props) => {
-  const [title, setTitle] = useState<string>(props.title);
-  const [start, setStart] = useState<string>(props.start);
-  const [end, setEnd] = useState<string>(props.end);
-  const [isPrivate, setIsPrivate] = useState<boolean>(props.isPrivate);
-  const [description, setDescription] = useState<string>(props.description);
-
+const EventBody: FC<Props> = ({
+  event,
+  disableEdit,
+  onChangeValue,
+  onValidate,
+}) => {
+  const [localEvent, setLocalEvent] = useState<EventType>({ ...event });
   const [errorMsg, setErrorMsg] = useState<string>('');
 
   const authCtx = useContext(AuthContext);
@@ -35,72 +36,55 @@ const EventBody: FC<EventBodyProps> = (props) => {
     const endDate = new Date(end);
 
     if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
-      props.onValidate(false);
+      onValidate(false);
     } else if (startDate.getTime() >= endDate.getTime()) {
       setErrorMsg('End date/time must be greater than start date/time.');
-      props.onValidate(false);
+      onValidate(false);
     } else if (startDate.getTime() < today.getTime()) {
       setErrorMsg('Start date/time can not be in the past.');
-      props.onValidate(false);
+      onValidate(false);
     } else if (!title.trim()) {
       setErrorMsg('');
-      props.onValidate(false);
+      onValidate(false);
     } else {
       setErrorMsg('');
-      props.onValidate(true);
+      onValidate(true);
     }
   };
 
-  const handleTitleChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleValueChange = (
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    prop: string
+  ) => {
     const { value } = event.target;
 
-    setTitle(value);
-    validateEventDates(start, end, value);
-    props.onTitle(value);
+    setLocalEvent({ ...localEvent, [prop]: value });
+
+    if (prop === 'title') {
+      validateEventDates(localEvent.start, localEvent.end, value);
+    }
+    if (prop === 'start') {
+      validateEventDates(value, localEvent.end, localEvent.title);
+    }
+    if (prop === 'end') {
+      validateEventDates(localEvent.start, value, localEvent.title);
+    }
+
+    onChangeValue(prop, value);
   };
-
-  const handleStartChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-
-    setStart(value);
-    validateEventDates(value, end, title);
-    props.onStart(value);
-  };
-
-  const handleEndChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-
-    setEnd(value);
-    validateEventDates(start, value, title);
-    props.onEnd(value);
-  };
-
-  const handleDescriptionChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-    const { value } = event.target;
-    setDescription(value);
-    props.onDescription(value);
-  };
-
-  const handleIsPrivateChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const { checked } = event.target;
-    setIsPrivate(checked);
-    props.onIsPrivate(checked);
-  };
-
-  const { onValidate, createdById } = props;
 
   useEffect(() => {
     const auth = authCtx.getAuth();
-    const today = new Date();
-    const endDate = new Date(end);
-
-    if (auth?.userId === createdById || createdById === '') {
-      if (endDate.getTime() < today.getTime()) {
-        setErrorMsg("Event can't be saved in the past.");
-        onValidate(false);
+    if (auth) {
+      if (
+        auth.userId === localEvent.createdById ||
+        localEvent.createdById === ''
+      ) {
+        validateEventDates(localEvent.start, localEvent.end, localEvent.title);
       }
     }
-  }, [authCtx, createdById, end, onValidate]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [authCtx]);
 
   return (
     <div className="row g-3">
@@ -111,12 +95,12 @@ const EventBody: FC<EventBodyProps> = (props) => {
         <input
           type="text"
           className="form-control"
-          disabled={props.disableEdit}
+          disabled={disableEdit}
           id="title"
           placeholder="Title"
           maxLength={50}
-          value={title}
-          onChange={handleTitleChange}
+          value={localEvent.title}
+          onChange={(e) => handleValueChange(e, 'title')}
         />
       </div>
       <div className="col-md-6 required">
@@ -126,11 +110,11 @@ const EventBody: FC<EventBodyProps> = (props) => {
         <input
           type="datetime-local"
           className="form-control"
-          disabled={props.disableEdit}
+          disabled={disableEdit}
           id="start"
           placeholder="Start"
-          value={start}
-          onChange={handleStartChange}
+          value={localEvent.start}
+          onChange={(e) => handleValueChange(e, 'start')}
         />
       </div>
       <div className="col-md-6 required">
@@ -140,15 +124,15 @@ const EventBody: FC<EventBodyProps> = (props) => {
         <input
           type="datetime-local"
           className="form-control"
-          disabled={props.disableEdit}
+          disabled={disableEdit}
           id="end"
-          min={start}
-          value={end}
+          min={localEvent.start}
+          value={localEvent.end}
           placeholder="End"
-          onChange={handleEndChange}
+          onChange={(e) => handleValueChange(e, 'end')}
         />
       </div>
-      {errorMsg && !props.disableEdit && (
+      {errorMsg && !disableEdit && (
         <div className="col-12">
           <Alert
             msg={errorMsg}
@@ -164,12 +148,12 @@ const EventBody: FC<EventBodyProps> = (props) => {
         </label>
         <textarea
           className="form-control"
-          disabled={props.disableEdit}
+          disabled={disableEdit}
           id="description"
           rows={3}
-          value={description}
+          value={localEvent.description}
           maxLength={1000}
-          onChange={handleDescriptionChange}
+          onChange={(e) => handleValueChange(e, 'description')}
         ></textarea>
       </div>
       <div className="col-12">
@@ -177,10 +161,10 @@ const EventBody: FC<EventBodyProps> = (props) => {
           <input
             className="form-check-input"
             type="checkbox"
-            disabled={props.disableEdit}
+            disabled={disableEdit}
             id="gridCheck"
-            checked={isPrivate}
-            onChange={handleIsPrivateChange}
+            checked={localEvent.isPrivate}
+            onChange={(e) => handleValueChange(e, 'isPrivate')}
           />
           <label className="form-check-label" htmlFor="gridCheck">
             Private (event is only visible to you)
