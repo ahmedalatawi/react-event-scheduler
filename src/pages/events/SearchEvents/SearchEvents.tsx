@@ -15,7 +15,7 @@ import {
   useGetEventsQuery,
   useSaveEventMutation,
 } from '../../../generated/graphql';
-import { EventCardContainer, EventCardWrapper } from './styles';
+import styled from 'styled-components';
 
 const EVENTS_PER_PAGE = 20;
 
@@ -398,5 +398,14 @@ const SearchEvents: FC = () => {
     </>
   );
 };
+
+export const EventCardContainer = styled.div({
+  paddingTop: 10,
+  paddingBottom: 20,
+});
+
+export const EventCardWrapper = styled.div({
+  paddingTop: 20,
+});
 
 export default SearchEvents;

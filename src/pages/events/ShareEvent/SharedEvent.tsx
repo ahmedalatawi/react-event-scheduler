@@ -11,7 +11,6 @@ const SharedEvent: FC = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    console.log(id);
     getEvent({ variables: { id: id ?? '' } });
   }, [getEvent, id]);
 

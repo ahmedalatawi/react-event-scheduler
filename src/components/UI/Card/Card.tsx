@@ -1,7 +1,7 @@
 import { FC, Fragment } from 'react';
 import { FacebookShareButton, TwitterShareButton } from 'react-share';
 import { FacebookIcon, TwitterIcon } from 'react-share';
-import { StyledCard, StyledPrivateBadge, StyledSubTitle } from './styles';
+import styled from 'styled-components';
 
 type CardProps = {
   title: string;
@@ -76,5 +76,28 @@ const Card: FC<CardProps> = ({
     </StyledCard>
   );
 };
+
+export const StyledCard = styled.div.attrs(() => ({
+  className: 'card',
+}))`
+  :hover {
+    background-color: rgba(242, 241, 239);
+    cursor: pointer;
+  }
+`;
+
+export const StyledSubTitle = styled.span.attrs(() => ({
+  className: 'badge rounded-pill bg-warning text-dark',
+}))`
+  font-size: small;
+  font-weight: 500;
+`;
+
+export const StyledPrivateBadge = styled.span.attrs(() => ({
+  className: 'badge rounded-pill bg-danger',
+}))`
+  font-size: small;
+  font-weight: 500;
+`;
 
 export default Card;

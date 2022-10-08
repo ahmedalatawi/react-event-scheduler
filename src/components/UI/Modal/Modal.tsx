@@ -3,7 +3,7 @@ import { Modal as ModalBootstrap } from 'bootstrap';
 import ReactDOM from 'react-dom';
 import { MdSaveAlt } from 'react-icons/md';
 import { FiLogIn, FiTrash2 } from 'react-icons/fi';
-import { StyledModal } from './styles';
+import styled from 'styled-components';
 
 const portalElement: any = document.getElementById('modal-root');
 
@@ -139,5 +139,15 @@ const Modal: FC<ModalProps> = (props) => {
     portalElement
   );
 };
+
+export const StyledModal = styled.div.attrs(() => ({
+  className: 'modal-dialog',
+}))`
+  @media (min-width: 768px) {
+    .modal-dialog {
+      min-width: 512px;
+    }
+  }
+`;
 
 export default Modal;
