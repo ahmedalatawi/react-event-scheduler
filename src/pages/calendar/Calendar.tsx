@@ -329,7 +329,7 @@ const Calendar: FC = () => {
           <FullCalendarWrapper>
             <FullCalendar
               initialView="dayGridMonth"
-              initialEvents={events.eventsData.events as any}
+              initialEvents={events.eventsData.events as EventType[]}
               plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
               eventClick={handleEventClick}
               dateClick={handleDateClick}
