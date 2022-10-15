@@ -7,11 +7,15 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "start:server": "cd server && ts-node-dev --respawn --transpile-only ./server.ts && wait-on tcp:4000",
+    "start:server": "cd api && ts-node-dev --respawn --transpile-only ./index.ts && wait-on tcp:4000",
     "start:web": "react-scripts start",
     "prepare": "husky install",
     "pretty": "prettier --write \"./**/*.{js,jsx,css,tsx,ts,json,yml}\"",
     "codegen": "graphql-codegen --config codegen.yml"
+  },
+  "engines": {
+    "npm": ">=8.0.0 <9.0.0",
+    "node": ">=16.0.0 <17.0.0"
   },
   "dependencies": {
     "@types/styled-components": "^5.1.25",
