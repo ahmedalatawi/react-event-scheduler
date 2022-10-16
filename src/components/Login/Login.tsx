@@ -1,13 +1,13 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { ChangeEvent, FC } from 'react';
 
-type LoginProps = {
+type Props = {
   onChangePassword: (password: string) => void;
   onChangeUsername: (username: string) => void;
   onToggleLogin: () => void;
 };
 
-const Login: FC<LoginProps> = ({
+const Login: FC<Props> = ({
   onChangePassword,
   onChangeUsername,
   onToggleLogin,

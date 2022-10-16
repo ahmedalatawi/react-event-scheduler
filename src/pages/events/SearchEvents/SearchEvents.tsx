@@ -2,20 +2,21 @@ import { NetworkStatus } from '@apollo/client';
 import { ChangeEvent, FC, useContext, useEffect, useState } from 'react';
 import useDebounce from '../../../hooks/useDebounce';
 import Spinner from '../../../components/UI/Spinner/Spinner';
-import Card from '../../../components/UI/Card/Card';
+import Card, { CardType } from '../../../components/UI/Card/Card';
 import Alert from '../../../components/UI/Alert/Alert';
 import Pagination from '../../../components/Pagination/Pagination';
-import { IEvent } from '../../../interfaces/types';
 import AuthContext from '../../../store/auth-context';
 import Modal from '../../../components/UI/Modal/Modal';
 import EventBody, { EventType } from '../../../components/EventBody/EventBody';
 import { Form } from 'react-bootstrap';
 import {
+  EventFull,
   useDeleteEventMutation,
   useGetEventsQuery,
   useSaveEventMutation,
 } from '../../../generated/graphql';
 import styled from 'styled-components';
+import { dateToTitle } from '../../../utils/dateTransforms';
 
 const EVENTS_PER_PAGE = 20;
 
@@ -98,12 +99,13 @@ const SearchEvents: FC = () => {
     return endDate.getTime() < today.getTime() ? 'Expired' : '';
   };
 
-  const clickEventHandler = (event: IEvent) => {
+  const clickEventHandler = (event: EventFull) => {
     const auth = authCtx.getAuth();
     const { id, title, start, end, isPrivate, description, createdBy } = event;
+    const createdById = createdBy?._id ?? '';
 
     if (auth) {
-      const equal = auth.userId === createdBy._id;
+      const equal = auth.userId === createdById;
       setActionBtns({
         ...actionBtns,
         displayDeleteBtn: equal,
@@ -125,7 +127,7 @@ const SearchEvents: FC = () => {
       end,
       description,
       isPrivate,
-      createdById: createdBy._id,
+      createdById,
     });
     setModal({ title: 'Update Event', show: true });
   };
@@ -241,6 +243,18 @@ const SearchEvents: FC = () => {
     return auth && auth.userId === event.createdById;
   };
 
+  const eventToCard = (event: EventFull): CardType => ({
+    title: event.title,
+    subtitle: dateToTitle(event),
+    exSubTitle: getExSubTitle(event.end),
+    content: event.description,
+    url: event.url,
+    createdBy: event?.createdBy?.username ?? '',
+    createdAt: event.createdAt ?? 0,
+    updatedAt: event.updatedAt ?? 0,
+    isPrivate: event.isPrivate,
+  });
+
   return (
     <>
       {error && (
@@ -324,20 +338,8 @@ const SearchEvents: FC = () => {
             return (
               <EventCardWrapper key={event.id}>
                 <Card
-                  isPrivate={event.isPrivate}
-                  title={event.title ?? ''}
-                  subtitle={`${new Date(
-                    event.start as string
-                  ).toLocaleString()} - ${new Date(
-                    event.end as string
-                  ).toLocaleString()}`}
-                  exSubTitle={getExSubTitle(event.end as string)}
-                  content={event.description}
-                  url={event.url ?? ''}
-                  createdBy={event?.createdBy?.username ?? ''}
-                  createdAt={event.createdAt as any}
-                  updatedAt={event.updatedAt as any}
-                  onClick={() => clickEventHandler(event as IEvent)}
+                  card={eventToCard(event)}
+                  onClick={() => clickEventHandler(event)}
                 />
               </EventCardWrapper>
             );

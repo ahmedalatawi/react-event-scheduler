@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie';
-import { IAuth } from '../interfaces/types';
+import { IAuth } from '../types';
 
 const getCookie = (name: string) => Cookies.get(name);
 

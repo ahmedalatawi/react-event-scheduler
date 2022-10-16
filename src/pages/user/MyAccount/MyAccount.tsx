@@ -7,12 +7,12 @@ import { Link } from 'react-router-dom';
 import AuthContext from '../../../store/auth-context';
 import { StyledNavDropdown } from './styles';
 
-type MyAccountProps = {
+type Props = {
   onLogout: () => void;
   onSelect: () => void;
 };
 
-const MyAccount: FC<MyAccountProps> = ({ onLogout, onSelect }) => {
+const MyAccount: FC<Props> = ({ onLogout, onSelect }) => {
   const authCtx = useContext(AuthContext);
 
   return (

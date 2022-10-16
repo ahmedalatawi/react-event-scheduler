@@ -7,14 +7,14 @@ const scrollToTop = () =>
     behavior: 'smooth',
   });
 
-type PaginationProps = {
+type Props = {
   total: number;
   itemsPerPage: number;
   currentPage: number;
   onPageChange: (page: number) => void;
 };
 
-const Pagination: FC<PaginationProps> = ({
+const Pagination: FC<Props> = ({
   total,
   itemsPerPage,
   currentPage,

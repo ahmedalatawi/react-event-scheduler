@@ -1,14 +1,14 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { ChangeEvent, FC } from 'react';
 
-type SignupProps = {
+type Props = {
   onChangeUsername: (username: string) => void;
   onChangePassword: (password: string) => void;
   onChangeConfirmPassword: (confirmPassword: string) => void;
   onToggleSignup: () => void;
 };
 
-const Signup: FC<SignupProps> = ({
+const Signup: FC<Props> = ({
   onChangeUsername,
   onChangePassword,
   onChangeConfirmPassword,

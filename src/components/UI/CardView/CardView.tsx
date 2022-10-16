@@ -1,22 +1,22 @@
 import { FC, Fragment } from 'react';
+import { formatDate } from '../../../utils/dateTransforms';
 
-type CardViewProps = {
-  title: string;
+type CardViewType = {
+  title: string | undefined;
   subtitle?: string;
-  content: string;
-  createdAt?: string;
-  updatedAt?: string;
-  createdBy: string;
+  content: string | undefined;
+  createdAt?: number | undefined | null;
+  updatedAt?: number | undefined | null;
+  createdBy: string | undefined;
 };
 
-const CardView: FC<CardViewProps> = ({
-  title,
-  subtitle,
-  content,
-  createdBy,
-  createdAt,
-  updatedAt,
-}) => {
+type Props = {
+  card: CardViewType;
+};
+
+const CardView: FC<Props> = ({ card }) => {
+  const { title, subtitle, content, createdBy, createdAt, updatedAt } = card;
+
   return (
     <div className="card">
       <div className="card-body">
@@ -26,7 +26,7 @@ const CardView: FC<CardViewProps> = ({
         <p className="card-text">
           <small className="text-muted">
             posted by: {createdBy}{' '}
-            {createdAt ? `on ${new Date(createdAt).toLocaleString()}` : null}
+            {createdAt ? `on ${formatDate(createdAt)}` : null}
           </small>
           {updatedAt ? (
             new Date(updatedAt).getTime() !==
@@ -34,7 +34,7 @@ const CardView: FC<CardViewProps> = ({
               <Fragment>
                 <br />
                 <small className="text-muted">
-                  updated on: {new Date(updatedAt).toLocaleString()}
+                  updated on: {formatDate(updatedAt)}
                 </small>
               </Fragment>
             ) : null

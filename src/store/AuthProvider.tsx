@@ -1,6 +1,6 @@
 import { FC, useState } from 'react';
 import useAuth from '../hooks/useAuth';
-import { IAuth } from '../interfaces/types';
+import { IAuth } from '../types';
 
 import AuthContext from './auth-context';
 

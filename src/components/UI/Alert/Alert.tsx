@@ -1,13 +1,13 @@
 import React, { FC } from 'react';
 
-type AlertProps = {
+type Props = {
   type: string;
   fillType: string;
   ariaLabel: string;
   msg: string;
 };
 
-const Alert: FC<AlertProps> = ({ type, msg, ariaLabel, fillType }) => {
+const Alert: FC<Props> = ({ type, msg, ariaLabel, fillType }) => {
   return (
     <>
       <svg xmlns="http://www.w3.org/2000/svg" style={{ display: 'none' }}>

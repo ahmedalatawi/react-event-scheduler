@@ -2,19 +2,19 @@ import { FC, FormEvent, useContext, useEffect, useRef, useState } from 'react';
 import { Button, Col, Form, InputGroup, Row } from 'react-bootstrap';
 import { MdSaveAlt } from 'react-icons/md';
 import { useNavigate } from 'react-router';
-import { IUser } from '../../../../interfaces/types';
+import { IUser } from '../../../../types';
 import AuthContext from '../../../../store/auth-context';
 import Spinner from '../../../../components/UI/Spinner/Spinner';
 import Alert from '../../../../components/UI/Alert/Alert';
 import TitledCard from '../../../../components/UI/TitledCard/TitledCard';
 import { useSaveUserMutation } from '../../../../generated/graphql';
 
-type EditMyProfileType = {
+type Props = {
   user: IUser | undefined;
   onReadOnlyMode: () => void;
 };
 
-const EditMyProfile: FC<EditMyProfileType> = ({ user, onReadOnlyMode }) => {
+const EditMyProfile: FC<Props> = ({ user, onReadOnlyMode }) => {
   const { _id, username, firstName, lastName, email, phoneNumber, bio } =
     user ?? {};
 

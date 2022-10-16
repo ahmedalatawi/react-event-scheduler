@@ -3,7 +3,8 @@ import { useParams } from 'react-router';
 import CardView from '../../../components/UI/CardView/CardView';
 import Alert from '../../../components/UI/Alert/Alert';
 import Spinner from '../../../components/UI/Spinner/Spinner';
-import { useGetEventMutation } from '../../../generated/graphql';
+import { EventFull, useGetEventMutation } from '../../../generated/graphql';
+import { dateToTitle } from '../../../utils/dateTransforms';
 
 const SharedEvent: FC = () => {
   const [getEvent, { data, loading, error }] = useGetEventMutation();
@@ -29,20 +30,16 @@ const SharedEvent: FC = () => {
     );
   }
 
-  return (
-    <CardView
-      title={data?.getEvent.title ?? ''}
-      subtitle={`${new Date(
-        data?.getEvent.start as string
-      ).toLocaleString()} - ${new Date(
-        data?.getEvent.end as string
-      ).toLocaleString()}`}
-      content={data?.getEvent.description ?? ''}
-      createdBy={data?.getEvent.createdBy?.username ?? ''}
-      createdAt={data?.getEvent.createdAt as any}
-      updatedAt={data?.getEvent.updatedAt as any}
-    />
-  );
+  const card = {
+    title: data?.getEvent.title,
+    subtitle: dateToTitle(data?.getEvent as EventFull),
+    content: data?.getEvent.description,
+    createdBy: data?.getEvent.createdBy?.username,
+    createdAt: data?.getEvent.createdAt,
+    updatedAt: data?.getEvent.updatedAt,
+  };
+
+  return <CardView card={card} />;
 };
 
 export default SharedEvent;

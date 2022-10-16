@@ -1,33 +1,40 @@
+import { formatDate } from '@fullcalendar/react';
 import { FC, Fragment } from 'react';
 import { FacebookShareButton, TwitterShareButton } from 'react-share';
 import { FacebookIcon, TwitterIcon } from 'react-share';
 import styled from 'styled-components';
+import { Maybe } from '../../../generated/graphql';
 
-type CardProps = {
+export type CardType = {
   title: string;
   subtitle?: string;
   exSubTitle?: string;
   content: string;
-  url: string;
+  url: Maybe<string> | undefined;
   isPrivate?: boolean;
-  createdAt?: string;
-  updatedAt?: string;
+  createdAt?: number;
+  updatedAt?: number;
   createdBy: string;
-  onClick: (item: any) => void;
 };
 
-const Card: FC<CardProps> = ({
-  title,
-  subtitle,
-  content,
-  url,
-  isPrivate,
-  exSubTitle,
-  createdAt,
-  updatedAt,
-  createdBy,
-  onClick,
-}) => {
+type Props = {
+  card: CardType;
+  onClick: () => void;
+};
+
+const Card: FC<Props> = ({ card, onClick }) => {
+  const {
+    title,
+    subtitle,
+    content,
+    url,
+    isPrivate,
+    exSubTitle,
+    createdAt,
+    updatedAt,
+    createdBy,
+  } = card;
+
   return (
     <StyledCard onClick={onClick}>
       <div className="card-body">
@@ -40,7 +47,7 @@ const Card: FC<CardProps> = ({
         <p className="card-text">
           <small className="text-muted">
             posted by: {createdBy}{' '}
-            {createdAt ? `on ${new Date(createdAt).toLocaleString()}` : null}
+            {createdAt ? `on ${formatDate(createdAt)}` : null}
           </small>
           {updatedAt ? (
             new Date(updatedAt).getTime() !==
@@ -48,7 +55,7 @@ const Card: FC<CardProps> = ({
               <Fragment>
                 <br />
                 <small className="text-muted">
-                  updated on: {new Date(updatedAt).toLocaleString()}
+                  updated on: {formatDate(updatedAt)}
                 </small>
               </Fragment>
             ) : null
@@ -57,7 +64,7 @@ const Card: FC<CardProps> = ({
 
         <FacebookShareButton
           onClick={(e) => e.stopPropagation()}
-          url={url}
+          url={url ?? ''}
           className="card-link btn btn-outline-secondary"
         >
           <FacebookIcon size={32} round /> Share on Facebook
@@ -67,7 +74,7 @@ const Card: FC<CardProps> = ({
           onClick={(e) => e.stopPropagation()}
           className="card-link btn btn-outline-secondary"
           title={title}
-          url={url}
+          url={url ?? ''}
           //hashtags={['hashtag1', 'hashtag2']}
         >
           <TwitterIcon size={32} round /> Share on Twitter

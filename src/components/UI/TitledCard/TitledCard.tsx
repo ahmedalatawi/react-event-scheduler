@@ -1,10 +1,10 @@
 import { FC } from 'react';
 
-type TitledCardProps = {
+type Props = {
   title: string;
 };
 
-const TitledCard: FC<TitledCardProps> = ({ title, children }) => {
+const TitledCard: FC<Props> = ({ title, children }) => {
   return (
     <div className="card">
       <h5 className="card-header">{title}</h5>

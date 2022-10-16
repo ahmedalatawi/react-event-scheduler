@@ -10,17 +10,13 @@ import {
   useSignupMutation,
 } from '../../../generated/graphql';
 
-type LoginContainerProps = {
+type Props = {
   view: string;
   onClose: () => void;
   onSuccess: () => void;
 };
 
-const LoginContainer: FC<LoginContainerProps> = ({
-  view,
-  onClose,
-  onSuccess,
-}) => {
+const LoginContainer: FC<Props> = ({ view, onClose, onSuccess }) => {
   const [viewType, setViewType] = useState<string>('');
   const [errorMsg, setErrorMsg] = useState<string>('');
   const [displayLoginError, setDisplayLoginError] = useState<boolean>(false);

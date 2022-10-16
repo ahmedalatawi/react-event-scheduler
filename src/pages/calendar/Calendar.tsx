@@ -8,7 +8,7 @@ import EventBody, { EventType } from '../../components/EventBody/EventBody';
 import { NetworkStatus } from '@apollo/client';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import Alert from '../../components/UI/Alert/Alert';
-import { IEvent } from '../../interfaces/types';
+import { IEvent } from '../../types';
 import AuthContext from '../../store/auth-context';
 import {
   useDeleteEventMutation,

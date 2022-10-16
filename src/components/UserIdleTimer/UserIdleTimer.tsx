@@ -4,11 +4,11 @@ import AuthContext from '../../store/auth-context';
 import Timer from '../Timer/Timer';
 import Modal from '../UI/Modal/Modal';
 
-type UserIdleTimerProps = {
+type Props = {
   onLogout: () => void;
 };
 
-const UserIdleTimer: FC<UserIdleTimerProps> = ({ onLogout }) => {
+const UserIdleTimer: FC<Props> = ({ onLogout }) => {
   const [displayModal, setDisplayModal] = useState<boolean>(false);
   const [closeOnStayLoggedIn, setCloseOnStayLoggedIn] =
     useState<boolean>(false);
