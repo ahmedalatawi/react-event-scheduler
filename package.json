@@ -11,7 +11,7 @@
     "start:web": "react-scripts start",
     "prepare": "husky install",
     "pretty": "prettier --write \"./**/*.{js,jsx,css,tsx,ts,json,yml}\"",
-    "codegen": "graphql-codegen --config codegen.yml"
+    "codegen": "graphql-codegen --config codegen.yml -r dotenv/config"
   },
   "engines": {
     "npm": ">=8.0.0 <9.0.0",

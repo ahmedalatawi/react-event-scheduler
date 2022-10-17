@@ -1,5 +1,5 @@
 overwrite: true
-schema: 'http://localhost:4000/graphql'
+schema: ${REACT_APP_GRAPHQL_ENDPOINT}
 documents: 'src/**/*.graphql'
 generates:
   src/generated/graphql.tsx:
