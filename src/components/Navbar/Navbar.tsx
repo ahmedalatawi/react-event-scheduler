@@ -1,4 +1,4 @@
-import { useState, Fragment, useContext, useEffect, FC } from 'react';
+import { useState, Fragment, useContext, FC } from 'react';
 import { Container, Form, Nav, Navbar } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import AuthContext from '../../store/auth-context';
@@ -9,15 +9,12 @@ import { Switch, useDarkreader } from 'react-darkreader';
 const MainNavbar: FC = () => {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
-  const [loggedIn, setLoggedIn] = useState<boolean>(false);
   const [view, setView] = useState<string>('Login');
   const [isDark, { toggle }] = useDarkreader(
     localStorage.getItem('react-event-scheduler-theme') === 'dark'
   );
 
-  const authCtx = useContext(AuthContext);
-
-  useEffect(() => setLoggedIn(!!authCtx.getAuth()), [authCtx]);
+  const { auth, removeAuth } = useContext(AuthContext);
 
   const handleLoginBtnClick = () => {
     setView('Login');
@@ -37,6 +34,9 @@ const MainNavbar: FC = () => {
     color: 'black',
   };
 
+  const handleStyle = ({ isActive }: { isActive: boolean }) =>
+    isActive ? isActiveStyle : {};
+
   const onToggleHandler = (expanded: boolean) => {
     setIsExpanded(expanded);
   };
@@ -46,19 +46,14 @@ const MainNavbar: FC = () => {
   };
 
   const handleLogoutBtnClick = () => {
-    authCtx.removeAuth();
-    setLoggedIn(false);
+    removeAuth();
     onSelectNavLinkHandler();
   };
 
   return (
     <Fragment>
       {showModal && (
-        <LoginContainer
-          view={view}
-          onClose={() => setShowModal(false)}
-          onSuccess={() => setLoggedIn(true)}
-        />
+        <LoginContainer view={view} onClose={() => setShowModal(false)} />
       )}
       <Navbar
         bg="light"
@@ -72,7 +67,7 @@ const MainNavbar: FC = () => {
             className="navbar-brand"
             to="/"
             onClick={onSelectNavLinkHandler}
-            style={({ isActive }) => (isActive ? isActiveStyle : {})}
+            style={handleStyle}
           >
             Event Scheduler
           </NavLink>
@@ -81,7 +76,7 @@ const MainNavbar: FC = () => {
             <Nav className="me-auto">
               <NavLink
                 className="nav-link"
-                style={({ isActive }) => (isActive ? isActiveStyle : {})}
+                style={handleStyle}
                 to="/searchEvents"
                 onClick={onSelectNavLinkHandler}
               >
@@ -90,7 +85,7 @@ const MainNavbar: FC = () => {
 
               <NavLink
                 className="nav-link"
-                style={({ isActive }) => (isActive ? isActiveStyle : {})}
+                style={handleStyle}
                 to="/addEvent"
                 onClick={onSelectNavLinkHandler}
               >
@@ -99,7 +94,7 @@ const MainNavbar: FC = () => {
 
               <NavLink
                 className="nav-link"
-                style={({ isActive }) => (isActive ? isActiveStyle : {})}
+                style={handleStyle}
                 to="/calendar"
                 onClick={onSelectNavLinkHandler}
               >
@@ -119,7 +114,7 @@ const MainNavbar: FC = () => {
               />
             </div>
             <Form className="d-flex">
-              {!loggedIn ? (
+              {!auth ? (
                 <Fragment>
                   <button
                     className="btn btn me-2"

@@ -13,32 +13,38 @@ type Props = {
 };
 
 const MyAccount: FC<Props> = ({ onLogout, onSelect }) => {
-  const authCtx = useContext(AuthContext);
+  const { auth } = useContext(AuthContext);
+
+  if (!auth) {
+    return null;
+  }
+
+  const { username, userId } = auth;
 
   return (
     <Fragment>
       <span className="nav-link text-secondary">
-        Welcome, <b>{authCtx.auth?.username}</b>
+        Welcome, <b>{username}</b>
       </span>
       <StyledNavDropdown title={<FaUser className="text-secondary" />}>
         <NavDropdown.Item
           onClick={onSelect}
           as={Link}
-          to={`/user/${authCtx.auth?.userId}/profile`}
+          to={`/user/${userId}/profile`}
         >
           <FaUserEdit /> My profile
         </NavDropdown.Item>
         <NavDropdown.Item
           onClick={onSelect}
           as={Link}
-          to={`/user/${authCtx.auth?.userId}/events`}
+          to={`/user/${userId}/events`}
         >
           <MdEventNote /> My events
         </NavDropdown.Item>
         <NavDropdown.Item
           onClick={onSelect}
           as={Link}
-          to={`/user/${authCtx.auth?.userId}/settings`}
+          to={`/user/${userId}/settings`}
         >
           <FiSettings /> Settings
         </NavDropdown.Item>

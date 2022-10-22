@@ -4,7 +4,7 @@ import { IAuth } from '../types';
 
 import AuthContext from './auth-context';
 
-const AuthProvider: FC = (props) => {
+const AuthProvider: FC = ({ children }) => {
   const { getAuth, addAuth, removeAuth } = useAuth();
 
   const [auth, setAuth] = useState<IAuth | null>(getAuth());
@@ -27,9 +27,7 @@ const AuthProvider: FC = (props) => {
   };
 
   return (
-    <AuthContext.Provider value={authContext}>
-      {props.children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={authContext}>{children}</AuthContext.Provider>
   );
 };
 

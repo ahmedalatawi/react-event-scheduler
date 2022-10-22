@@ -1,12 +1,12 @@
-import { FC, useContext, useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { FC, useState } from 'react';
+import { useParams } from 'react-router';
 import { BiEditAlt } from 'react-icons/bi';
 import Alert from '../../../../components/UI/Alert/Alert';
 import Spinner from '../../../../components/UI/Spinner/Spinner';
 import EditMyProfile from './EditMyProfile';
-import AuthContext from '../../../../store/auth-context';
 import TitledCard from '../../../../components/UI/TitledCard/TitledCard';
 import { useGetUserQuery } from '../../../../generated/graphql';
+import { useNavigateToHome } from '../../../../hooks/useNavigateToHome';
 
 const MyProfile: FC = () => {
   const { id } = useParams();
@@ -17,12 +17,7 @@ const MyProfile: FC = () => {
 
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
 
-  const authCtx = useContext(AuthContext);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    !authCtx.auth && navigate('/');
-  }, [authCtx, navigate]);
+  useNavigateToHome();
 
   if (loading) {
     return <Spinner />;
@@ -39,6 +34,10 @@ const MyProfile: FC = () => {
     );
   }
 
+  if (!data) {
+    return null;
+  }
+
   const {
     username,
     firstName,
@@ -48,7 +47,7 @@ const MyProfile: FC = () => {
     bio,
     createdAt,
     updatedAt,
-  } = data?.getUser ?? {};
+  } = data.getUser;
 
   return (
     <>
@@ -107,7 +106,7 @@ const MyProfile: FC = () => {
         </TitledCard>
       ) : (
         <EditMyProfile
-          user={data?.getUser as any}
+          user={data.getUser}
           onReadOnlyMode={() => setIsEditMode(false)}
         />
       )}

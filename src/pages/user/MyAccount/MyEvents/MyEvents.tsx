@@ -1,16 +1,16 @@
 import { NetworkStatus } from '@apollo/client';
-import { FC, useContext, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
 import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
 import ToolkitProvider, { Search } from 'react-bootstrap-table2-toolkit';
-import { useNavigate, useParams } from 'react-router';
-import AuthContext from '../../../../store/auth-context';
+import { useParams } from 'react-router';
 import Alert from '../../../../components/UI/Alert/Alert';
 import Spinner from '../../../../components/UI/Spinner/Spinner';
 import TitledCard from '../../../../components/UI/TitledCard/TitledCard';
 import Pagination from '../../../../components/Pagination/Pagination';
 import { useGetUserEventsQuery } from '../../../../generated/graphql';
 import { BootstrapTableWrapper } from '../styles';
+import { useNavigateToHome } from '../../../../hooks/useNavigateToHome';
 
 const ITEMS_PER_PAGE = 10;
 
@@ -29,6 +29,8 @@ const MyEvents: FC = () => {
       filter: { searchText, pageNumber, pageSize: ITEMS_PER_PAGE },
     },
   });
+
+  useNavigateToHome();
 
   const columns = [
     {
@@ -98,13 +100,6 @@ const MyEvents: FC = () => {
     setPageNumber(1);
     setSearchText(text);
   };
-
-  const authCtx = useContext(AuthContext);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    !authCtx.auth && navigate('/');
-  }, [authCtx, navigate]);
 
   if (error) {
     return (

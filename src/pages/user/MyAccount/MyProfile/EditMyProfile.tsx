@@ -1,36 +1,38 @@
-import { FC, FormEvent, useContext, useEffect, useRef, useState } from 'react';
+import { FC, FormEvent, useContext, useState } from 'react';
 import { Button, Col, Form, InputGroup, Row } from 'react-bootstrap';
 import { MdSaveAlt } from 'react-icons/md';
-import { useNavigate } from 'react-router';
-import { IUser } from '../../../../types';
 import AuthContext from '../../../../store/auth-context';
 import Spinner from '../../../../components/UI/Spinner/Spinner';
 import Alert from '../../../../components/UI/Alert/Alert';
 import TitledCard from '../../../../components/UI/TitledCard/TitledCard';
-import { useSaveUserMutation } from '../../../../generated/graphql';
+import {
+  UserFullFragment,
+  useSaveUserMutation,
+} from '../../../../generated/graphql';
+
+type UserPropKeys = keyof UserFullFragment;
 
 type Props = {
-  user: IUser | undefined;
+  user: UserFullFragment;
   onReadOnlyMode: () => void;
 };
 
 const EditMyProfile: FC<Props> = ({ user, onReadOnlyMode }) => {
-  const { _id, username, firstName, lastName, email, phoneNumber, bio } =
-    user ?? {};
-
   const [validated, setValidated] = useState(false);
+  const [userToEdit, setUserToEdit] = useState<UserFullFragment>(user);
 
-  const usernameRef = useRef<any>(username);
-  const firstNameRef = useRef<any>(firstName);
-  const lastNameRef = useRef<any>(lastName);
-  const emailRef = useRef<any>(email);
-  const phoneNumberRef = useRef<any>(phoneNumber);
-  const bioRef = useRef<any>(bio);
+  const { auth, addAuth } = useContext(AuthContext);
 
-  const authCtx = useContext(AuthContext);
-  const navigate = useNavigate();
+  const editUser = (prop: UserPropKeys, value: string) =>
+    setUserToEdit({
+      ...userToEdit,
+      [prop]: value.trim(),
+    });
 
   const [saveUser, { error, loading, reset }] = useSaveUserMutation();
+
+  const { _id, username, firstName, lastName, email, phoneNumber, bio } =
+    userToEdit;
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     const form = event.currentTarget;
@@ -46,22 +48,22 @@ const EditMyProfile: FC<Props> = ({ user, onReadOnlyMode }) => {
       saveUser({
         variables: {
           user: {
-            _id: _id ?? '',
-            username: usernameRef.current?.value.trim(),
-            firstName: firstNameRef.current?.value.trim(),
-            lastName: lastNameRef.current?.value.trim(),
-            email: emailRef.current?.value.trim(),
-            phoneNumber: phoneNumberRef.current?.value.trim(),
-            bio: bioRef.current?.value.trim(),
+            _id: _id,
+            username,
+            firstName,
+            lastName,
+            email,
+            phoneNumber,
+            bio,
           },
         },
       })
         .then((res) => {
-          const { userId, token, tokenExpiration } = authCtx.getAuth() ?? {
+          const { userId, token, tokenExpiration } = auth ?? {
             token: '',
             userId: '',
           };
-          authCtx.addAuth({
+          addAuth({
             userId,
             token,
             tokenExpiration,
@@ -74,10 +76,6 @@ const EditMyProfile: FC<Props> = ({ user, onReadOnlyMode }) => {
           setValidated(false);
         });
   };
-
-  useEffect(() => {
-    !authCtx.auth && navigate('/');
-  }, [authCtx, navigate]);
 
   if (loading) {
     return <Spinner />;
@@ -105,8 +103,8 @@ const EditMyProfile: FC<Props> = ({ user, onReadOnlyMode }) => {
                   type="text"
                   placeholder="Username"
                   aria-describedby="inputGroupPrepend"
-                  defaultValue={username}
-                  ref={usernameRef}
+                  value={username}
+                  onChange={(event) => editUser('username', event.target.value)}
                   required
                 />
                 <Form.Control.Feedback type="invalid">
@@ -121,8 +119,8 @@ const EditMyProfile: FC<Props> = ({ user, onReadOnlyMode }) => {
               <Form.Control
                 type="text"
                 placeholder="First name"
-                defaultValue={firstName}
-                ref={firstNameRef}
+                value={firstName ?? ''}
+                onChange={(event) => editUser('firstName', event.target.value)}
               />
             </Form.Group>
             <Form.Group as={Col} md="6">
@@ -130,8 +128,8 @@ const EditMyProfile: FC<Props> = ({ user, onReadOnlyMode }) => {
               <Form.Control
                 type="text"
                 placeholder="Last name"
-                defaultValue={lastName}
-                ref={lastNameRef}
+                value={lastName ?? ''}
+                onChange={(event) => editUser('lastName', event.target.value)}
               />
             </Form.Group>
           </Row>
@@ -141,8 +139,8 @@ const EditMyProfile: FC<Props> = ({ user, onReadOnlyMode }) => {
               <Form.Control
                 type="email"
                 placeholder="Email"
-                defaultValue={email}
-                ref={emailRef}
+                value={email ?? ''}
+                onChange={(event) => editUser('email', event.target.value)}
               />
               <Form.Control.Feedback type="invalid">
                 Please provide a valid email.
@@ -155,8 +153,10 @@ const EditMyProfile: FC<Props> = ({ user, onReadOnlyMode }) => {
               <Form.Control
                 type="text"
                 placeholder="Phone number"
-                defaultValue={phoneNumber}
-                ref={phoneNumberRef}
+                value={phoneNumber ?? ''}
+                onChange={(event) =>
+                  editUser('phoneNumber', event.target.value)
+                }
               />
             </Form.Group>
           </Row>
@@ -167,8 +167,8 @@ const EditMyProfile: FC<Props> = ({ user, onReadOnlyMode }) => {
                 as="textarea"
                 rows={5}
                 placeholder="Bio"
-                defaultValue={bio}
-                ref={bioRef}
+                value={bio ?? ''}
+                onChange={(event) => editUser('bio', event.target.value)}
               />
             </Form.Group>
           </Row>

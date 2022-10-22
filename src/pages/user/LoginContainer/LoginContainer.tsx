@@ -1,4 +1,4 @@
-import { useState, useRef, Fragment, useContext, useEffect, FC } from 'react';
+import { useState, Fragment, useContext, useEffect, FC } from 'react';
 import useValidation from '../../../hooks/useValidation';
 import Login from '../../../components/Login/Login';
 import Signup from '../../../components/Signup/Signup';
@@ -9,22 +9,23 @@ import {
   useLoginLazyQuery,
   useSignupMutation,
 } from '../../../generated/graphql';
+import { ISignupInput } from '../../../types';
 
 type Props = {
   view: string;
   onClose: () => void;
-  onSuccess: () => void;
 };
 
-const LoginContainer: FC<Props> = ({ view, onClose, onSuccess }) => {
+const LoginContainer: FC<Props> = ({ view, onClose }) => {
   const [viewType, setViewType] = useState<string>('');
   const [errorMsg, setErrorMsg] = useState<string>('');
   const [displayLoginError, setDisplayLoginError] = useState<boolean>(false);
   const [closeOnSuccess, setCloseOnSuccess] = useState<boolean>(false);
-
-  const usernameRef = useRef<any>({});
-  const passwordRef = useRef<any>({});
-  const confirmPasswordRef = useRef<any>({});
+  const [signupForm, setSignupForm] = useState<ISignupInput>({
+    username: '',
+    password: '',
+    confirmPassword: '',
+  });
 
   const [validate] = useValidation(setErrorMsg);
 
@@ -37,9 +38,7 @@ const LoginContainer: FC<Props> = ({ view, onClose, onSuccess }) => {
     { error: signupError, data: signupData, loading: signupLoading, reset },
   ] = useSignupMutation();
 
-  const authCtx = useContext(AuthContext);
-
-  const { addAuth, getAuth } = authCtx;
+  const { addAuth, getAuth } = useContext(AuthContext);
 
   useEffect(() => {
     const auth: any = loginData || signupData;
@@ -51,15 +50,12 @@ const LoginContainer: FC<Props> = ({ view, onClose, onSuccess }) => {
 
       addAuth({ userId, token, tokenExpiration, username });
       setCloseOnSuccess(true);
-      onSuccess();
     }
-  }, [addAuth, getAuth, loginData, onSuccess, signupData]);
+  }, [addAuth, getAuth, loginData, signupData]);
 
   const handleSubmit = () => {
     const view = getViewType();
-    const username = usernameRef.current?.value;
-    const password = passwordRef.current?.value;
-    const confirmPassword = confirmPasswordRef.current?.value;
+    const { username, password, confirmPassword } = signupForm;
 
     setDisplayLoginError(false);
     reset();
@@ -80,25 +76,25 @@ const LoginContainer: FC<Props> = ({ view, onClose, onSuccess }) => {
     }
   };
 
-  const handleUsernameChange = (username: string) => {
-    usernameRef.current.value = username;
+  const onReset = () => {
     reset();
     setErrorMsg('');
     setDisplayLoginError(false);
+  };
+
+  const handleUsernameChange = (username: string) => {
+    onReset();
+    setSignupForm({ ...signupForm, username });
   };
 
   const handlePasswordChange = (password: string) => {
-    passwordRef.current.value = password;
-    reset();
-    setErrorMsg('');
-    setDisplayLoginError(false);
+    onReset();
+    setSignupForm({ ...signupForm, password });
   };
 
   const handleConfirmPasswordChange = (confirmPassword: string) => {
-    confirmPasswordRef.current.value = confirmPassword;
-    reset();
-    setErrorMsg('');
-    setDisplayLoginError(false);
+    onReset();
+    setSignupForm({ ...signupForm, confirmPassword });
   };
 
   const getViewType = (): string => {

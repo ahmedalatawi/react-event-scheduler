@@ -12,7 +12,7 @@ const UserIdleTimer: FC<Props> = ({ onLogout }) => {
   const [displayModal, setDisplayModal] = useState<boolean>(false);
   const [closeOnStayLoggedIn, setCloseOnStayLoggedIn] =
     useState<boolean>(false);
-  const resetTimerRef = useRef<any>({});
+  const resetTimerRef = useRef<boolean>(false);
 
   const authCtx = useContext(AuthContext);
 

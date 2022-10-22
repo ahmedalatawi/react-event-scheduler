@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useContext, useEffect, useState } from 'react';
+import { ChangeEvent, FC, useContext, useState } from 'react';
 import { MdSaveAlt } from 'react-icons/md';
 import EventBody, { EventType } from '../../../components/EventBody/EventBody';
 import Spinner from '../../../components/UI/Spinner/Spinner';
@@ -17,17 +17,13 @@ const AddEvent: FC = () => {
   const [disableSaveBtn, setDisableSaveBtn] = useState<boolean>(true);
   const [displayForm, setDisplayForm] = useState<boolean>(true);
 
-  const [loggedIn, setLoggedIn] = useState<boolean>(true);
-
   const { title, start, end, isPrivate, description } = event;
 
   const [saveEvent, { error, data, loading }] = useSaveEventMutation({
     variables: { event: { id: '', title, start, end, isPrivate, description } },
   });
 
-  const authCtx = useContext(AuthContext);
-
-  useEffect(() => setLoggedIn(!!authCtx.getAuth()), [authCtx]);
+  const { auth } = useContext(AuthContext);
 
   const handleOnSubmit = (event: ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -53,7 +49,7 @@ const AddEvent: FC = () => {
 
   return (
     <div>
-      {!loggedIn && (
+      {!auth && (
         <Alert
           msg="You must log in to be able to add events."
           type="warning"
@@ -85,7 +81,7 @@ const AddEvent: FC = () => {
             <div className="col-12">
               <EventBody
                 event={event}
-                disableEdit={!loggedIn}
+                disableEdit={!auth}
                 onChangeValue={(prop, value) =>
                   onChangeValueHandler(prop, value)
                 }
@@ -98,7 +94,7 @@ const AddEvent: FC = () => {
             <button
               type="submit"
               className="btn btn-primary"
-              disabled={disableSaveBtn || loading || !loggedIn}
+              disabled={disableSaveBtn || loading || !auth}
             >
               Save <MdSaveAlt />
             </button>

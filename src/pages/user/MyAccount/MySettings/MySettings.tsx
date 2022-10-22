@@ -1,9 +1,8 @@
-import { FC, useContext, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import { Tab, Tabs } from 'react-bootstrap';
-import { useNavigate } from 'react-router';
-import AuthContext from '../../../../store/auth-context';
 import TitledCard from '../../../../components/UI/TitledCard/TitledCard';
 import styled from 'styled-components';
+import { useNavigateToHome } from '../../../../hooks/useNavigateToHome';
 
 const BodyContainer = styled.div({
   minHeight: '15rem',
@@ -12,12 +11,7 @@ const BodyContainer = styled.div({
 const MySettings: FC = () => {
   const [key, setKey] = useState('inbox');
 
-  const authCtx = useContext(AuthContext);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    !authCtx.auth && navigate('/');
-  }, [authCtx, navigate]);
+  useNavigateToHome();
 
   return (
     <TitledCard title="My Settings">

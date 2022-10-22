@@ -2,6 +2,8 @@ import styled from 'styled-components';
 import { NavDropdown } from 'react-bootstrap';
 
 export const StyledNavDropdown = styled(NavDropdown)`
+  margin-left: 12px;
+
   .dropdown > a::after {
     color: #6c757d;
   }

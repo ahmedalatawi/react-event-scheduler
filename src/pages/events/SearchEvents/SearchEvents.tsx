@@ -51,7 +51,7 @@ const SearchEvents: FC = () => {
     expiredCheck: false,
   });
 
-  const authCtx = useContext(AuthContext);
+  const { auth } = useContext(AuthContext);
 
   const { searchText, currentPage, allCheck, currentCheck, expiredCheck } =
     formProps;
@@ -100,7 +100,6 @@ const SearchEvents: FC = () => {
   };
 
   const clickEventHandler = (event: EventFull) => {
-    const auth = authCtx.getAuth();
     const { id, title, start, end, isPrivate, description, createdBy } = event;
     const createdById = createdBy?._id ?? '';
 
@@ -195,7 +194,7 @@ const SearchEvents: FC = () => {
     resetCurrentPage();
     refetch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [authCtx, refetch]);
+  }, [auth, refetch]);
 
   const handleFilterByAllEventsChange = (e: ChangeEvent<HTMLInputElement>) => {
     e.persist();
@@ -239,7 +238,6 @@ const SearchEvents: FC = () => {
   };
 
   const disableEditHandler = () => {
-    const auth = authCtx.getAuth();
     return auth && auth.userId === event.createdById;
   };
 
@@ -379,9 +377,7 @@ const SearchEvents: FC = () => {
           disableDeleteBtn={disableDeleteBtn}
           isSubmitLoading={saveEventLoading}
           isDeleteLoading={deleteEventLoading}
-          closeBtnName={
-            authCtx.auth?.userId === createdById ? 'Cancel' : 'Close'
-          }
+          closeBtnName={auth?.userId === createdById ? 'Cancel' : 'Close'}
           onClose={() => setModal({ ...modal, show: false })}
           onDelete={handleDeleteEvent}
           onSubmit={handleSaveEvent}

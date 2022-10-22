@@ -84,10 +84,9 @@ const Calendar: FC = () => {
     variables: { id: clickInfoRef.current.value?.event?.id },
   });
 
-  const authCtx = useContext(AuthContext);
+  const { auth } = useContext(AuthContext);
 
   useEffect(() => {
-    const auth = authCtx.getAuth();
     refetch();
     setLoggedIn(!!auth);
     setDisableEdit(!auth);
@@ -97,7 +96,7 @@ const Calendar: FC = () => {
       disableDeleteBtn: !auth,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [authCtx, refetch]);
+  }, [auth, refetch]);
 
   const handleSaveEvent = () => {
     setActionBtns({
@@ -134,7 +133,7 @@ const Calendar: FC = () => {
               isPrivate,
               description,
               createdBy: {
-                _id: authCtx.auth?.userId,
+                _id: auth?.userId,
               },
             },
           });
@@ -152,8 +151,6 @@ const Calendar: FC = () => {
   const handleDateClick = async (selectedDate: DateClickArg) => {
     clickInfoRef.current.value = null;
     calendarApiRef.current.value = selectedDate.view.calendar;
-
-    const auth = authCtx.getAuth();
 
     setDisableEdit(!auth);
     setActionBtns({
@@ -179,8 +176,6 @@ const Calendar: FC = () => {
   const handleEventClick = (clickInfo: EventClickArg) => {
     clickInfo.jsEvent.preventDefault();
     clickInfoRef.current.value = clickInfo;
-
-    const auth = authCtx.getAuth();
 
     if (auth) {
       const equal = auth.userId === clickInfo.event.extendedProps.createdBy._id;
