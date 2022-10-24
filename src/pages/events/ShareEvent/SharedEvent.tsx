@@ -20,14 +20,7 @@ const SharedEvent: FC = () => {
   }
 
   if (error) {
-    return (
-      <Alert
-        msg={error.message}
-        type="danger"
-        ariaLabel="Warning"
-        fillType="#exclamation-triangle-fill"
-      />
-    );
+    return <Alert msg={error.message} type="danger" dismissible={false} />;
   }
 
   const card = {

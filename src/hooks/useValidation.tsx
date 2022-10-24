@@ -1,40 +1,37 @@
-const useValidation = (callback: Function) => {
+const useValidation = () => {
   const validate = (
     username: string,
     password: string,
     confirmPassword: string,
     view: string
-  ): boolean => {
-    let isValid = false;
+  ): string => {
+    let errorText = '';
 
     if (view === 'Signup') {
       const passwordRegex =
         /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
 
       if (!username || !password || !confirmPassword) {
-        callback('Please fill out required fields.');
+        errorText = 'Please fill out required fields.';
       } else if (username.length < 3) {
-        callback('Username must be at least 3 characters.');
+        errorText = 'Username must be at least 3 characters.';
       } else if (!passwordRegex.test(password)) {
-        callback(
-          'Password must be at least 6 characters, symbol, upper and lower case letters and a number.'
-        );
+        errorText =
+          'Password must be at least 6 characters, symbol, upper and lower case letters and a number.';
       } else if (password !== confirmPassword) {
-        callback("Password and confirmed password don't match.");
+        errorText = "Password and confirmed password don't match.";
       } else {
-        callback('');
-        isValid = true;
+        errorText = '';
       }
     } else {
       if (!username || !password) {
-        callback('Username and password are required.');
+        errorText = 'Username and password are required.';
       } else {
-        callback('');
-        isValid = true;
+        errorText = '';
       }
     }
 
-    return isValid;
+    return errorText;
   };
 
   return [validate];

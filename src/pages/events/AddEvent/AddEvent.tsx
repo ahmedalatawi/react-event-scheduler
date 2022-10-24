@@ -1,25 +1,32 @@
-import { ChangeEvent, FC, useContext, useState } from 'react';
+import { ChangeEvent, FC, Fragment, useContext, useState } from 'react';
 import { MdSaveAlt } from 'react-icons/md';
 import EventBody, { EventType } from '../../../components/EventBody/EventBody';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import Alert from '../../../components/UI/Alert/Alert';
 import AuthContext from '../../../store/auth-context';
-import { useSaveEventMutation } from '../../../generated/graphql';
+import {
+  SaveEventMutation,
+  useSaveEventMutation,
+} from '../../../generated/graphql';
+import { IAuth } from '../../../types';
+import { ApolloError } from '@apollo/client';
+
+const initEvent = {
+  title: '',
+  start: '',
+  end: '',
+  isPrivate: false,
+  description: '',
+};
 
 const AddEvent: FC = () => {
-  const [event, setEvent] = useState<EventType>({
-    title: '',
-    start: '',
-    end: '',
-    isPrivate: false,
-    description: '',
-  });
+  const [event, setEvent] = useState<EventType>(initEvent);
   const [disableSaveBtn, setDisableSaveBtn] = useState<boolean>(true);
   const [displayForm, setDisplayForm] = useState<boolean>(true);
 
   const { title, start, end, isPrivate, description } = event;
 
-  const [saveEvent, { error, data, loading }] = useSaveEventMutation({
+  const [saveEvent, { error, data, loading, reset }] = useSaveEventMutation({
     variables: { event: { id: '', title, start, end, isPrivate, description } },
   });
 
@@ -30,13 +37,7 @@ const AddEvent: FC = () => {
     setDisplayForm(false);
     saveEvent()
       .then((_) => {
-        setEvent({
-          title: '',
-          start: '',
-          end: '',
-          isPrivate: false,
-          description: '',
-        });
+        setEvent(initEvent);
         setDisableSaveBtn(true);
       })
       .catch((error) => console.error(error.message))
@@ -48,31 +49,8 @@ const AddEvent: FC = () => {
   };
 
   return (
-    <div>
-      {!auth && (
-        <Alert
-          msg="You must log in to be able to add events."
-          type="warning"
-          ariaLabel="Warning:"
-          fillType="#exclamation-triangle-fill"
-        />
-      )}
-      {data && (
-        <Alert
-          msg="Event was successfully added."
-          type="success"
-          ariaLabel="Success:"
-          fillType="#check-circle-fill"
-        />
-      )}
-      {error && (
-        <Alert
-          msg="Error occurred while saving event! Please try again later."
-          type="danger"
-          ariaLabel="Warning"
-          fillType="#exclamation-triangle-fill"
-        />
-      )}
+    <Fragment>
+      <CustomAlert auth={auth} data={data} error={error} onClose={reset} />
       {loading ? (
         <Spinner />
       ) : (
@@ -101,8 +79,39 @@ const AddEvent: FC = () => {
           </div>
         </form>
       )}
-    </div>
+    </Fragment>
   );
 };
+
+const CustomAlert = ({
+  auth,
+  data,
+  error,
+  onClose,
+}: {
+  auth: IAuth | null;
+  data: SaveEventMutation | null | undefined;
+  error: ApolloError | undefined;
+  onClose: () => void;
+}) =>
+  !auth ? (
+    <Alert
+      msg="You must log in to be able to add events."
+      type="warning"
+      dismissible={false}
+    />
+  ) : data ? (
+    <Alert
+      msg="Event was successfully added."
+      type="success"
+      onClose={onClose}
+    />
+  ) : error ? (
+    <Alert
+      msg="Error occurred while saving event! Please try again later."
+      type="danger"
+      onClose={onClose}
+    />
+  ) : null;
 
 export default AddEvent;

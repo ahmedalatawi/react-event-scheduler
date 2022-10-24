@@ -1,17 +1,13 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { ChangeEvent, FC } from 'react';
+import { LoginOrSignupFormProps } from '../Signup/Signup';
 
 type Props = {
-  onChangePassword: (password: string) => void;
-  onChangeUsername: (username: string) => void;
+  onChangeValue: (prop: LoginOrSignupFormProps, value: string) => void;
   onToggleLogin: () => void;
 };
 
-const Login: FC<Props> = ({
-  onChangePassword,
-  onChangeUsername,
-  onToggleLogin,
-}) => {
+const Login: FC<Props> = ({ onChangeValue, onToggleLogin }) => {
   return (
     <div className="row g-3">
       <div className="col-12">
@@ -26,7 +22,7 @@ const Login: FC<Props> = ({
           placeholder="Username"
           maxLength={20}
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
-            onChangeUsername(e.target.value.trim())
+            onChangeValue('username', e.target.value.trim())
           }
         />
       </div>
@@ -42,7 +38,7 @@ const Login: FC<Props> = ({
           placeholder="Password"
           maxLength={20}
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
-            onChangePassword(e.target.value.trim())
+            onChangeValue('password', e.target.value.trim())
           }
         />
       </div>

@@ -1,4 +1,4 @@
-import { NetworkStatus } from '@apollo/client';
+import { ApolloError, NetworkStatus } from '@apollo/client';
 import { ChangeEvent, FC, useContext, useEffect, useState } from 'react';
 import useDebounce from '../../../hooks/useDebounce';
 import Spinner from '../../../components/UI/Spinner/Spinner';
@@ -17,6 +17,7 @@ import {
 } from '../../../generated/graphql';
 import styled from 'styled-components';
 import { dateToTitle } from '../../../utils/dateTransforms';
+import { ServerErrorAlert } from '../../../components/ServerErrorAlert/ServerErrorAlert';
 
 const EVENTS_PER_PAGE = 20;
 
@@ -25,6 +26,7 @@ const SearchEvents: FC = () => {
     title: '',
     show: false,
   });
+  const [serverError, setServerError] = useState<ApolloError | null>(null);
 
   const [event, setEvent] = useState<EventType>({
     id: '',
@@ -61,7 +63,7 @@ const SearchEvents: FC = () => {
 
   const debouncedSearchText = useDebounce(searchText);
 
-  const { loading, data, error, refetch, networkStatus } = useGetEventsQuery({
+  const { loading, data, refetch, networkStatus } = useGetEventsQuery({
     fetchPolicy: 'cache-and-network',
     notifyOnNetworkStatusChange: true,
     variables: {
@@ -73,15 +75,16 @@ const SearchEvents: FC = () => {
         expiredCheck,
       },
     },
+    onError: setServerError,
   });
 
-  const [saveEvent, { error: saveEventError, loading: saveEventLoading }] =
-    useSaveEventMutation();
+  const [saveEvent, { loading: saveEventLoading }] = useSaveEventMutation({
+    onError: setServerError,
+  });
 
-  const [
-    deleteEvent,
-    { error: deleteEventError, loading: deleteEventLoading },
-  ] = useDeleteEventMutation();
+  const [deleteEvent, { loading: deleteEventLoading }] = useDeleteEventMutation(
+    { onError: setServerError }
+  );
 
   const handleOnSubmit = (event: ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -90,6 +93,15 @@ const SearchEvents: FC = () => {
 
   const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
     setFormProps({ ...formProps, searchText: event.target.value });
+  };
+
+  const onFinalizeApiRequest = () => {
+    setActionBtns({
+      ...actionBtns,
+      disableDeleteBtn: false,
+      disableSaveBtn: false,
+    });
+    setModal({ ...modal, show: false });
   };
 
   const getExSubTitle = (endTime: string) => {
@@ -145,13 +157,7 @@ const SearchEvents: FC = () => {
         resetCurrentPage();
         refetch();
       })
-      .finally(() =>
-        setActionBtns({
-          ...actionBtns,
-          disableDeleteBtn: false,
-          disableSaveBtn: false,
-        })
-      );
+      .finally(onFinalizeApiRequest);
   };
 
   const handleSaveEvent = () => {
@@ -174,13 +180,7 @@ const SearchEvents: FC = () => {
       },
     })
       .then(() => refetch())
-      .finally(() =>
-        setActionBtns({
-          ...actionBtns,
-          disableDeleteBtn: false,
-          disableSaveBtn: false,
-        })
-      );
+      .finally(onFinalizeApiRequest);
   };
 
   const resetCurrentPage = () => setFormProps({ ...formProps, currentPage: 1 });
@@ -255,32 +255,10 @@ const SearchEvents: FC = () => {
 
   return (
     <>
-      {error && (
-        <Alert
-          msg={error.message}
-          type="danger"
-          ariaLabel="Warning"
-          fillType="#exclamation-triangle-fill"
-        />
-      )}
-
-      {saveEventError && (
-        <Alert
-          msg={saveEventError.message}
-          type="danger"
-          ariaLabel="Warning"
-          fillType="#exclamation-triangle-fill"
-        />
-      )}
-
-      {deleteEventError && (
-        <Alert
-          msg={deleteEventError.message}
-          type="danger"
-          ariaLabel="Warning"
-          fillType="#exclamation-triangle-fill"
-        />
-      )}
+      <ServerErrorAlert
+        error={serverError}
+        onClose={() => setServerError(null)}
+      />
 
       <Form>
         <div className="mb-4">
@@ -342,13 +320,12 @@ const SearchEvents: FC = () => {
               </EventCardWrapper>
             );
           })
-        ) : !error ? (
+        ) : !serverError ? (
           <div className="event-card">
             <Alert
               msg="No results were found."
               type="warning"
-              ariaLabel="Warning:"
-              fillType="#exclamation-triangle-fill"
+              dismissible={false}
             />
           </div>
         ) : null}
@@ -367,32 +344,34 @@ const SearchEvents: FC = () => {
         </div>
       )}
 
-      {modal.show && (
-        <Modal
-          title={modal.title}
-          closeOnSubmit={true}
-          disableSubmitBtn={disableSaveBtn}
-          hideSubmitBtn={hideSaveBtn}
-          displayDeleteBtn={displayDeleteBtn}
-          disableDeleteBtn={disableDeleteBtn}
-          isSubmitLoading={saveEventLoading}
-          isDeleteLoading={deleteEventLoading}
-          closeBtnName={auth?.userId === createdById ? 'Cancel' : 'Close'}
-          onClose={() => setModal({ ...modal, show: false })}
-          onDelete={handleDeleteEvent}
-          onSubmit={handleSaveEvent}
-          children={
-            <EventBody
-              event={event}
-              disableEdit={!disableEditHandler()}
-              onChangeValue={(prop, value) => onChangeValueHandler(prop, value)}
-              onValidate={(valid) =>
-                setActionBtns({ ...actionBtns, disableSaveBtn: !valid })
-              }
-            />
-          }
-        />
-      )}
+      <Modal
+        title={modal.title}
+        show={modal.show}
+        actionBtnFlags={{
+          disableSubmitBtn: disableSaveBtn,
+          hideSubmitBtn: hideSaveBtn,
+          displayDeleteBtn,
+          disableDeleteBtn,
+          closeBtnName: auth?.userId === createdById ? 'Cancel' : 'Close',
+        }}
+        actionBtnLoading={{
+          isSubmitLoading: saveEventLoading,
+          isDeleteLoading: deleteEventLoading,
+        }}
+        onClose={() => setModal({ ...modal, show: false })}
+        onDelete={handleDeleteEvent}
+        onSubmit={handleSaveEvent}
+        children={
+          <EventBody
+            event={event}
+            disableEdit={!disableEditHandler()}
+            onChangeValue={(prop, value) => onChangeValueHandler(prop, value)}
+            onValidate={(valid) =>
+              setActionBtns({ ...actionBtns, disableSaveBtn: !valid })
+            }
+          />
+        }
+      />
     </>
   );
 };

@@ -1,144 +1,98 @@
-import { FC, useEffect, useRef, useState } from 'react';
-import { Modal as ModalBootstrap } from 'bootstrap';
-import ReactDOM from 'react-dom';
+import { FC } from 'react';
 import { MdSaveAlt } from 'react-icons/md';
 import { FiLogIn, FiTrash2 } from 'react-icons/fi';
 import styled from 'styled-components';
+import { Modal as ModalBootstrap, Button } from 'react-bootstrap';
 
-const portalElement: any = document.getElementById('modal-root');
-
-type ModalProps = {
-  title: string;
-  closeOnSubmit?: boolean;
+type ActionBtnFlagsType = {
   submitBtnName?: string;
   closeBtnName?: string;
-  disableSubmitBtn: boolean;
   disableDeleteBtn?: boolean;
   displayDeleteBtn?: boolean;
+  disableSubmitBtn?: boolean;
   hideSubmitBtn?: boolean;
+};
+
+type ActionBtnLoadingType = {
   isSubmitLoading: boolean;
   isDeleteLoading?: boolean;
+};
+
+type Props = {
+  title: string;
+  show: boolean;
+  actionBtnFlags?: ActionBtnFlagsType;
+  actionBtnLoading?: ActionBtnLoadingType;
+  closeButton?: boolean;
   onClose: () => void;
   onDelete?: () => void;
   onSubmit: () => void;
 };
 
-const Modal: FC<ModalProps> = (props) => {
-  const modalRef = useRef<any>(null);
-  const [modal, setModal] = useState<ModalBootstrap>();
-
+const Modal: FC<Props> = ({
+  title,
+  show,
+  actionBtnFlags,
+  actionBtnLoading,
+  closeButton = true,
+  children,
+  onClose,
+  onSubmit,
+  onDelete,
+}) => {
   const {
-    title,
-    closeOnSubmit,
     submitBtnName,
     closeBtnName,
-    isSubmitLoading,
-    isDeleteLoading,
-    children,
     displayDeleteBtn,
     disableDeleteBtn,
     disableSubmitBtn,
     hideSubmitBtn,
-    onSubmit,
-    onDelete,
-    onClose,
-  } = props;
+  } = actionBtnFlags ?? {};
 
-  useEffect(() => {
-    const modal = new ModalBootstrap(modalRef.current, { keyboard: false });
-    setModal(modal);
-    modal.show();
-  }, []);
+  const { isSubmitLoading, isDeleteLoading } = actionBtnLoading ?? {};
 
-  useEffect(() => {
-    const modalEl = modalRef.current;
-
-    modalEl.addEventListener('hidden.bs.modal', onClose);
-
-    return () => modalEl.removeEventListener('hidden.bs.modal', null);
-  }, [onClose]);
-
-  useEffect(() => {
-    !isSubmitLoading && closeOnSubmit && modal?.hide();
-  }, [isSubmitLoading, closeOnSubmit, modal]);
-
-  useEffect(() => {
-    !isDeleteLoading && modal?.hide();
-  }, [isDeleteLoading, modal]);
-
-  return ReactDOM.createPortal(
-    <div
-      className="modal fade"
-      tabIndex={-1}
-      aria-labelledby="exampleModalLabel"
-      aria-hidden="true"
-      ref={modalRef}
+  return (
+    <ModalBootstrap
+      show={show}
+      backdrop="static"
+      keyboard={false}
+      onHide={onClose}
     >
-      <StyledModal>
-        <div className="modal-content">
-          <div className="modal-header">
-            <h5 className="modal-title" id="exampleModalLabel">
-              {title}
-            </h5>
-            <button
-              type="button"
-              className="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-
-          <div className="modal-body">{children}</div>
-
-          <div className="modal-footer">
-            <button
-              type="button"
-              className="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
-              {' '}
-              {closeBtnName || 'Cancel'}
-            </button>
-            {displayDeleteBtn && (
-              <button
-                type="button"
-                className="btn btn-danger"
-                disabled={disableDeleteBtn}
-                onClick={onDelete}
-              >
-                {isDeleteLoading && (
-                  <div
-                    className="spinner-border spinner-border-sm"
-                    role="status"
-                  ></div>
-                )}{' '}
-                Remove <FiTrash2 />
-              </button>
-            )}
-            {!hideSubmitBtn && (
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={onSubmit}
-                disabled={disableSubmitBtn}
-              >
-                {isSubmitLoading && (
-                  <div
-                    className="spinner-border spinner-border-sm"
-                    role="status"
-                  ></div>
-                )}{' '}
-                {submitBtnName || 'Save'}{' '}
-                {submitBtnName ? <FiLogIn /> : <MdSaveAlt />}
-              </button>
-            )}
-          </div>
-        </div>
-      </StyledModal>
-    </div>,
-    portalElement
+      <ModalBootstrap.Header closeButton={closeButton}>
+        <ModalBootstrap.Title>{title}</ModalBootstrap.Title>
+      </ModalBootstrap.Header>
+      <ModalBootstrap.Body>{children}</ModalBootstrap.Body>
+      <ModalBootstrap.Footer>
+        <Button variant="secondary" onClick={onClose}>
+          {closeBtnName || 'Cancel'}
+        </Button>
+        {displayDeleteBtn && (
+          <Button
+            variant="danger"
+            disabled={disableDeleteBtn}
+            onClick={onDelete}
+          >
+            {isDeleteLoading && <BtnSpinner />} Remove <FiTrash2 />
+          </Button>
+        )}
+        {!hideSubmitBtn && (
+          <Button
+            variant="primary"
+            disabled={disableSubmitBtn}
+            onClick={onSubmit}
+          >
+            {isSubmitLoading && <BtnSpinner />} {submitBtnName || 'Save'}{' '}
+            {submitBtnName ? <FiLogIn /> : <MdSaveAlt />}
+          </Button>
+        )}
+      </ModalBootstrap.Footer>
+    </ModalBootstrap>
   );
 };
+
+const BtnSpinner = () => (
+  <div className="spinner-border spinner-border-sm" role="status"></div>
+);
 
 export const StyledModal = styled.div.attrs(() => ({
   className: 'modal-dialog',

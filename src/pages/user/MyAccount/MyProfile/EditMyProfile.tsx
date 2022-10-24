@@ -83,14 +83,7 @@ const EditMyProfile: FC<Props> = ({ user, onReadOnlyMode }) => {
 
   return (
     <>
-      {error && (
-        <Alert
-          msg={error.message}
-          type="danger"
-          ariaLabel="Warning"
-          fillType="#exclamation-triangle-fill"
-        />
-      )}
+      {error && <Alert msg={error.message} type="danger" onClose={reset} />}
 
       <TitledCard title="Edit My Profile">
         <Form noValidate validated={validated} onSubmit={handleSubmit}>

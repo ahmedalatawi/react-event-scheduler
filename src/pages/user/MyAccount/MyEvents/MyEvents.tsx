@@ -102,14 +102,7 @@ const MyEvents: FC = () => {
   };
 
   if (error) {
-    return (
-      <Alert
-        msg={error.message}
-        type="danger"
-        ariaLabel="Warning"
-        fillType="#exclamation-triangle-fill"
-      />
-    );
+    return <Alert msg={error.message} type="danger" dismissible={false} />;
   }
 
   const updatedEvents = data?.getUserEvents.events.map((event) => {
@@ -150,8 +143,7 @@ const MyEvents: FC = () => {
             <Alert
               msg={'No events were found'}
               type="warning"
-              ariaLabel="Warning"
-              fillType="#exclamation-triangle-fill"
+              dismissible={false}
             />
           )}
           <ToolkitProvider

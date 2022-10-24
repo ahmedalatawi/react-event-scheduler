@@ -1,4 +1,4 @@
-import { FC, Fragment, useContext, useRef, useState } from 'react';
+import { FC, useContext, useState } from 'react';
 import { useIdleTimer } from 'react-idle-timer';
 import AuthContext from '../../store/auth-context';
 import Timer from '../Timer/Timer';
@@ -10,33 +10,16 @@ type Props = {
 
 const UserIdleTimer: FC<Props> = ({ onLogout }) => {
   const [displayModal, setDisplayModal] = useState<boolean>(false);
-  const [closeOnStayLoggedIn, setCloseOnStayLoggedIn] =
-    useState<boolean>(false);
-  const resetTimerRef = useRef<boolean>(false);
 
-  const authCtx = useContext(AuthContext);
+  const { auth } = useContext(AuthContext);
 
   const handleOnIdle = () => {
-    resetTimerRef.current = false;
-    const auth = authCtx.getAuth();
     auth ? setDisplayModal(true) : onLogout();
   };
 
-  const handleOnLogout = () => {
-    !resetTimerRef.current && onLogout();
-    setDisplayModal(false);
-    setCloseOnStayLoggedIn(false);
-  };
-
   const handleOnStayLoggedIn = () => {
-    resetTimerRef.current = true;
     reset();
-    setCloseOnStayLoggedIn(true);
-  };
-
-  const handleOnTimeout = () => {
-    onLogout();
-    setCloseOnStayLoggedIn(true);
+    setDisplayModal(false);
   };
 
   const { reset } = useIdleTimer({
@@ -48,22 +31,21 @@ const UserIdleTimer: FC<Props> = ({ onLogout }) => {
     },
   });
 
+  const actionBtnFlags = {
+    submitBtnName: 'Stay logged in',
+    closeBtnName: 'Logout',
+  };
+
   return (
-    <Fragment>
-      {displayModal && (
-        <Modal
-          title={'Session Expiry Warning'}
-          closeOnSubmit={closeOnStayLoggedIn}
-          submitBtnName={'Stay logged in'}
-          closeBtnName={'Logout'}
-          disableSubmitBtn={false}
-          isSubmitLoading={false}
-          children={<Timer seconds={90} onTimeout={handleOnTimeout} />}
-          onClose={handleOnLogout}
-          onSubmit={handleOnStayLoggedIn}
-        />
-      )}
-    </Fragment>
+    <Modal
+      title={'Session Expiry Warning'}
+      show={displayModal}
+      closeButton={false}
+      actionBtnFlags={actionBtnFlags}
+      children={<Timer seconds={90} onTimeout={onLogout} />}
+      onClose={onLogout}
+      onSubmit={handleOnStayLoggedIn}
+    />
   );
 };
 

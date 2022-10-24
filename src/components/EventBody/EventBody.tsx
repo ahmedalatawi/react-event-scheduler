@@ -137,8 +137,7 @@ const EventBody: FC<Props> = ({
           <Alert
             msg={errorMsg}
             type="warning"
-            ariaLabel="Warning"
-            fillType="#exclamation-triangle-fill"
+            onClose={() => setErrorMsg('')}
           />
         </div>
       )}
