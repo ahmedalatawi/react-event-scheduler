@@ -118,10 +118,11 @@ export const Events = {
           throw new AuthenticationError('Event could not be found');
         }
 
-        await EventModel.findOneAndUpdate(
+        savedEvent = await EventModel.findOneAndUpdate(
           { _id: id, createdBy: userId },
-          { title, start, end, isPrivate, description }
-        );
+          { title, start, end, isPrivate, description },
+          { new: true }
+        ).populate('createdBy');
       } else {
         const event = new EventModel({
           title,
@@ -132,12 +133,12 @@ export const Events = {
           createdBy: userId,
         });
 
-        savedEvent = await event.save();
+        savedEvent = await event.save().then((e) => e.populate('createdBy'));
         savedEvent.url = `${URI}/sharedEvent/${savedEvent._id}`;
         await savedEvent.save({ timestamps: false });
       }
 
-      return { id: id || savedEvent._id };
+      return savedEvent;
     } catch (err) {
       throw err;
     }

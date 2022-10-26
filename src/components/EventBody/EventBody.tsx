@@ -58,7 +58,13 @@ const EventBody: FC<Props> = ({
   ) => {
     const { value } = event.target;
 
-    setLocalEvent({ ...localEvent, [prop]: value });
+    const getValue = () =>
+      prop === 'isPrivate' ? (event.target as any).checked : value;
+
+    setLocalEvent({
+      ...localEvent,
+      [prop]: getValue(),
+    });
 
     if (prop === 'title') {
       validateEventDates(localEvent.start, localEvent.end, value);
@@ -70,7 +76,7 @@ const EventBody: FC<Props> = ({
       validateEventDates(localEvent.start, value, localEvent.title);
     }
 
-    onChangeValue(prop, value);
+    onChangeValue(prop, getValue());
   };
 
   useEffect(() => {

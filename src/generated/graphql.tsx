@@ -84,7 +84,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   deleteEvent: Scalars['Boolean'];
   getEvent: EventFull;
-  saveEvent?: Maybe<Event>;
+  saveEvent: EventFull;
   saveUser: UserFull;
   signup: Auth;
 };
@@ -188,6 +188,20 @@ export type UserFullFragment = {
   updatedAt?: number | null;
 };
 
+export type EventFullFragment = {
+  __typename?: 'EventFull';
+  id: string;
+  title: string;
+  start: string;
+  end: string;
+  url?: string | null;
+  isPrivate: boolean;
+  description: string;
+  createdAt?: number | null;
+  updatedAt?: number | null;
+  createdBy?: { __typename?: 'User'; _id: string; username: string } | null;
+};
+
 export type EventsFragment = {
   __typename?: 'Events';
   totalCount?: number | null;
@@ -212,7 +226,19 @@ export type SaveEventMutationVariables = Exact<{
 
 export type SaveEventMutation = {
   __typename?: 'Mutation';
-  saveEvent?: { __typename?: 'Event'; id: string } | null;
+  saveEvent: {
+    __typename?: 'EventFull';
+    id: string;
+    title: string;
+    start: string;
+    end: string;
+    url?: string | null;
+    isPrivate: boolean;
+    description: string;
+    createdAt?: number | null;
+    updatedAt?: number | null;
+    createdBy?: { __typename?: 'User'; _id: string; username: string } | null;
+  };
 };
 
 export type SaveUserMutationVariables = Exact<{
@@ -580,7 +606,7 @@ export type MutationResolvers<
     RequireFields<MutationGetEventArgs, 'id'>
   >;
   saveEvent?: Resolver<
-    Maybe<ResolversTypes['Event']>,
+    ResolversTypes['EventFull'],
     ParentType,
     ContextType,
     RequireFields<MutationSaveEventArgs, 'event'>
@@ -686,32 +712,39 @@ export const UserFullFragmentDoc = gql`
     updatedAt
   }
 `;
+export const EventFullFragmentDoc = gql`
+  fragment EventFull on EventFull {
+    id
+    title
+    start
+    end
+    url
+    isPrivate
+    description
+    createdAt
+    updatedAt
+    createdBy {
+      _id
+      username
+    }
+  }
+`;
 export const EventsFragmentDoc = gql`
   fragment Events on Events {
     totalCount
     events {
-      id
-      title
-      start
-      end
-      url
-      isPrivate
-      description
-      createdAt
-      updatedAt
-      createdBy {
-        _id
-        username
-      }
+      ...EventFull
     }
   }
+  ${EventFullFragmentDoc}
 `;
 export const SaveEventDocument = gql`
   mutation saveEvent($event: EventInput!) {
     saveEvent(event: $event) {
-      id
+      ...EventFull
     }
   }
+  ${EventFullFragmentDoc}
 `;
 export type SaveEventMutationFn = Apollo.MutationFunction<
   SaveEventMutation,

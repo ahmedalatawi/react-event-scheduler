@@ -8,7 +8,7 @@ import EventBody, { EventType } from '../../components/EventBody/EventBody';
 import { ApolloError, NetworkStatus } from '@apollo/client';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import Alert from '../../components/UI/Alert/Alert';
-import { IAuth, IEvent } from '../../types';
+import { IAuth } from '../../types';
 import AuthContext from '../../store/auth-context';
 import {
   useDeleteEventMutation,
@@ -17,6 +17,10 @@ import {
 } from '../../generated/graphql';
 import styled from 'styled-components';
 import { ServerErrorAlert } from '../../components/ServerErrorAlert/ServerErrorAlert';
+import {
+  updateCacheOnDeleteEvent,
+  updateCacheOnSaveEvent,
+} from '../../utils/apolloCache';
 
 interface ModalBodyType {
   auth: IAuth | null;
@@ -63,7 +67,6 @@ const Calendar: FC = () => {
     refetch,
     networkStatus,
   } = useGetEventsQuery({
-    fetchPolicy: 'cache-and-network',
     notifyOnNetworkStatusChange: true,
     variables: { filter: {} },
     onError: setServerError,
@@ -88,7 +91,7 @@ const Calendar: FC = () => {
 
   const [deleteEvent, { loading: deleteEventLoading }] = useDeleteEventMutation(
     {
-      variables: { id: clickInfoRef.current.value?.event?.id },
+      variables: { id },
       onError: setServerError,
     }
   );
@@ -106,7 +109,16 @@ const Calendar: FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth, refetch]);
 
-  const handleSaveEvent = () => {
+  const onCompleteApiRequest = () => {
+    setActionBtns({
+      ...actionBtns,
+      disableSaveBtn: false,
+      disableDeleteBtn: false,
+    });
+    setModal({ ...modal, show: false });
+  };
+
+  const handleSaveEvent = async () => {
     setActionBtns({
       ...actionBtns,
       disableSaveBtn: true,
@@ -115,46 +127,46 @@ const Calendar: FC = () => {
 
     calendarApiRef.current.value?.unselect();
 
-    saveEvent()
-      .then((res) => {
-        const { id } = res.data?.saveEvent as IEvent;
+    setServerError(null);
 
-        if (clickInfoRef.current.value) {
-          clickInfoRef.current.value.event.setProp('title', title);
-          clickInfoRef.current.value.event.setExtendedProp(
-            'isPrivate',
-            isPrivate
-          );
-          clickInfoRef.current.value.event.setExtendedProp(
-            'description',
-            description
-          );
-          clickInfoRef.current.value.event.setStart(start);
-          clickInfoRef.current.value.event.setEnd(end);
-        } else {
-          calendarApiRef.current.value.addEvent({
-            id,
-            title,
-            start,
-            end,
-            extendedProps: {
-              isPrivate,
-              description,
-              createdBy: {
-                _id: auth?.userId,
-              },
+    const res = await saveEvent({
+      update(cache, { data }) {
+        updateCacheOnSaveEvent(cache, { data }, {});
+      },
+    });
+
+    if (res.data) {
+      const { id } = res.data?.saveEvent ?? {};
+
+      if (clickInfoRef.current.value) {
+        clickInfoRef.current.value.event.setProp('title', title);
+        clickInfoRef.current.value.event.setExtendedProp(
+          'isPrivate',
+          isPrivate
+        );
+        clickInfoRef.current.value.event.setExtendedProp(
+          'description',
+          description
+        );
+        clickInfoRef.current.value.event.setStart(start);
+        clickInfoRef.current.value.event.setEnd(end);
+      } else {
+        calendarApiRef.current.value.addEvent({
+          id,
+          title,
+          start,
+          end,
+          extendedProps: {
+            isPrivate,
+            description,
+            createdBy: {
+              _id: auth?.userId,
             },
-          });
-        }
-      })
-      .finally(() => {
-        setActionBtns({
-          ...actionBtns,
-          disableSaveBtn: false,
-          disableDeleteBtn: false,
+          },
         });
-        setModal({ ...modal, show: false });
-      });
+      }
+    }
+    onCompleteApiRequest();
   };
 
   const handleDateClick = async (selectedDate: DateClickArg) => {
@@ -232,26 +244,26 @@ const Calendar: FC = () => {
     });
   };
 
-  const handleDeleteEvent = () => {
+  const handleDeleteEvent = async () => {
     setActionBtns({
       ...actionBtns,
       disableSaveBtn: true,
       disableDeleteBtn: true,
     });
 
-    deleteEvent()
-      .then(() => {
-        clickInfoRef.current.value.event.remove();
-        clickInfoRef.current.value = null;
-      })
-      .finally(() => {
-        setActionBtns({
-          ...actionBtns,
-          disableSaveBtn: false,
-          disableDeleteBtn: false,
-        });
-        setModal({ ...modal, show: false });
-      });
+    setServerError(null);
+
+    const res = await deleteEvent({
+      update(cache, { data }) {
+        updateCacheOnDeleteEvent(cache, { data }, id, {});
+      },
+    });
+
+    if (res.data) {
+      clickInfoRef.current.value.event.remove();
+      clickInfoRef.current.value = null;
+    }
+    onCompleteApiRequest();
   };
 
   const onChangeValueHandler = (prop: string, value: string | boolean) => {

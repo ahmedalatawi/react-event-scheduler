@@ -10,21 +10,25 @@ fragment UserFull on UserFull {
   updatedAt
 }
 
+fragment EventFull on EventFull {
+  id
+  title
+  start
+  end
+  url
+  isPrivate
+  description
+  createdAt
+  updatedAt
+  createdBy {
+    _id
+    username
+  }
+}
+
 fragment Events on Events {
   totalCount
   events {
-    id
-    title
-    start
-    end
-    url
-    isPrivate
-    description
-    createdAt
-    updatedAt
-    createdBy {
-      _id
-      username
-    }
+    ...EventFull
   }
 }

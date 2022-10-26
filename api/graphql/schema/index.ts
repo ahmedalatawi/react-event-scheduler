@@ -101,7 +101,7 @@ export const typeDefs = gql`
   type Mutation {
     signup(userInput: UserInput!): Auth!
     saveUser(user: UserInputFull!): UserFull!
-    saveEvent(event: EventInput!): Event
+    saveEvent(event: EventInput!): EventFull!
     getEvent(id: ID!): EventFull!
     deleteEvent(id: ID!): Boolean!
   }

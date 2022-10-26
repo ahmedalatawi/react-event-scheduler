@@ -2,7 +2,7 @@
 
 mutation saveEvent($event: EventInput!) {
   saveEvent(event: $event) {
-    id
+    ...EventFull
   }
 }
 

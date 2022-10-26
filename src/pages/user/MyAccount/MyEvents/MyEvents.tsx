@@ -32,59 +32,6 @@ const MyEvents: FC = () => {
 
   useNavigateToHome();
 
-  const columns = [
-    {
-      dataField: 'title',
-      text: 'Title',
-      sort: true,
-      filter: textFilter(),
-    },
-    {
-      dataField: 'start',
-      text: 'Start',
-      sort: true,
-      filter: textFilter(),
-    },
-    {
-      dataField: 'end',
-      text: 'End',
-      sort: true,
-      filter: textFilter(),
-    },
-    {
-      dataField: 'description',
-      text: 'Description',
-      sort: true,
-      filter: textFilter(),
-    },
-    {
-      dataField: 'isPrivate',
-      text: 'Private',
-      sort: true,
-    },
-    {
-      dataField: 'url',
-      text: 'Link',
-      sort: true,
-    },
-    {
-      dataField: 'createdBy',
-      text: 'Posted By',
-      sort: true,
-    },
-    {
-      dataField: 'createdAt',
-      text: 'Posted Date',
-      sort: true,
-      filter: textFilter(),
-    },
-    {
-      dataField: 'updatedAt',
-      text: 'Updated Date',
-      sort: true,
-    },
-  ];
-
   const selectRow: any = {
     mode: 'checkbox',
     clickToSelect: true,
@@ -190,5 +137,58 @@ const MyEvents: FC = () => {
     </>
   );
 };
+
+const columns = [
+  {
+    dataField: 'title',
+    text: 'Title',
+    sort: true,
+    filter: textFilter(),
+  },
+  {
+    dataField: 'start',
+    text: 'Start',
+    sort: true,
+    filter: textFilter(),
+  },
+  {
+    dataField: 'end',
+    text: 'End',
+    sort: true,
+    filter: textFilter(),
+  },
+  {
+    dataField: 'description',
+    text: 'Description',
+    sort: true,
+    filter: textFilter(),
+  },
+  {
+    dataField: 'isPrivate',
+    text: 'Private',
+    sort: true,
+  },
+  {
+    dataField: 'url',
+    text: 'Link',
+    sort: true,
+  },
+  {
+    dataField: 'createdBy',
+    text: 'Posted By',
+    sort: true,
+  },
+  {
+    dataField: 'createdAt',
+    text: 'Posted Date',
+    sort: true,
+    filter: textFilter(),
+  },
+  {
+    dataField: 'updatedAt',
+    text: 'Updated Date',
+    sort: true,
+  },
+];
 
 export default MyEvents;

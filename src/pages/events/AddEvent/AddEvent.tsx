@@ -10,6 +10,7 @@ import {
 } from '../../../generated/graphql';
 import { IAuth } from '../../../types';
 import { ApolloError } from '@apollo/client';
+import { updateCacheOnSaveEvent } from '../../../utils/apolloCache';
 
 const initEvent = {
   title: '',
@@ -35,7 +36,11 @@ const AddEvent: FC = () => {
   const handleOnSubmit = (event: ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
     setDisplayForm(false);
-    saveEvent()
+    saveEvent({
+      update(cache, { data }) {
+        updateCacheOnSaveEvent(cache, { data }, {});
+      },
+    })
       .then((_) => {
         setEvent(initEvent);
         setDisableSaveBtn(true);
@@ -102,6 +107,7 @@ const CustomAlert = ({
     />
   ) : data ? (
     <Alert
+      data-testid="success-alert"
       msg="Event was successfully added."
       type="success"
       onClose={onClose}

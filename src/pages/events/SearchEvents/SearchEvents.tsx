@@ -18,6 +18,10 @@ import {
 import styled from 'styled-components';
 import { dateToTitle } from '../../../utils/dateTransforms';
 import { ServerErrorAlert } from '../../../components/ServerErrorAlert/ServerErrorAlert';
+import {
+  updateCacheOnDeleteEvent,
+  updateCacheOnSaveEvent,
+} from '../../../utils/apolloCache';
 
 const EVENTS_PER_PAGE = 20;
 
@@ -63,17 +67,18 @@ const SearchEvents: FC = () => {
 
   const debouncedSearchText = useDebounce(searchText);
 
+  const filter = {
+    searchText: debouncedSearchText.trim(),
+    pageSize: EVENTS_PER_PAGE,
+    pageNumber: currentPage,
+    currentCheck,
+    expiredCheck,
+  };
+
   const { loading, data, refetch, networkStatus } = useGetEventsQuery({
-    fetchPolicy: 'cache-and-network',
     notifyOnNetworkStatusChange: true,
     variables: {
-      filter: {
-        searchText: debouncedSearchText.trim(),
-        pageSize: EVENTS_PER_PAGE,
-        pageNumber: currentPage,
-        currentCheck,
-        expiredCheck,
-      },
+      filter,
     },
     onError: setServerError,
   });
@@ -95,7 +100,7 @@ const SearchEvents: FC = () => {
     setFormProps({ ...formProps, searchText: event.target.value });
   };
 
-  const onFinalizeApiRequest = () => {
+  const onCompleteApiRequest = () => {
     setActionBtns({
       ...actionBtns,
       disableDeleteBtn: false,
@@ -143,31 +148,31 @@ const SearchEvents: FC = () => {
     setModal({ title: 'Update Event', show: true });
   };
 
-  const handleDeleteEvent = () => {
+  const handleDeleteEvent = async () => {
     setActionBtns({
       ...actionBtns,
       disableDeleteBtn: true,
       disableSaveBtn: true,
     });
 
-    deleteEvent({
+    await deleteEvent({
       variables: { id: id ?? '' },
-    })
-      .then(() => {
-        resetCurrentPage();
-        refetch();
-      })
-      .finally(onFinalizeApiRequest);
+      update(cache, { data }) {
+        updateCacheOnDeleteEvent(cache, { data }, id, filter);
+      },
+    });
+
+    onCompleteApiRequest();
   };
 
-  const handleSaveEvent = () => {
+  const handleSaveEvent = async () => {
     setActionBtns({
       ...actionBtns,
       disableDeleteBtn: true,
       disableSaveBtn: true,
     });
 
-    saveEvent({
+    await saveEvent({
       variables: {
         event: {
           id: id ?? '',
@@ -178,9 +183,12 @@ const SearchEvents: FC = () => {
           description,
         },
       },
-    })
-      .then(() => refetch())
-      .finally(onFinalizeApiRequest);
+      update(cache, { data }) {
+        updateCacheOnSaveEvent(cache, { data }, filter);
+      },
+    });
+
+    onCompleteApiRequest();
   };
 
   const resetCurrentPage = () => setFormProps({ ...formProps, currentPage: 1 });
