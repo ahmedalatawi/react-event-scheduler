@@ -79,6 +79,8 @@ export const typeDefs = gql`
 
   input FilterInput {
     searchText: String
+    startDate: String
+    endDate: String
     pageNumber: Int
     pageSize: Int
     expiredCheck: Boolean

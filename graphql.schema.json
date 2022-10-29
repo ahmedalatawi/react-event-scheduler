@@ -448,6 +448,18 @@
             "deprecationReason": null
           },
           {
+            "name": "endDate",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "expiredCheck",
             "description": null,
             "type": {
@@ -485,6 +497,18 @@
           },
           {
             "name": "searchText",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "startDate",
             "description": null,
             "type": {
               "kind": "SCALAR",

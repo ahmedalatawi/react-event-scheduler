@@ -12,6 +12,8 @@ export const Events = {
         pageSize = 0,
         expiredCheck,
         currentCheck,
+        startDate,
+        endDate,
       },
     },
     { isAuthorized, userId }
@@ -31,8 +33,16 @@ export const Events = {
       ? { end: { $lt: new Date().toISOString() } }
       : {};
 
+    const startDateFilter = startDate ? { start: { $gte: startDate } } : {};
+    const endDateFilter = endDate ? { end: { $lt: endDate } } : {};
+
     try {
-      const events = await EventModel.find({ ...regexFilter, ...statusFilter })
+      const events = await EventModel.find({
+        ...regexFilter,
+        ...statusFilter,
+        ...startDateFilter,
+        ...endDateFilter,
+      })
         .sort({ end: -1 })
         .limit(pageSize)
         .skip(pageNumber > 0 ? (pageNumber - 1) * pageSize : 0)

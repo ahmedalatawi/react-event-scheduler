@@ -69,10 +69,12 @@ export type Events = {
 
 export type FilterInput = {
   currentCheck?: InputMaybe<Scalars['Boolean']>;
+  endDate?: InputMaybe<Scalars['String']>;
   expiredCheck?: InputMaybe<Scalars['Boolean']>;
   pageNumber?: InputMaybe<Scalars['Int']>;
   pageSize?: InputMaybe<Scalars['Int']>;
   searchText?: InputMaybe<Scalars['String']>;
+  startDate?: InputMaybe<Scalars['String']>;
 };
 
 export type LoginInput = {

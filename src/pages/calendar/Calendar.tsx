@@ -12,15 +12,15 @@ import { IAuth } from '../../types';
 import AuthContext from '../../store/auth-context';
 import {
   useDeleteEventMutation,
-  useGetEventsQuery,
+  useGetEventsLazyQuery,
   useSaveEventMutation,
 } from '../../generated/graphql';
-import styled from 'styled-components';
 import { ServerErrorAlert } from '../../components/ServerErrorAlert/ServerErrorAlert';
 import {
   updateCacheOnDeleteEvent,
   updateCacheOnSaveEvent,
 } from '../../utils/apolloCache';
+import styled from 'styled-components';
 
 interface ModalBodyType {
   auth: IAuth | null;
@@ -54,6 +54,7 @@ const Calendar: FC = () => {
 
   const [disableEdit, setDisableEdit] = useState<boolean>(false);
   const [serverError, setServerError] = useState<ApolloError | null>(null);
+  const [calendarReady, setCalendarReady] = useState<boolean>(false);
 
   const calendarApiRef = useRef<any>({});
   const clickInfoRef = useRef<any>({});
@@ -61,14 +62,11 @@ const Calendar: FC = () => {
   const { displayDeleteBtn, hideSaveBtn, disableSaveBtn, disableDeleteBtn } =
     actionBtns;
 
-  const {
-    loading: getEventsLoading,
-    data: events,
-    refetch,
-    networkStatus,
-  } = useGetEventsQuery({
+  const [
+    getEvents,
+    { loading: getEventsLoading, data: events, refetch, networkStatus },
+  ] = useGetEventsLazyQuery({
     notifyOnNetworkStatusChange: true,
-    variables: { filter: {} },
     onError: setServerError,
   });
 
@@ -99,7 +97,7 @@ const Calendar: FC = () => {
   const { auth } = useContext(AuthContext);
 
   useEffect(() => {
-    refetch();
+    calendarReady && refetch();
     setDisableEdit(!auth);
     setActionBtns({
       ...actionBtns,
@@ -306,21 +304,31 @@ const Calendar: FC = () => {
         }
       />
 
-      {getEventsLoading || networkStatus === NetworkStatus.refetch ? (
-        <Spinner />
-      ) : (
-        events && (
-          <FullCalendarWrapper>
-            <FullCalendar
-              initialView="dayGridMonth"
-              initialEvents={events.eventsData.events as EventType[]}
-              plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-              eventClick={handleEventClick}
-              dateClick={handleDateClick}
-            />
-          </FullCalendarWrapper>
-        )
-      )}
+      <FullCalendarWrapper>
+        {getEventsLoading || networkStatus === NetworkStatus.refetch ? (
+          <Spinner />
+        ) : null}
+
+        <FullCalendar
+          initialView="dayGridMonth"
+          lazyFetching={true}
+          events={events?.eventsData?.events as EventType[]}
+          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+          eventClick={handleEventClick}
+          dateClick={handleDateClick}
+          datesSet={(dateRange) => {
+            setCalendarReady(true);
+            getEvents({
+              variables: {
+                filter: {
+                  startDate: dateRange.startStr,
+                  endDate: dateRange.endStr,
+                },
+              },
+            });
+          }}
+        />
+      </FullCalendarWrapper>
     </Fragment>
   );
 };
