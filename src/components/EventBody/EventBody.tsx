@@ -15,6 +15,7 @@ export type EventType = {
 type Props = {
   event: EventType;
   disableEdit: boolean;
+  resetForm?: boolean;
   onChangeValue: (prop: string, value: string | boolean) => void;
   onValidate: (valid: boolean) => void;
 };
@@ -22,6 +23,7 @@ type Props = {
 const EventBody: FC<Props> = ({
   event,
   disableEdit,
+  resetForm,
   onChangeValue,
   onValidate,
 }) => {
@@ -89,8 +91,11 @@ const EventBody: FC<Props> = ({
         validateEventDates(localEvent.start, localEvent.end, localEvent.title);
       }
     }
+    if (resetForm) {
+      setLocalEvent({ ...event });
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [authCtx]);
+  }, [authCtx, resetForm]);
 
   return (
     <div className="row g-3">

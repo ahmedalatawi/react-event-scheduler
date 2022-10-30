@@ -3,6 +3,7 @@ import { MdSaveAlt } from 'react-icons/md';
 import { FiLogIn, FiTrash2 } from 'react-icons/fi';
 import styled from 'styled-components';
 import { Modal as ModalBootstrap, Button } from 'react-bootstrap';
+import { BtnSpinner } from '../BtnSpinner/BtnSpinner';
 
 type ActionBtnFlagsType = {
   submitBtnName?: string;
@@ -89,10 +90,6 @@ const Modal: FC<Props> = ({
     </ModalBootstrap>
   );
 };
-
-const BtnSpinner = () => (
-  <div className="spinner-border spinner-border-sm" role="status"></div>
-);
 
 export const StyledModal = styled.div.attrs(() => ({
   className: 'modal-dialog',

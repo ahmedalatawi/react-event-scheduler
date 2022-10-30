@@ -21,6 +21,7 @@ import {
   updateCacheOnSaveEvent,
 } from '../../utils/apolloCache';
 import styled from 'styled-components';
+import toast from 'react-hot-toast';
 
 interface ModalBodyType {
   auth: IAuth | null;
@@ -71,25 +72,13 @@ const Calendar: FC = () => {
   });
 
   const { title, start, end, isPrivate, description } = event;
-  const id = clickInfoRef.current.value?.event?.id || '';
 
   const [saveEvent, { loading: saveEventLoading }] = useSaveEventMutation({
-    variables: {
-      event: {
-        id,
-        title,
-        start,
-        end,
-        isPrivate,
-        description,
-      },
-    },
     onError: setServerError,
   });
 
   const [deleteEvent, { loading: deleteEventLoading }] = useDeleteEventMutation(
     {
-      variables: { id },
       onError: setServerError,
     }
   );
@@ -127,7 +116,19 @@ const Calendar: FC = () => {
 
     setServerError(null);
 
+    const id = clickInfoRef.current?.value?.event?.id ?? '';
+
     const res = await saveEvent({
+      variables: {
+        event: {
+          id,
+          title,
+          start,
+          end,
+          isPrivate,
+          description,
+        },
+      },
       update(cache, { data }) {
         updateCacheOnSaveEvent(cache, { data }, {});
       },
@@ -163,7 +164,12 @@ const Calendar: FC = () => {
           },
         });
       }
+
+      if (!serverError) {
+        toast.success('Event was successfully saved!');
+      }
     }
+
     onCompleteApiRequest();
   };
 
@@ -251,7 +257,14 @@ const Calendar: FC = () => {
 
     setServerError(null);
 
+    const id = clickInfoRef.current?.value?.event?.id;
+
+    if (!id) {
+      throw new Error('Event ID is missing!');
+    }
+
     const res = await deleteEvent({
+      variables: { id },
       update(cache, { data }) {
         updateCacheOnDeleteEvent(cache, { data }, id, {});
       },
@@ -260,7 +273,12 @@ const Calendar: FC = () => {
     if (res.data) {
       clickInfoRef.current.value.event.remove();
       clickInfoRef.current.value = null;
+
+      if (!serverError) {
+        toast.success('Event was successfully deleted!');
+      }
     }
+
     onCompleteApiRequest();
   };
 

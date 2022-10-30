@@ -22,6 +22,7 @@ import {
   updateCacheOnDeleteEvent,
   updateCacheOnSaveEvent,
 } from '../../../utils/apolloCache';
+import toast from 'react-hot-toast';
 
 const EVENTS_PER_PAGE = 20;
 
@@ -162,6 +163,10 @@ const SearchEvents: FC = () => {
       },
     });
 
+    if (!serverError) {
+      toast.success('Event was successfully deleted!');
+    }
+
     onCompleteApiRequest();
   };
 
@@ -188,6 +193,9 @@ const SearchEvents: FC = () => {
       },
     });
 
+    if (!serverError) {
+      toast.success('Event was successfully saved!');
+    }
     onCompleteApiRequest();
   };
 

@@ -9,6 +9,7 @@ import { Container } from 'react-bootstrap';
 import Footer from './components/Footer/Footer';
 
 import './App.css';
+import { Toaster } from 'react-hot-toast';
 
 const AppContainer = styled(Container)({
   minHeight: '100vh',
@@ -27,6 +28,7 @@ function App() {
         </ApolloProvider>
       </AppContainer>
       <Footer />
+      <Toaster />
     </>
   );
 }

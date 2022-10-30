@@ -1,7 +1,6 @@
 import { ChangeEvent, FC, Fragment, useContext, useState } from 'react';
 import { MdSaveAlt } from 'react-icons/md';
 import EventBody, { EventType } from '../../../components/EventBody/EventBody';
-import Spinner from '../../../components/UI/Spinner/Spinner';
 import Alert from '../../../components/UI/Alert/Alert';
 import AuthContext from '../../../store/auth-context';
 import {
@@ -11,6 +10,7 @@ import {
 import { IAuth } from '../../../types';
 import { ApolloError } from '@apollo/client';
 import { updateCacheOnSaveEvent } from '../../../utils/apolloCache';
+import { BtnSpinner } from '../../../components/UI/BtnSpinner/BtnSpinner';
 
 const initEvent = {
   title: '',
@@ -21,9 +21,9 @@ const initEvent = {
 };
 
 const AddEvent: FC = () => {
-  const [event, setEvent] = useState<EventType>(initEvent);
+  const [event, setEvent] = useState<EventType>({ ...initEvent });
+  const [resetForm, setResetForm] = useState<boolean>(false);
   const [disableSaveBtn, setDisableSaveBtn] = useState<boolean>(true);
-  const [displayForm, setDisplayForm] = useState<boolean>(true);
 
   const { title, start, end, isPrivate, description } = event;
 
@@ -35,18 +35,19 @@ const AddEvent: FC = () => {
 
   const handleOnSubmit = (event: ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setDisplayForm(false);
+    reset();
+    setResetForm(false);
     saveEvent({
       update(cache, { data }) {
         updateCacheOnSaveEvent(cache, { data }, {});
       },
     })
       .then((_) => {
-        setEvent(initEvent);
+        setEvent({ ...initEvent });
+        setResetForm(true);
         setDisableSaveBtn(true);
       })
-      .catch((error) => console.error(error.message))
-      .finally(() => setDisplayForm(true));
+      .catch((error) => console.error(error.message));
   };
 
   const onChangeValueHandler = (prop: string, value: string | boolean) => {
@@ -56,34 +57,27 @@ const AddEvent: FC = () => {
   return (
     <Fragment>
       <CustomAlert auth={auth} data={data} error={error} onClose={reset} />
-      {loading ? (
-        <Spinner />
-      ) : (
-        <form className="row g-3" onSubmit={handleOnSubmit}>
-          {displayForm && (
-            <div className="col-12">
-              <EventBody
-                event={event}
-                disableEdit={!auth}
-                onChangeValue={(prop, value) =>
-                  onChangeValueHandler(prop, value)
-                }
-                onValidate={(valid) => setDisableSaveBtn(!valid)}
-              />
-            </div>
-          )}
+      <form className="row g-3" onSubmit={handleOnSubmit}>
+        <div className="col-12">
+          <EventBody
+            event={event}
+            disableEdit={!auth || loading}
+            resetForm={resetForm}
+            onChangeValue={(prop, value) => onChangeValueHandler(prop, value)}
+            onValidate={(valid) => setDisableSaveBtn(!valid)}
+          />
+        </div>
 
-          <div className="col-12 mt-4">
-            <button
-              type="submit"
-              className="btn btn-primary"
-              disabled={disableSaveBtn || loading || !auth}
-            >
-              Save <MdSaveAlt />
-            </button>
-          </div>
-        </form>
-      )}
+        <div className="col-12 mt-4">
+          <button
+            type="submit"
+            className="btn btn-primary"
+            disabled={disableSaveBtn || loading || !auth}
+          >
+            {loading && <BtnSpinner />} Save <MdSaveAlt />
+          </button>
+        </div>
+      </form>
     </Fragment>
   );
 };
