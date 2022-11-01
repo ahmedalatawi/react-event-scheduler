@@ -1,5 +1,12 @@
 import { ApolloError, NetworkStatus } from '@apollo/client';
-import { ChangeEvent, FC, useContext, useEffect, useState } from 'react';
+import {
+  ChangeEvent,
+  FC,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import useDebounce from '../../../hooks/useDebounce';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import Card, { CardType } from '../../../components/UI/Card/Card';
@@ -23,6 +30,7 @@ import {
   updateCacheOnSaveEvent,
 } from '../../../utils/apolloCache';
 import toast from 'react-hot-toast';
+import CalendarContext from '../../../store/calendar-context';
 
 const EVENTS_PER_PAGE = 20;
 
@@ -58,7 +66,11 @@ const SearchEvents: FC = () => {
     expiredCheck: false,
   });
 
+  const [skipFirstRun, setSkipFirstRun] = useState<boolean>(true);
+
   const { auth } = useContext(AuthContext);
+  const { startDate, endDate, addSearchEventsFilter } =
+    useContext(CalendarContext);
 
   const { searchText, currentPage, allCheck, currentCheck, expiredCheck } =
     formProps;
@@ -68,13 +80,16 @@ const SearchEvents: FC = () => {
 
   const debouncedSearchText = useDebounce(searchText);
 
-  const filter = {
-    searchText: debouncedSearchText.trim(),
-    pageSize: EVENTS_PER_PAGE,
-    pageNumber: currentPage,
-    currentCheck,
-    expiredCheck,
-  };
+  const filter = useMemo(
+    () => ({
+      searchText: debouncedSearchText.trim(),
+      pageSize: EVENTS_PER_PAGE,
+      pageNumber: currentPage,
+      currentCheck,
+      expiredCheck,
+    }),
+    [currentCheck, currentPage, debouncedSearchText, expiredCheck]
+  );
 
   const { loading, data, refetch, networkStatus } = useGetEventsQuery({
     notifyOnNetworkStatusChange: true,
@@ -159,7 +174,10 @@ const SearchEvents: FC = () => {
     await deleteEvent({
       variables: { id: id ?? '' },
       update(cache, { data }) {
-        updateCacheOnDeleteEvent(cache, { data }, id, filter);
+        updateCacheOnDeleteEvent(cache, { data }, id, [
+          filter,
+          { startDate, endDate },
+        ]);
       },
     });
 
@@ -189,7 +207,10 @@ const SearchEvents: FC = () => {
         },
       },
       update(cache, { data }) {
-        updateCacheOnSaveEvent(cache, { data }, filter);
+        updateCacheOnSaveEvent(cache, { data }, [
+          filter,
+          { startDate, endDate },
+        ]);
       },
     });
 
@@ -201,14 +222,20 @@ const SearchEvents: FC = () => {
 
   const resetCurrentPage = () => setFormProps({ ...formProps, currentPage: 1 });
 
+  useEffect(
+    () => addSearchEventsFilter({ ...filter }),
+    [filter, addSearchEventsFilter]
+  );
+
   useEffect(() => {
     resetCurrentPage();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearchText]);
 
   useEffect(() => {
+    skipFirstRun && setSkipFirstRun(false);
+    !skipFirstRun && refetch();
     resetCurrentPage();
-    refetch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth, refetch]);
 

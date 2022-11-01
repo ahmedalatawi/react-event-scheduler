@@ -9,8 +9,9 @@ import {
 } from '../../../generated/graphql';
 import { IAuth } from '../../../types';
 import { ApolloError } from '@apollo/client';
-import { updateCacheOnSaveEvent } from '../../../utils/apolloCache';
 import { BtnSpinner } from '../../../components/UI/BtnSpinner/BtnSpinner';
+import { updateCacheOnSaveEvent } from '../../../utils/apolloCache';
+import CalendarContext from '../../../store/calendar-context';
 
 const initEvent = {
   title: '',
@@ -32,6 +33,8 @@ const AddEvent: FC = () => {
   });
 
   const { auth } = useContext(AuthContext);
+  const { startDate, endDate, searchEventsFilter } =
+    useContext(CalendarContext);
 
   const handleOnSubmit = (event: ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -39,7 +42,13 @@ const AddEvent: FC = () => {
     setResetForm(false);
     saveEvent({
       update(cache, { data }) {
-        updateCacheOnSaveEvent(cache, { data }, {});
+        updateCacheOnSaveEvent(cache, { data }, [
+          searchEventsFilter,
+          {
+            startDate,
+            endDate,
+          },
+        ]);
       },
     })
       .then((_) => {
