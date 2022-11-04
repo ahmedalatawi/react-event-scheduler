@@ -81,60 +81,58 @@ const MyEvents: FC = () => {
   });
 
   return (
-    <>
+    <TitledCard title="My Events">
       {loading || networkStatus === NetworkStatus.refetch ? (
         <Spinner />
       ) : (
-        <TitledCard title="My Events">
-          {!updatedEvents?.length && (
-            <Alert
-              msg={'No events were found'}
-              type="warning"
-              dismissible={false}
-            />
-          )}
-          <ToolkitProvider
-            bootstrap4
-            keyField="id"
-            data={updatedEvents ?? []}
-            columns={columns}
-            search
-          >
-            {(props) => (
-              <div>
-                <SearchBar
-                  {...props.searchProps}
-                  onSearch={setSearchTextHandler}
-                  searchText={searchText}
-                  delay={800}
-                />
-                <hr />
-                <BootstrapTableWrapper>
-                  <BootstrapTable
-                    {...props.baseProps}
-                    striped
-                    hover
-                    bordered={false}
-                    selectRow={selectRow}
-                    wrapperClasses="table-responsive"
-                    rowStyle={{ overflowWrap: 'break-word' }}
-                    filter={filterFactory()}
-                  />
-                </BootstrapTableWrapper>
-              </div>
-            )}
-          </ToolkitProvider>
-          <div className="float-end">
-            <Pagination
-              total={data?.getUserEvents.totalCount || 0}
-              itemsPerPage={ITEMS_PER_PAGE}
-              currentPage={pageNumber}
-              onPageChange={(page) => setPageNumber(page)}
-            />
-          </div>
-        </TitledCard>
+        !updatedEvents?.length && (
+          <Alert
+            msg={'No events were found'}
+            type="warning"
+            dismissible={false}
+          />
+        )
       )}
-    </>
+      <ToolkitProvider
+        bootstrap4
+        keyField="id"
+        data={updatedEvents ?? []}
+        columns={columns}
+        search
+      >
+        {(props) => (
+          <div>
+            <SearchBar
+              {...props.searchProps}
+              onSearch={setSearchTextHandler}
+              searchText={searchText}
+              delay={800}
+            />
+            <hr />
+            <BootstrapTableWrapper>
+              <BootstrapTable
+                {...props.baseProps}
+                striped
+                hover
+                bordered={false}
+                selectRow={selectRow}
+                wrapperClasses="table-responsive"
+                rowStyle={{ overflowWrap: 'break-word' }}
+                filter={filterFactory()}
+              />
+            </BootstrapTableWrapper>
+          </div>
+        )}
+      </ToolkitProvider>
+      <div className="float-end">
+        <Pagination
+          total={data?.getUserEvents.totalCount || 0}
+          itemsPerPage={ITEMS_PER_PAGE}
+          currentPage={pageNumber}
+          onPageChange={(page) => setPageNumber(page)}
+        />
+      </div>
+    </TitledCard>
   );
 };
 

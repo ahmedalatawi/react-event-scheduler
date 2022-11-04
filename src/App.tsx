@@ -10,7 +10,6 @@ import Footer from './components/Footer/Footer';
 
 import './App.css';
 import { Toaster } from 'react-hot-toast';
-import CalendarProvider from './store/CalendarProvider';
 
 const AppContainer = styled(Container)({
   minHeight: '100vh',
@@ -25,9 +24,7 @@ function App() {
         {auth && <UserIdleTimer onLogout={removeAuth} />}
 
         <ApolloProvider client={client}>
-          <CalendarProvider>
-            <AppRoutes />
-          </CalendarProvider>
+          <AppRoutes />
         </ApolloProvider>
       </AppContainer>
       <Footer />

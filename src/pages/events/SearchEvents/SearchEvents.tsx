@@ -1,12 +1,5 @@
 import { ApolloError, NetworkStatus } from '@apollo/client';
-import {
-  ChangeEvent,
-  FC,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import { ChangeEvent, FC, useContext, useEffect, useState } from 'react';
 import useDebounce from '../../../hooks/useDebounce';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import Card, { CardType } from '../../../components/UI/Card/Card';
@@ -25,14 +18,9 @@ import {
 import styled from 'styled-components';
 import { dateToTitle } from '../../../utils/dateTransforms';
 import { ServerErrorAlert } from '../../../components/ServerErrorAlert/ServerErrorAlert';
-import {
-  updateCacheOnDeleteEvent,
-  updateCacheOnSaveEvent,
-} from '../../../utils/apolloCache';
 import toast from 'react-hot-toast';
-import CalendarContext from '../../../store/calendar-context';
 
-const EVENTS_PER_PAGE = 20;
+const EVENTS_PER_PAGE = 15;
 
 const SearchEvents: FC = () => {
   const [modal, setModal] = useState({
@@ -66,12 +54,7 @@ const SearchEvents: FC = () => {
     expiredCheck: false,
   });
 
-  const [skipFirstRun, setSkipFirstRun] = useState<boolean>(true);
-
   const { auth } = useContext(AuthContext);
-  const { startDate, endDate, addSearchEventsFilter } =
-    useContext(CalendarContext);
-
   const { searchText, currentPage, allCheck, currentCheck, expiredCheck } =
     formProps;
   const { id, title, start, end, isPrivate, description, createdById } = event;
@@ -80,19 +63,17 @@ const SearchEvents: FC = () => {
 
   const debouncedSearchText = useDebounce(searchText);
 
-  const filter = useMemo(
-    () => ({
-      searchText: debouncedSearchText.trim(),
-      pageSize: EVENTS_PER_PAGE,
-      pageNumber: currentPage,
-      currentCheck,
-      expiredCheck,
-    }),
-    [currentCheck, currentPage, debouncedSearchText, expiredCheck]
-  );
+  const filter = {
+    searchText: debouncedSearchText.trim(),
+    pageSize: EVENTS_PER_PAGE,
+    pageNumber: currentPage,
+    currentCheck,
+    expiredCheck,
+  };
 
   const { loading, data, refetch, networkStatus } = useGetEventsQuery({
     notifyOnNetworkStatusChange: true,
+    fetchPolicy: 'cache-and-network',
     variables: {
       filter,
     },
@@ -171,17 +152,20 @@ const SearchEvents: FC = () => {
       disableSaveBtn: true,
     });
 
-    await deleteEvent({
-      variables: { id: id ?? '' },
-      update(cache, { data }) {
-        updateCacheOnDeleteEvent(cache, { data }, id, [
-          filter,
-          { startDate, endDate },
-        ]);
+    if (!id) {
+      throw new Error('Event ID is missing!');
+    }
+
+    const res = await deleteEvent({
+      variables: { id },
+      update(cache) {
+        const normalizedId = cache.identify({ id, __typename: 'EventFull' });
+        cache.evict({ id: normalizedId });
+        cache.gc();
       },
     });
 
-    if (!serverError) {
+    if (res.data && !serverError) {
       toast.success('Event was successfully deleted!');
     }
 
@@ -195,10 +179,14 @@ const SearchEvents: FC = () => {
       disableSaveBtn: true,
     });
 
-    await saveEvent({
+    if (!id) {
+      throw new Error('Event ID is missing!');
+    }
+
+    const res = await saveEvent({
       variables: {
         event: {
-          id: id ?? '',
+          id,
           title,
           start,
           end,
@@ -206,26 +194,16 @@ const SearchEvents: FC = () => {
           description,
         },
       },
-      update(cache, { data }) {
-        updateCacheOnSaveEvent(cache, { data }, [
-          filter,
-          { startDate, endDate },
-        ]);
-      },
     });
 
-    if (!serverError) {
+    if (res.data && !serverError) {
       toast.success('Event was successfully saved!');
     }
+
     onCompleteApiRequest();
   };
 
   const resetCurrentPage = () => setFormProps({ ...formProps, currentPage: 1 });
-
-  useEffect(
-    () => addSearchEventsFilter({ ...filter }),
-    [filter, addSearchEventsFilter]
-  );
 
   useEffect(() => {
     resetCurrentPage();
@@ -233,8 +211,7 @@ const SearchEvents: FC = () => {
   }, [debouncedSearchText]);
 
   useEffect(() => {
-    skipFirstRun && setSkipFirstRun(false);
-    !skipFirstRun && refetch();
+    refetch();
     resetCurrentPage();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth, refetch]);

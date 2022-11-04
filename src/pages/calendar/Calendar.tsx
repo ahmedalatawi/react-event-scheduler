@@ -16,13 +16,8 @@ import {
   useSaveEventMutation,
 } from '../../generated/graphql';
 import { ServerErrorAlert } from '../../components/ServerErrorAlert/ServerErrorAlert';
-import {
-  updateCacheOnDeleteEvent,
-  updateCacheOnSaveEvent,
-} from '../../utils/apolloCache';
 import styled from 'styled-components';
 import toast from 'react-hot-toast';
-import CalendarContext from '../../store/calendar-context';
 
 interface ModalBodyType {
   auth: IAuth | null;
@@ -57,10 +52,6 @@ const Calendar: FC = () => {
   const [disableEdit, setDisableEdit] = useState<boolean>(false);
   const [serverError, setServerError] = useState<ApolloError | null>(null);
   const [calendarReady, setCalendarReady] = useState<boolean>(false);
-  // const [dateRangeFilter, setDateRangeFilter] = useState<{
-  //   startDate: string;
-  //   endDate: string;
-  // }>({ startDate: '', endDate: '' });
 
   const calendarApiRef = useRef<any>({});
   const clickInfoRef = useRef<any>({});
@@ -72,6 +63,7 @@ const Calendar: FC = () => {
     getEvents,
     { loading: getEventsLoading, data: events, refetch, networkStatus },
   ] = useGetEventsLazyQuery({
+    fetchPolicy: 'cache-and-network',
     notifyOnNetworkStatusChange: true,
     onError: setServerError,
   });
@@ -89,10 +81,6 @@ const Calendar: FC = () => {
   );
 
   const { auth } = useContext(AuthContext);
-  const { startDate, endDate, addStartDate, addEndDate, searchEventsFilter } =
-    useContext(CalendarContext);
-
-  //const { startDate, endDate } = dateRangeFilter;
 
   useEffect(() => {
     calendarReady && refetch();
@@ -137,15 +125,6 @@ const Calendar: FC = () => {
           isPrivate,
           description,
         },
-      },
-      update(cache, { data }) {
-        updateCacheOnSaveEvent(cache, { data }, [
-          searchEventsFilter,
-          {
-            startDate,
-            endDate,
-          },
-        ]);
       },
     });
 
@@ -280,14 +259,10 @@ const Calendar: FC = () => {
 
     const res = await deleteEvent({
       variables: { id },
-      update(cache, { data }) {
-        updateCacheOnDeleteEvent(cache, { data }, id, [
-          searchEventsFilter,
-          {
-            startDate,
-            endDate,
-          },
-        ]);
+      update(cache) {
+        const normalizedId = cache.identify({ id, __typename: 'EventFull' });
+        cache.evict({ id: normalizedId });
+        cache.gc();
       },
     });
 
@@ -357,12 +332,6 @@ const Calendar: FC = () => {
           dateClick={handleDateClick}
           datesSet={(dateRange) => {
             setCalendarReady(true);
-            // setDateRangeFilter({
-            //   startDate: dateRange.startStr,
-            //   endDate: dateRange.endStr,
-            // });
-            addStartDate(dateRange.startStr);
-            addEndDate(dateRange.endStr);
             getEvents({
               variables: {
                 filter: {
