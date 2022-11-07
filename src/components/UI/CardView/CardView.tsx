@@ -1,5 +1,5 @@
 import { FC, Fragment } from 'react';
-import { formatDate } from '../../../utils/dateTransforms';
+import { formatDateTime } from '../../../utils/dateTransforms';
 
 type CardViewType = {
   title: string | undefined;
@@ -26,7 +26,7 @@ const CardView: FC<Props> = ({ card }) => {
         <p className="card-text">
           <small className="text-muted">
             posted by: {createdBy}{' '}
-            {createdAt ? `on ${formatDate(createdAt)}` : null}
+            {createdAt ? `on ${formatDateTime(createdAt)}` : null}
           </small>
           {updatedAt ? (
             new Date(updatedAt).getTime() !==
@@ -34,7 +34,7 @@ const CardView: FC<Props> = ({ card }) => {
               <Fragment>
                 <br />
                 <small className="text-muted">
-                  updated on: {formatDate(updatedAt)}
+                  updated on: {formatDateTime(updatedAt)}
                 </small>
               </Fragment>
             ) : null

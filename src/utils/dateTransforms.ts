@@ -1,8 +1,10 @@
+import { DateTime } from 'luxon';
 import { EventFull } from '../generated/graphql';
 
 export const dateToTitle = (event: EventFull) =>
-  `${new Date(event.start).toLocaleString()} - ${new Date(
+  `${DateTime.fromISO(event.start).toFormat('ff')} - ${DateTime.fromISO(
     event.end
-  ).toLocaleString()}`;
+  ).toFormat('ff')}`;
 
-export const formatDate = (date: number) => new Date(date).toLocaleString();
+export const formatDateTime = (date: number) =>
+  DateTime.fromMillis(date).toFormat('ff');

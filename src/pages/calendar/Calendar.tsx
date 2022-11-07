@@ -63,7 +63,6 @@ const Calendar: FC = () => {
     getEvents,
     { loading: getEventsLoading, data: events, refetch, networkStatus },
   ] = useGetEventsLazyQuery({
-    fetchPolicy: 'cache-and-network',
     notifyOnNetworkStatusChange: true,
     onError: setServerError,
   });

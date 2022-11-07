@@ -1,9 +1,9 @@
-import { formatDate } from '@fullcalendar/react';
 import { FC, Fragment } from 'react';
 import { FacebookShareButton, TwitterShareButton } from 'react-share';
 import { FacebookIcon, TwitterIcon } from 'react-share';
 import styled from 'styled-components';
 import { Maybe } from '../../../generated/graphql';
+import { formatDateTime } from '../../../utils/dateTransforms';
 
 export type CardType = {
   title: string;
@@ -47,7 +47,7 @@ const Card: FC<Props> = ({ card, onClick }) => {
         <p className="card-text">
           <small className="text-muted">
             posted by: {createdBy}{' '}
-            {createdAt ? `on ${formatDate(createdAt)}` : null}
+            {createdAt ? `on ${formatDateTime(createdAt)}` : null}
           </small>
           {updatedAt ? (
             new Date(updatedAt).getTime() !==
@@ -55,7 +55,7 @@ const Card: FC<Props> = ({ card, onClick }) => {
               <Fragment>
                 <br />
                 <small className="text-muted">
-                  updated on: {formatDate(updatedAt)}
+                  updated on: {formatDateTime(updatedAt)}
                 </small>
               </Fragment>
             ) : null

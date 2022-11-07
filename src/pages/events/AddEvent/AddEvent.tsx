@@ -10,6 +10,7 @@ import {
 import { IAuth } from '../../../types';
 import { ApolloError } from '@apollo/client';
 import { BtnSpinner } from '../../../components/UI/BtnSpinner/BtnSpinner';
+import client from '../../../apollo';
 
 const initEvent = {
   title: '',
@@ -37,10 +38,11 @@ const AddEvent: FC = () => {
     reset();
     setResetForm(false);
     saveEvent()
-      .then((_) => {
+      .then(async (_) => {
         setEvent({ ...initEvent });
         setResetForm(true);
         setDisableSaveBtn(true);
+        await client.resetStore();
       })
       .catch((error) => console.error(error.message));
   };

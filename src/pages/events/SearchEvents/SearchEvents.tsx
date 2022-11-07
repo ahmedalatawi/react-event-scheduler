@@ -54,6 +54,8 @@ const SearchEvents: FC = () => {
     expiredCheck: false,
   });
 
+  const [skipFirstRun, setSkipFirstRun] = useState<boolean>(true);
+
   const { auth } = useContext(AuthContext);
   const { searchText, currentPage, allCheck, currentCheck, expiredCheck } =
     formProps;
@@ -73,7 +75,6 @@ const SearchEvents: FC = () => {
 
   const { loading, data, refetch, networkStatus } = useGetEventsQuery({
     notifyOnNetworkStatusChange: true,
-    fetchPolicy: 'cache-and-network',
     variables: {
       filter,
     },
@@ -211,7 +212,8 @@ const SearchEvents: FC = () => {
   }, [debouncedSearchText]);
 
   useEffect(() => {
-    refetch();
+    skipFirstRun && setSkipFirstRun(false);
+    !skipFirstRun && refetch();
     resetCurrentPage();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth, refetch]);
