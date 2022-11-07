@@ -18,6 +18,7 @@ import {
 import { ServerErrorAlert } from '../../components/ServerErrorAlert/ServerErrorAlert';
 import styled from 'styled-components';
 import toast from 'react-hot-toast';
+import { removeEvent } from '../../utils/apolloCache';
 
 interface ModalBodyType {
   auth: IAuth | null;
@@ -194,16 +195,17 @@ const Calendar: FC = () => {
   const handleEventClick = (clickInfo: EventClickArg) => {
     clickInfo.jsEvent.preventDefault();
     clickInfoRef.current.value = clickInfo;
+    const isTheOwner =
+      (auth && auth.userId === clickInfo.event.extendedProps.createdBy._id) ??
+      false;
 
     if (auth) {
-      const equal = auth.userId === clickInfo.event.extendedProps.createdBy._id;
-
-      setDisableEdit(!equal);
+      setDisableEdit(!isTheOwner);
       setActionBtns({
-        disableSaveBtn: !equal,
-        disableDeleteBtn: !equal,
-        displayDeleteBtn: equal,
-        hideSaveBtn: !equal,
+        disableSaveBtn: !isTheOwner,
+        disableDeleteBtn: !isTheOwner,
+        displayDeleteBtn: isTheOwner,
+        hideSaveBtn: !isTheOwner,
       });
     } else {
       setDisableEdit(true);
@@ -236,7 +238,7 @@ const Calendar: FC = () => {
       createdById: createdBy._id,
     });
     setModal({
-      title: 'Update Event',
+      title: isTheOwner ? 'Edit Event' : 'Event (read only)',
       show: true,
     });
   };
@@ -259,9 +261,7 @@ const Calendar: FC = () => {
     const res = await deleteEvent({
       variables: { id },
       update(cache) {
-        const normalizedId = cache.identify({ id, __typename: 'EventFull' });
-        cache.evict({ id: normalizedId });
-        cache.gc();
+        removeEvent(cache, id);
       },
     });
 

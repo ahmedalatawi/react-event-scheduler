@@ -19,6 +19,7 @@ import styled from 'styled-components';
 import { dateToTitle } from '../../../utils/dateTransforms';
 import { ServerErrorAlert } from '../../../components/ServerErrorAlert/ServerErrorAlert';
 import toast from 'react-hot-toast';
+import { removeEvent } from '../../../utils/apolloCache';
 
 const EVENTS_PER_PAGE = 15;
 
@@ -117,14 +118,14 @@ const SearchEvents: FC = () => {
   const clickEventHandler = (event: EventFull) => {
     const { id, title, start, end, isPrivate, description, createdBy } = event;
     const createdById = createdBy?._id ?? '';
+    const isTheOwner = (auth && auth.userId === createdById) ?? false;
 
     if (auth) {
-      const equal = auth.userId === createdById;
       setActionBtns({
         ...actionBtns,
-        displayDeleteBtn: equal,
-        hideSaveBtn: !equal,
-        disableSaveBtn: !equal,
+        displayDeleteBtn: isTheOwner,
+        hideSaveBtn: !isTheOwner,
+        disableSaveBtn: !isTheOwner,
       });
     } else {
       setActionBtns({
@@ -143,7 +144,10 @@ const SearchEvents: FC = () => {
       isPrivate,
       createdById,
     });
-    setModal({ title: 'Update Event', show: true });
+    setModal({
+      title: isTheOwner ? 'Edit Event' : 'Event (read only)',
+      show: true,
+    });
   };
 
   const handleDeleteEvent = async () => {
@@ -160,9 +164,7 @@ const SearchEvents: FC = () => {
     const res = await deleteEvent({
       variables: { id },
       update(cache) {
-        const normalizedId = cache.identify({ id, __typename: 'EventFull' });
-        cache.evict({ id: normalizedId });
-        cache.gc();
+        removeEvent(cache, id);
       },
     });
 
@@ -259,7 +261,7 @@ const SearchEvents: FC = () => {
     setEvent({ ...event, [prop]: value });
   };
 
-  const disableEditHandler = () => {
+  const isTheOwner = () => {
     return auth && auth.userId === event.createdById;
   };
 
@@ -386,7 +388,7 @@ const SearchEvents: FC = () => {
         children={
           <EventBody
             event={event}
-            disableEdit={!disableEditHandler()}
+            disableEdit={!isTheOwner()}
             onChangeValue={(prop, value) => onChangeValueHandler(prop, value)}
             onValidate={(valid) =>
               setActionBtns({ ...actionBtns, disableSaveBtn: !valid })
