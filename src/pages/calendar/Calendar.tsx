@@ -19,6 +19,7 @@ import { ServerErrorAlert } from '../../components/ServerErrorAlert/ServerErrorA
 import styled from 'styled-components';
 import toast from 'react-hot-toast';
 import { removeEvent } from '../../utils/apolloCache';
+import client from '../../apollo';
 
 interface ModalBodyType {
   auth: IAuth | null;
@@ -129,8 +130,6 @@ const Calendar: FC = () => {
     });
 
     if (res.data) {
-      const { id } = res.data?.saveEvent ?? {};
-
       if (clickInfoRef.current.value) {
         clickInfoRef.current.value.event.setProp('title', title);
         clickInfoRef.current.value.event.setExtendedProp(
@@ -144,19 +143,7 @@ const Calendar: FC = () => {
         clickInfoRef.current.value.event.setStart(start);
         clickInfoRef.current.value.event.setEnd(end);
       } else {
-        calendarApiRef.current.value.addEvent({
-          id,
-          title,
-          start,
-          end,
-          extendedProps: {
-            isPrivate,
-            description,
-            createdBy: {
-              _id: auth?.userId,
-            },
-          },
-        });
+        await client.resetStore();
       }
 
       if (!serverError) {
