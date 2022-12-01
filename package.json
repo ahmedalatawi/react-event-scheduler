@@ -35,7 +35,7 @@
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.21",
     "luxon": "^3.0.4",
-    "mongoose": "^6.6.5",
+    "mongoose": "^6.7.5",
     "react": "^17.0.2",
     "react-bootstrap": "^2.5.0",
     "react-bootstrap-table-next": "^4.0.3",
