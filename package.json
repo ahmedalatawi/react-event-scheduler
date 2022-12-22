@@ -32,7 +32,7 @@
     "express-sslify": "^1.2.0",
     "graphql": "^16.6.0",
     "js-cookie": "^3.0.1",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "lodash": "^4.17.21",
     "luxon": "^3.0.4",
     "mongoose": "^6.6.5",
