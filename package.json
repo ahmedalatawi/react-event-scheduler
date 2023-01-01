@@ -80,7 +80,7 @@
     "@types/js-cookie": "^3.0.1",
     "@types/jsonwebtoken": "^8.5.9",
     "@types/lodash": "^4.14.191",
-    "@types/luxon": "^3.0.2",
+    "@types/luxon": "^3.1.0",
     "@types/mongoose": "^5.11.97",
     "@types/node": "12.20.52",
     "@types/react": "^17.0.34",
