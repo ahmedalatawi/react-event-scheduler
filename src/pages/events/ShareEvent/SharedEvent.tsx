@@ -25,7 +25,7 @@ const SharedEvent: FC = () => {
 
   const card = {
     title: data?.getEvent.title,
-    subtitle: dateToTitle(data?.getEvent as EventFull),
+    subtitle: data?.getEvent && dateToTitle(data?.getEvent as EventFull),
     content: data?.getEvent.description,
     createdBy: data?.getEvent.createdBy?.username,
     createdAt: data?.getEvent.createdAt,
