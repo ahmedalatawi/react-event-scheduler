@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, ReactNode } from 'react';
 import { MdSaveAlt } from 'react-icons/md';
 import { FiLogIn, FiTrash2 } from 'react-icons/fi';
 import styled from 'styled-components';
@@ -25,6 +25,7 @@ type Props = {
   actionBtnFlags?: ActionBtnFlagsType;
   actionBtnLoading?: ActionBtnLoadingType;
   closeButton?: boolean;
+  children?: ReactNode;
   onClose: () => void;
   onDelete?: () => void;
   onSubmit: () => void;

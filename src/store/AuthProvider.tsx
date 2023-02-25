@@ -1,10 +1,14 @@
-import { FC, useState } from 'react';
+import { FC, ReactNode, useState } from 'react';
 import useAuth from '../hooks/useAuth';
 import { IAuth } from '../types';
 
 import AuthContext from './auth-context';
 
-const AuthProvider: FC = ({ children }) => {
+type Props = {
+  children: ReactNode;
+};
+
+const AuthProvider: FC<Props> = ({ children }) => {
   const { getAuth, addAuth, removeAuth } = useAuth();
 
   const [auth, setAuth] = useState<IAuth | null>(getAuth());

@@ -1,7 +1,8 @@
-import { FC } from 'react';
+import { FC, ReactNode } from 'react';
 
 type Props = {
   title: string;
+  children?: ReactNode;
 };
 
 const TitledCard: FC<Props> = ({ title, children }) => {

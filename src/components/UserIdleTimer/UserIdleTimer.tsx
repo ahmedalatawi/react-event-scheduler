@@ -26,9 +26,7 @@ const UserIdleTimer: FC<Props> = ({ onLogout }) => {
     timeout: 180000, // 3 minutes
     onIdle: handleOnIdle,
     debounce: 500,
-    crossTab: {
-      emitOnAllTabs: true,
-    },
+    crossTab: true,
   });
 
   const actionBtnFlags = {

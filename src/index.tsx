@@ -1,16 +1,11 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import './index.css';
 import App from './App';
 
 import 'jquery/dist/jquery.min.js';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-
-// must manually import the stylesheets for each plugin
-//import "@fullcalendar/core/main.css";
-import '@fullcalendar/daygrid/main.css';
-import '@fullcalendar/timegrid/main.css';
 
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 
@@ -20,13 +15,15 @@ import AuthProvider from './store/AuthProvider';
 // Put any other imports below so that CSS from your
 // components takes precedence over default styles.
 
-ReactDOM.render(
+const container = document.getElementById('root');
+const root = createRoot(container!);
+
+root.render(
   <React.StrictMode>
     <AuthProvider>
       <App />
     </AuthProvider>
-  </React.StrictMode>,
-  document.getElementById('root')
+  </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

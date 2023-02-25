@@ -1,6 +1,7 @@
 import { useState, useRef, Fragment, useContext, useEffect, FC } from 'react';
 import Modal from '../../components/UI/Modal/Modal';
-import FullCalendar, { EventClickArg } from '@fullcalendar/react';
+import { EventClickArg } from '@fullcalendar/core';
+import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
