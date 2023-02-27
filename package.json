@@ -50,7 +50,7 @@
     "react-dom": "^18.2.0",
     "react-hot-toast": "^2.4.0",
     "react-icons": "^4.7.1",
-    "react-idle-timer": "^5.5.2",
+    "react-idle-timer": "^5.5.3",
     "react-router": "^6.8.1",
     "react-router-dom": "^6.8.1",
     "react-share": "^4.4.1",
