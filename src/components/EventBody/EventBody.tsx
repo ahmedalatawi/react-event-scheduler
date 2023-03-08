@@ -1,3 +1,4 @@
+import { DateTime } from 'luxon';
 import { useEffect, useState, ChangeEvent, FC, useContext } from 'react';
 import AuthContext from '../../store/auth-context';
 import Alert from '../UI/Alert/Alert';
@@ -33,17 +34,21 @@ const EventBody: FC<Props> = ({
   const authCtx = useContext(AuthContext);
 
   const validateEventDates = (start: string, end: string, title: string) => {
-    const today = new Date();
-    const startDate = new Date(start);
-    const endDate = new Date(end);
+    const today = DateTime.now();
+    const startDate = DateTime.fromISO(start);
+    const endDate = DateTime.fromISO(end);
+    const diffInMonths = endDate.diff(startDate, 'months');
 
-    if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+    if (!startDate.isValid || !endDate.isValid) {
       onValidate(false);
-    } else if (startDate.getTime() >= endDate.getTime()) {
-      setErrorMsg('End date/time must be greater than start date/time.');
+    } else if (startDate.valueOf() >= endDate.valueOf()) {
+      setErrorMsg('End date must be greater than start date.');
       onValidate(false);
-    } else if (startDate.getTime() < today.getTime()) {
-      setErrorMsg('Start date/time can not be in the past.');
+    } else if (startDate.valueOf() < today.valueOf()) {
+      setErrorMsg('Start date can not be in the past.');
+      onValidate(false);
+    } else if (diffInMonths.months > 1) {
+      setErrorMsg('Event can not be more than a month long.');
       onValidate(false);
     } else if (!title.trim()) {
       setErrorMsg('');

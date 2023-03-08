@@ -8,7 +8,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 
-import { connect } from 'mongoose';
+import { connect, set } from 'mongoose';
 import { rootValue } from './graphql/resolvers';
 import { typeDefs } from './graphql/schema';
 
@@ -55,6 +55,7 @@ const startServer = async () => {
   apolloServer.applyMiddleware({ app, cors: false });
 
   try {
+    set('strictQuery', false);
     await connect(MONGODB_URI);
 
     app.listen(PORT, () => {

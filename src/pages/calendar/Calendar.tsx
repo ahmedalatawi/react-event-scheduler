@@ -21,6 +21,7 @@ import styled from 'styled-components';
 import toast from 'react-hot-toast';
 import { removeEvent } from '../../utils/apolloCache';
 import client from '../../apollo';
+import { DateTime } from 'luxon';
 
 interface ModalBodyType {
   auth: IAuth | null;
@@ -322,8 +323,12 @@ const Calendar: FC = () => {
             getEvents({
               variables: {
                 filter: {
-                  startDate: dateRange.startStr,
-                  endDate: dateRange.endStr,
+                  startDate: DateTime.fromISO(dateRange.startStr)
+                    .minus({ months: 1 })
+                    .toISO(),
+                  endDate: DateTime.fromISO(dateRange.endStr)
+                    .plus({ months: 1 })
+                    .toISO(),
                 },
               },
             });
