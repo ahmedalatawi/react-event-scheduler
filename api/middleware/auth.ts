@@ -3,7 +3,7 @@ import { constants } from '../config/constants';
 
 const { JWT_SECRET } = constants;
 
-export const context = ({ req, res }) => {
+export const context = async ({ req, res }) => {
   const auth = req.cookies['auth'] ? JSON.parse(req.cookies['auth']) : '';
 
   if (!auth) {

@@ -21,3 +21,14 @@ export interface IUser {
   bio: string;
   createdEvents: Types.ObjectId[];
 }
+
+export interface IAuth {
+  userId: string;
+  username: string;
+  token: string;
+  tokenExpiration?: number;
+}
+
+export interface IContext {
+  auth?: IAuth;
+}

@@ -1,4 +1,4 @@
-import { AuthenticationError } from 'apollo-server-express';
+import { GraphQLError } from 'graphql';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { constants } from '../../config/constants';
@@ -62,13 +62,13 @@ export const Auth = {
       const user = await UserModel.findOne({ username });
 
       if (!user) {
-        throw new AuthenticationError(ERROR_MESSAGE);
+        throw new GraphQLError(ERROR_MESSAGE);
       }
 
       const correctPassword = await bcrypt.compare(password, user.password);
 
       if (!correctPassword) {
-        throw new AuthenticationError(ERROR_MESSAGE);
+        throw new GraphQLError(ERROR_MESSAGE);
       }
 
       const token = jwt.sign(

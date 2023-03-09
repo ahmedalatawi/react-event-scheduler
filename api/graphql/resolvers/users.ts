@@ -1,21 +1,21 @@
-import { AuthenticationError } from 'apollo-server-express';
+import { GraphQLError } from 'graphql';
 import { UserModel } from '../../models/user';
 
 export const Users = {
   getUser: async ({ id }, { isAuthorized, userId }) => {
     if (!isAuthorized) {
-      throw new AuthenticationError('Unauthenticated');
+      throw new GraphQLError('Unauthenticated');
     }
 
     try {
       const user = await UserModel.findById(userId);
 
       if (!user) {
-        throw new AuthenticationError('Unauthenticated');
+        throw new GraphQLError('Unauthenticated');
       }
 
       if (id !== userId) {
-        throw new AuthenticationError('Profile not found');
+        throw new GraphQLError('Profile not found');
       }
 
       // const full = await UserModel.findOne({ _id: id }).populate('address');
@@ -30,18 +30,18 @@ export const Users = {
     { isAuthorized, userId }
   ) => {
     if (!isAuthorized) {
-      throw new AuthenticationError('Unauthenticated');
+      throw new GraphQLError('Unauthenticated');
     }
 
     try {
       const user = await UserModel.findById(userId);
 
       if (!user) {
-        throw new AuthenticationError('Unauthenticated');
+        throw new GraphQLError('Unauthenticated');
       }
 
       if (_id !== userId) {
-        throw new AuthenticationError('Unauthenticated');
+        throw new GraphQLError('Unauthenticated');
       }
 
       if (!username) {

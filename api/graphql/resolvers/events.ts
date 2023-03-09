@@ -1,4 +1,4 @@
-import { AuthenticationError } from 'apollo-server-express';
+import { GraphQLError } from 'graphql';
 import { EventModel } from '../../models/event';
 import { UserModel } from '../../models/user';
 import { constants } from '../../config/constants';
@@ -75,11 +75,11 @@ export const Events = {
     { isAuthorized, userId }
   ) => {
     if (!isAuthorized) {
-      throw new AuthenticationError('Unauthenticated');
+      throw new GraphQLError('Unauthenticated');
     }
 
     if (!id || id !== userId) {
-      throw new AuthenticationError('Unauthenticated');
+      throw new GraphQLError('Unauthenticated');
     }
 
     const filter = {
@@ -109,13 +109,13 @@ export const Events = {
     const { URI } = constants;
 
     if (!isAuthorized) {
-      throw new AuthenticationError('Unauthenticated');
+      throw new GraphQLError('Unauthenticated');
     }
 
     const user = await UserModel.findById(userId);
 
     if (!user) {
-      throw new AuthenticationError('Unauthenticated');
+      throw new GraphQLError('Unauthenticated');
     }
 
     try {
@@ -125,7 +125,7 @@ export const Events = {
         const event = await EventModel.findOne({ _id: id, createdBy: userId });
 
         if (!event) {
-          throw new AuthenticationError('Event could not be found');
+          throw new GraphQLError('Event could not be found');
         }
 
         savedEvent = await EventModel.findOneAndUpdate(
@@ -155,13 +155,13 @@ export const Events = {
   },
   deleteEvent: async ({ id }, { isAuthorized, userId }) => {
     if (!isAuthorized) {
-      throw new AuthenticationError('Unauthenticated');
+      throw new GraphQLError('Unauthenticated');
     }
 
     const user = await UserModel.findById(userId);
 
     if (!user) {
-      throw new AuthenticationError('Unauthenticated');
+      throw new GraphQLError('Unauthenticated');
     }
 
     try {
