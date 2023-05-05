@@ -1,18 +1,18 @@
-import { useEffect, useState, useMemo, FC, useCallback } from 'react';
-import ReactBootstrapPagination from 'react-bootstrap/Pagination';
+import { useEffect, useState, useMemo, FC, useCallback } from 'react'
+import ReactBootstrapPagination from 'react-bootstrap/Pagination'
 
 const scrollToTop = () =>
   window.scrollTo({
     top: 0,
     behavior: 'smooth',
-  });
+  })
 
 type Props = {
-  total: number;
-  itemsPerPage: number;
-  currentPage: number;
-  onPageChange: (page: number) => void;
-};
+  total: number
+  itemsPerPage: number
+  currentPage: number
+  onPageChange: (page: number) => void
+}
 
 const Pagination: FC<Props> = ({
   total,
@@ -20,28 +20,28 @@ const Pagination: FC<Props> = ({
   currentPage,
   onPageChange,
 }) => {
-  const [totalPages, setTotalPages] = useState<number>(0);
+  const [totalPages, setTotalPages] = useState<number>(0)
 
   const onPageChangeHandler = useCallback(
     (page: number) => {
-      scrollToTop();
-      onPageChange(page);
+      scrollToTop()
+      onPageChange(page)
     },
-    [onPageChange]
-  );
+    [onPageChange],
+  )
 
   useEffect(() => {
     if (total > 0 && itemsPerPage > 0)
-      setTotalPages(Math.ceil(total / itemsPerPage));
-  }, [total, itemsPerPage]);
+      setTotalPages(Math.ceil(total / itemsPerPage))
+  }, [total, itemsPerPage])
 
   const paginationItems = useMemo(() => {
-    const pages = [];
+    const pages = []
 
     for (let i = 1; i <= totalPages; i++) {
-      const isPageNumberFirst = i === 1;
-      const isPageNumberLast = i === totalPages;
-      const isCurrentPageWithinTwoPageNumbers = Math.abs(i - currentPage) <= 2;
+      const isPageNumberFirst = i === 1
+      const isPageNumberLast = i === totalPages
+      const isCurrentPageWithinTwoPageNumbers = Math.abs(i - currentPage) <= 2
 
       if (
         isPageNumberFirst ||
@@ -55,19 +55,19 @@ const Pagination: FC<Props> = ({
             onClick={() => onPageChangeHandler(i)}
           >
             {i}
-          </ReactBootstrapPagination.Item>
-        );
+          </ReactBootstrapPagination.Item>,
+        )
       } else {
         pages.push(
-          <ReactBootstrapPagination.Ellipsis key={i} className="muted" />
-        );
+          <ReactBootstrapPagination.Ellipsis key={i} className='muted' />,
+        )
       }
     }
 
-    return pages;
-  }, [totalPages, currentPage, onPageChangeHandler]);
+    return pages
+  }, [totalPages, currentPage, onPageChangeHandler])
 
-  if (totalPages === 0) return null;
+  if (totalPages === 0) return null
 
   return (
     <ReactBootstrapPagination>
@@ -81,7 +81,7 @@ const Pagination: FC<Props> = ({
         disabled={currentPage === totalPages}
       />
     </ReactBootstrapPagination>
-  );
-};
+  )
+}
 
-export default Pagination;
+export default Pagination

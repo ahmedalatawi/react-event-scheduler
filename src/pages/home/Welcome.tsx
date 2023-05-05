@@ -1,13 +1,13 @@
-import { FC } from 'react';
-import { Col, Row } from 'react-bootstrap';
-import styled from 'styled-components';
-import WelcomeImage from '../../assests/images/mtb.jpg';
+import { FC } from 'react'
+import { Col, Row } from 'react-bootstrap'
+import styled from 'styled-components'
+import WelcomeImage from '../../assests/images/mtb.jpg'
 
 const ImageContainer = styled(Col)({
   backgroundSize: 'cover',
   padding: 20,
   backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url(${WelcomeImage})`,
-});
+})
 
 const Welcome: FC = () => {
   return (
@@ -20,22 +20,22 @@ const Welcome: FC = () => {
           <br />
           <p>
             <a
-              title="GDPR-compliant Web Analytics"
-              href="https://clicky.com/101370668"
+              title='GDPR-compliant Web Analytics'
+              href='https://clicky.com/101370668'
             >
               <img
-                alt="Clicky"
-                src="//static.getclicky.com/media/links/badge.gif"
+                alt='Clicky'
+                src='//static.getclicky.com/media/links/badge.gif'
               />
             </a>
-            <script async src="//static.getclicky.com/101370668.js"></script>
+            <script async src='//static.getclicky.com/101370668.js'></script>
             <noscript>
               <p>
                 <img
-                  alt="Clicky"
-                  width="1"
-                  height="1"
-                  src="//in.getclicky.com/101370668ns.gif"
+                  alt='Clicky'
+                  width='1'
+                  height='1'
+                  src='//in.getclicky.com/101370668ns.gif'
                 />
               </p>
             </noscript>
@@ -82,7 +82,7 @@ const Welcome: FC = () => {
         </ImageContainer>
       </Row>
     </div>
-  );
-};
+  )
+}
 
-export default Welcome;
+export default Welcome

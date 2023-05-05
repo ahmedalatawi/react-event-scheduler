@@ -16,6 +16,6 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": ["src", "server/**/*"],
-  "exclude": ["server/**/*"]
+  "include": ["src", "index.d.ts", "api/**/*"],
+  "exclude": ["api/**/*"]
 }

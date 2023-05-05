@@ -1,41 +1,41 @@
-import { useState, useRef, Fragment, useContext, useEffect, FC } from 'react';
-import Modal from '../../components/UI/Modal/Modal';
-import { EventClickArg } from '@fullcalendar/core';
-import FullCalendar from '@fullcalendar/react';
-import dayGridPlugin from '@fullcalendar/daygrid';
-import timeGridPlugin from '@fullcalendar/timegrid';
-import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
-import EventBody, { EventType } from '../../components/EventBody/EventBody';
-import { ApolloError, NetworkStatus } from '@apollo/client';
-import Spinner from '../../components/UI/Spinner/Spinner';
-import Alert from '../../components/UI/Alert/Alert';
-import { IAuth } from '../../types';
-import AuthContext from '../../store/auth-context';
+import { useState, useRef, Fragment, useContext, useEffect, FC } from 'react'
+import Modal from '../../components/UI/Modal/Modal'
+import { EventClickArg } from '@fullcalendar/core'
+import FullCalendar from '@fullcalendar/react'
+import dayGridPlugin from '@fullcalendar/daygrid'
+import timeGridPlugin from '@fullcalendar/timegrid'
+import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction'
+import EventBody, { EventType } from '../../components/EventBody/EventBody'
+import { ApolloError, NetworkStatus } from '@apollo/client'
+import Spinner from '../../components/UI/Spinner/Spinner'
+import Alert from '../../components/UI/Alert/Alert'
+import { IAuth } from '../../types'
+import AuthContext from '../../store/auth-context'
 import {
   useDeleteEventMutation,
   useGetEventsLazyQuery,
   useSaveEventMutation,
-} from '../../generated/graphql';
-import { ServerErrorAlert } from '../../components/ServerErrorAlert/ServerErrorAlert';
-import styled from 'styled-components';
-import toast from 'react-hot-toast';
-import { removeEvent } from '../../utils/apolloCache';
-import client from '../../apollo';
-import { DateTime } from 'luxon';
+} from '../../generated/graphql'
+import { ServerErrorAlert } from '../../components/ServerErrorAlert/ServerErrorAlert'
+import styled from 'styled-components'
+import toast from 'react-hot-toast'
+import { removeEvent } from '../../utils/apolloCache'
+import client from '../../apollo'
+import { DateTime } from 'luxon'
 
 interface ModalBodyType {
-  auth: IAuth | null;
-  event: EventType;
-  disableEdit: boolean;
-  onChangeValue: (prop: string, value: string | boolean) => void;
-  onValidate: (valid: boolean) => void;
+  auth: IAuth | null
+  event: EventType
+  disableEdit: boolean
+  onChangeValue: (prop: string, value: string | boolean) => void
+  onValidate: (valid: boolean) => void
 }
 
 const Calendar: FC = () => {
   const [modal, setModal] = useState({
     title: '',
     show: false,
-  });
+  })
 
   const [event, setEvent] = useState<EventType>({
     title: '',
@@ -44,24 +44,26 @@ const Calendar: FC = () => {
     isPrivate: false,
     description: '',
     createdById: '',
-  });
+  })
 
   const [actionBtns, setActionBtns] = useState({
     displayDeleteBtn: false,
     hideSaveBtn: true,
     disableSaveBtn: true,
     disableDeleteBtn: false,
-  });
+  })
 
-  const [disableEdit, setDisableEdit] = useState<boolean>(false);
-  const [serverError, setServerError] = useState<ApolloError | null>(null);
-  const [calendarReady, setCalendarReady] = useState<boolean>(false);
+  const [disableEdit, setDisableEdit] = useState<boolean>(false)
+  const [serverError, setServerError] = useState<ApolloError | null>(null)
+  const [calendarReady, setCalendarReady] = useState<boolean>(false)
 
-  const calendarApiRef = useRef<any>({});
-  const clickInfoRef = useRef<any>({});
+  const calendarApiRef = useRef<{ value: DateClickArg['view']['calendar'] }>(
+    null,
+  )
+  const clickInfoRef = useRef<{ value: EventClickArg | null }>(null)
 
   const { displayDeleteBtn, hideSaveBtn, disableSaveBtn, disableDeleteBtn } =
-    actionBtns;
+    actionBtns
 
   const [
     getEvents,
@@ -69,54 +71,54 @@ const Calendar: FC = () => {
   ] = useGetEventsLazyQuery({
     notifyOnNetworkStatusChange: true,
     onError: setServerError,
-  });
+  })
 
-  const { title, start, end, isPrivate, description } = event;
+  const { title, start, end, isPrivate, description } = event
 
   const [saveEvent, { loading: saveEventLoading }] = useSaveEventMutation({
     onError: setServerError,
-  });
+  })
 
   const [deleteEvent, { loading: deleteEventLoading }] = useDeleteEventMutation(
     {
       onError: setServerError,
-    }
-  );
+    },
+  )
 
-  const { auth } = useContext(AuthContext);
+  const { auth } = useContext(AuthContext)
 
   useEffect(() => {
-    calendarReady && refetch();
-    setDisableEdit(!auth);
+    calendarReady && refetch()
+    setDisableEdit(!auth)
     setActionBtns({
       ...actionBtns,
       disableSaveBtn: true,
       disableDeleteBtn: !auth,
-    });
+    })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [auth, refetch]);
+  }, [auth, refetch])
 
   const onCompleteApiRequest = () => {
     setActionBtns({
       ...actionBtns,
       disableSaveBtn: false,
       disableDeleteBtn: false,
-    });
-    setModal({ ...modal, show: false });
-  };
+    })
+    setModal({ ...modal, show: false })
+  }
 
   const handleSaveEvent = async () => {
     setActionBtns({
       ...actionBtns,
       disableSaveBtn: true,
       disableDeleteBtn: true,
-    });
+    })
 
-    calendarApiRef.current.value?.unselect();
+    calendarApiRef.current?.value?.unselect()
 
-    setServerError(null);
+    setServerError(null)
 
-    const id = clickInfoRef.current?.value?.event?.id ?? '';
+    const id = clickInfoRef.current?.value?.event?.id ?? ''
 
     const res = await saveEvent({
       variables: {
@@ -129,44 +131,42 @@ const Calendar: FC = () => {
           description,
         },
       },
-    });
+    })
 
     if (res.data) {
-      if (clickInfoRef.current.value) {
-        clickInfoRef.current.value.event.setProp('title', title);
-        clickInfoRef.current.value.event.setExtendedProp(
-          'isPrivate',
-          isPrivate
-        );
+      if (clickInfoRef.current?.value) {
+        clickInfoRef.current.value.event.setProp('title', title)
+        clickInfoRef.current.value.event.setExtendedProp('isPrivate', isPrivate)
         clickInfoRef.current.value.event.setExtendedProp(
           'description',
-          description
-        );
-        clickInfoRef.current.value.event.setStart(start);
-        clickInfoRef.current.value.event.setEnd(end);
+          description,
+        )
+        clickInfoRef.current.value.event.setStart(start)
+        clickInfoRef.current.value.event.setEnd(end)
       } else {
-        await client.resetStore();
+        await client.resetStore()
       }
 
       if (!serverError) {
-        toast.success('Event was successfully saved!');
+        toast.success('Event was successfully saved!')
       }
     }
 
-    onCompleteApiRequest();
-  };
+    onCompleteApiRequest()
+  }
 
   const handleDateClick = async (selectedDate: DateClickArg) => {
-    clickInfoRef.current.value = null;
-    calendarApiRef.current.value = selectedDate.view.calendar;
+    if (clickInfoRef.current) clickInfoRef.current.value = null
+    if (calendarApiRef.current)
+      calendarApiRef.current.value = selectedDate.view.calendar
 
-    setDisableEdit(!auth);
+    setDisableEdit(!auth)
     setActionBtns({
       disableSaveBtn: true,
       disableDeleteBtn: !auth,
       displayDeleteBtn: false,
       hideSaveBtn: !auth,
-    });
+    })
     setEvent({
       title: '',
       start: `${selectedDate.dateStr}T00:00:00`,
@@ -174,49 +174,49 @@ const Calendar: FC = () => {
       isPrivate: false,
       description: '',
       createdById: '',
-    });
+    })
     setModal({
       title: 'New Event',
       show: true,
-    });
-  };
+    })
+  }
 
   const handleEventClick = (clickInfo: EventClickArg) => {
-    clickInfo.jsEvent.preventDefault();
-    clickInfoRef.current.value = clickInfo;
+    clickInfo.jsEvent.preventDefault()
+    if (clickInfoRef.current) clickInfoRef.current.value = clickInfo
     const isTheOwner =
       (auth && auth.userId === clickInfo.event.extendedProps.createdBy._id) ??
-      false;
+      false
 
     if (auth) {
-      setDisableEdit(!isTheOwner);
+      setDisableEdit(!isTheOwner)
       setActionBtns({
         disableSaveBtn: !isTheOwner,
         disableDeleteBtn: !isTheOwner,
         displayDeleteBtn: isTheOwner,
         hideSaveBtn: !isTheOwner,
-      });
+      })
     } else {
-      setDisableEdit(true);
+      setDisableEdit(true)
       setActionBtns({
         disableSaveBtn: true,
         disableDeleteBtn: true,
         displayDeleteBtn: false,
         hideSaveBtn: true,
-      });
+      })
     }
 
     const start = clickInfo.event.startStr.substring(
       0,
-      clickInfo.event.startStr.lastIndexOf('-')
-    );
+      clickInfo.event.startStr.lastIndexOf('-'),
+    )
     const end = clickInfo.event.endStr.substring(
       0,
-      clickInfo.event.endStr.lastIndexOf('-')
-    );
+      clickInfo.event.endStr.lastIndexOf('-'),
+    )
 
-    const { title } = clickInfo.event;
-    const { isPrivate, description, createdBy } = clickInfo.event.extendedProps;
+    const { title } = clickInfo.event
+    const { isPrivate, description, createdBy } = clickInfo.event.extendedProps
 
     setEvent({
       title,
@@ -225,50 +225,50 @@ const Calendar: FC = () => {
       isPrivate,
       description,
       createdById: createdBy._id,
-    });
+    })
     setModal({
       title: isTheOwner ? 'Edit Event' : 'Event (read only)',
       show: true,
-    });
-  };
+    })
+  }
 
   const handleDeleteEvent = async () => {
     setActionBtns({
       ...actionBtns,
       disableSaveBtn: true,
       disableDeleteBtn: true,
-    });
+    })
 
-    setServerError(null);
+    setServerError(null)
 
-    const id = clickInfoRef.current?.value?.event?.id;
+    const id = clickInfoRef.current?.value?.event?.id
 
     if (!id) {
-      throw new Error('Event ID is missing!');
+      throw new Error('Event ID is missing!')
     }
 
     const res = await deleteEvent({
       variables: { id },
       update(cache) {
-        removeEvent(cache, id);
+        removeEvent(cache, id)
       },
-    });
+    })
 
     if (res.data) {
-      clickInfoRef.current.value.event.remove();
-      clickInfoRef.current.value = null;
+      clickInfoRef.current.value?.event.remove()
+      clickInfoRef.current.value = null
 
       if (!serverError) {
-        toast.success('Event was successfully deleted!');
+        toast.success('Event was successfully deleted!')
       }
     }
 
-    onCompleteApiRequest();
-  };
+    onCompleteApiRequest()
+  }
 
   const onChangeValueHandler = (prop: string, value: string | boolean) => {
-    setEvent({ ...event, [prop]: value });
-  };
+    setEvent({ ...event, [prop]: value })
+  }
 
   return (
     <Fragment>
@@ -293,18 +293,17 @@ const Calendar: FC = () => {
         onClose={() => setModal({ ...modal, show: false })}
         onDelete={handleDeleteEvent}
         onSubmit={handleSaveEvent}
-        children={
-          <ModalBody
-            auth={auth}
-            event={event}
-            disableEdit={disableEdit}
-            onChangeValue={(prop, value) => onChangeValueHandler(prop, value)}
-            onValidate={(valid) =>
-              setActionBtns({ ...actionBtns, disableSaveBtn: !valid })
-            }
-          />
-        }
-      />
+      >
+        <ModalBody
+          auth={auth}
+          event={event}
+          disableEdit={disableEdit}
+          onChangeValue={(prop, value) => onChangeValueHandler(prop, value)}
+          onValidate={(valid) =>
+            setActionBtns({ ...actionBtns, disableSaveBtn: !valid })
+          }
+        />
+      </Modal>
 
       <FullCalendarWrapper>
         {getEventsLoading || networkStatus === NetworkStatus.refetch ? (
@@ -312,14 +311,14 @@ const Calendar: FC = () => {
         ) : null}
 
         <FullCalendar
-          initialView="dayGridMonth"
+          initialView='dayGridMonth'
           lazyFetching={true}
           events={events?.eventsData?.events as EventType[]}
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
           eventClick={handleEventClick}
           dateClick={handleDateClick}
           datesSet={(dateRange) => {
-            setCalendarReady(true);
+            setCalendarReady(true)
             getEvents({
               variables: {
                 filter: {
@@ -331,13 +330,13 @@ const Calendar: FC = () => {
                     .toISO(),
                 },
               },
-            });
+            })
           }}
         />
       </FullCalendarWrapper>
     </Fragment>
-  );
-};
+  )
+}
 
 const ModalBody = ({
   auth,
@@ -349,8 +348,8 @@ const ModalBody = ({
   <div>
     {!auth && (
       <Alert
-        msg="You must log in to be able to add or edit events."
-        type="warning"
+        msg='You must log in to be able to add or edit events.'
+        type='warning'
         dismissible={false}
       />
     )}
@@ -361,7 +360,7 @@ const ModalBody = ({
       onValidate={onValidate}
     />
   </div>
-);
+)
 
 export const FullCalendarWrapper = styled.div`
   a.fc-event,
@@ -384,6 +383,6 @@ export const FullCalendarWrapper = styled.div`
   .fc .fc-toolbar-title {
     font-size: 20px !important;
   }
-`;
+`
 
-export default Calendar;
+export default Calendar

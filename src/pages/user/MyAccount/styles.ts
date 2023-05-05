@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import { NavDropdown } from 'react-bootstrap';
+import styled from 'styled-components'
+import { NavDropdown } from 'react-bootstrap'
 
 export const StyledNavDropdown = styled(NavDropdown)`
   margin-left: 12px;
@@ -21,7 +21,7 @@ export const StyledNavDropdown = styled(NavDropdown)`
     right: 0;
     left: auto;
   }
-`;
+`
 
 export const BootstrapTableWrapper = styled.div`
   .table {
@@ -32,4 +32,4 @@ export const BootstrapTableWrapper = styled.div`
   .react-bootstrap-table {
     min-height: 15rem;
   }
-`;
+`

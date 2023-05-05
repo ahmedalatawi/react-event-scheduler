@@ -1,5 +1,5 @@
-import { Schema, model } from 'mongoose';
-import { IEvent } from '../interfaces/types';
+import { Schema, model } from 'mongoose'
+import { IEvent } from '../interfaces/types'
 
 const schema = new Schema<IEvent>(
   {
@@ -32,7 +32,7 @@ const schema = new Schema<IEvent>(
       ref: 'User',
     },
   },
-  { timestamps: true }
-);
+  { timestamps: true },
+)
 
-export const EventModel = model<IEvent>('Event', schema);
+export const EventModel = model<IEvent>('Event', schema)

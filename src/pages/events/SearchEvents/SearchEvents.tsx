@@ -1,34 +1,34 @@
-import { ApolloError, NetworkStatus } from '@apollo/client';
-import { ChangeEvent, FC, useContext, useEffect, useState } from 'react';
-import useDebounce from '../../../hooks/useDebounce';
-import Spinner from '../../../components/UI/Spinner/Spinner';
-import Card, { CardType } from '../../../components/UI/Card/Card';
-import Alert from '../../../components/UI/Alert/Alert';
-import Pagination from '../../../components/Pagination/Pagination';
-import AuthContext from '../../../store/auth-context';
-import Modal from '../../../components/UI/Modal/Modal';
-import EventBody, { EventType } from '../../../components/EventBody/EventBody';
-import { Form } from 'react-bootstrap';
+import { ApolloError, NetworkStatus } from '@apollo/client'
+import { ChangeEvent, FC, useContext, useEffect, useState } from 'react'
+import useDebounce from '../../../hooks/useDebounce'
+import Spinner from '../../../components/UI/Spinner/Spinner'
+import Card, { CardType } from '../../../components/UI/Card/Card'
+import Alert from '../../../components/UI/Alert/Alert'
+import Pagination from '../../../components/Pagination/Pagination'
+import AuthContext from '../../../store/auth-context'
+import Modal from '../../../components/UI/Modal/Modal'
+import EventBody, { EventType } from '../../../components/EventBody/EventBody'
+import { Form } from 'react-bootstrap'
 import {
   EventFull,
   useDeleteEventMutation,
   useGetEventsQuery,
   useSaveEventMutation,
-} from '../../../generated/graphql';
-import styled from 'styled-components';
-import { dateToTitle } from '../../../utils/dateTransforms';
-import { ServerErrorAlert } from '../../../components/ServerErrorAlert/ServerErrorAlert';
-import toast from 'react-hot-toast';
-import { removeEvent } from '../../../utils/apolloCache';
+} from '../../../generated/graphql'
+import styled from 'styled-components'
+import { dateToTitle } from '../../../utils/dateTransforms'
+import { ServerErrorAlert } from '../../../components/ServerErrorAlert/ServerErrorAlert'
+import toast from 'react-hot-toast'
+import { removeEvent } from '../../../utils/apolloCache'
 
-const EVENTS_PER_PAGE = 15;
+const EVENTS_PER_PAGE = 15
 
 const SearchEvents: FC = () => {
   const [modal, setModal] = useState({
     title: '',
     show: false,
-  });
-  const [serverError, setServerError] = useState<ApolloError | null>(null);
+  })
+  const [serverError, setServerError] = useState<ApolloError | null>(null)
 
   const [event, setEvent] = useState<EventType>({
     id: '',
@@ -38,14 +38,14 @@ const SearchEvents: FC = () => {
     isPrivate: false,
     description: '',
     createdById: '',
-  });
+  })
 
   const [actionBtns, setActionBtns] = useState({
     displayDeleteBtn: false,
     hideSaveBtn: true,
     disableSaveBtn: false,
     disableDeleteBtn: false,
-  });
+  })
 
   const [formProps, setFormProps] = useState({
     searchText: '',
@@ -53,18 +53,18 @@ const SearchEvents: FC = () => {
     allCheck: true,
     currentCheck: false,
     expiredCheck: false,
-  });
+  })
 
-  const [skipFirstRun, setSkipFirstRun] = useState<boolean>(true);
+  const [skipFirstRun, setSkipFirstRun] = useState<boolean>(true)
 
-  const { auth } = useContext(AuthContext);
+  const { auth } = useContext(AuthContext)
   const { searchText, currentPage, allCheck, currentCheck, expiredCheck } =
-    formProps;
-  const { id, title, start, end, isPrivate, description, createdById } = event;
+    formProps
+  const { id, title, start, end, isPrivate, description, createdById } = event
   const { displayDeleteBtn, hideSaveBtn, disableSaveBtn, disableDeleteBtn } =
-    actionBtns;
+    actionBtns
 
-  const debouncedSearchText = useDebounce(searchText);
+  const debouncedSearchText = useDebounce(searchText)
 
   const filter = {
     searchText: debouncedSearchText.trim(),
@@ -72,7 +72,7 @@ const SearchEvents: FC = () => {
     pageNumber: currentPage,
     currentCheck,
     expiredCheck,
-  };
+  }
 
   const { loading, data, refetch, networkStatus } = useGetEventsQuery({
     notifyOnNetworkStatusChange: true,
@@ -80,45 +80,47 @@ const SearchEvents: FC = () => {
       filter,
     },
     onError: setServerError,
-  });
+  })
 
   const [saveEvent, { loading: saveEventLoading }] = useSaveEventMutation({
     onError: setServerError,
-  });
+  })
 
   const [deleteEvent, { loading: deleteEventLoading }] = useDeleteEventMutation(
-    { onError: setServerError }
-  );
+    {
+      onError: setServerError,
+    },
+  )
 
   const handleOnSubmit = (event: ChangeEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    refetch();
-  };
+    event.preventDefault()
+    refetch()
+  }
 
   const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setFormProps({ ...formProps, searchText: event.target.value });
-  };
+    setFormProps({ ...formProps, searchText: event.target.value })
+  }
 
   const onCompleteApiRequest = () => {
     setActionBtns({
       ...actionBtns,
       disableDeleteBtn: false,
       disableSaveBtn: false,
-    });
-    setModal({ ...modal, show: false });
-  };
+    })
+    setModal({ ...modal, show: false })
+  }
 
   const getExSubTitle = (endTime: string) => {
-    const today = new Date();
-    const endDate = new Date(endTime);
+    const today = new Date()
+    const endDate = new Date(endTime)
 
-    return endDate.getTime() < today.getTime() ? 'Expired' : '';
-  };
+    return endDate.getTime() < today.getTime() ? 'Expired' : ''
+  }
 
   const clickEventHandler = (event: EventFull) => {
-    const { id, title, start, end, isPrivate, description, createdBy } = event;
-    const createdById = createdBy?._id ?? '';
-    const isTheOwner = (auth && auth.userId === createdById) ?? false;
+    const { id, title, start, end, isPrivate, description, createdBy } = event
+    const createdById = createdBy?._id ?? ''
+    const isTheOwner = (auth && auth.userId === createdById) ?? false
 
     if (auth) {
       setActionBtns({
@@ -126,13 +128,13 @@ const SearchEvents: FC = () => {
         displayDeleteBtn: isTheOwner,
         hideSaveBtn: !isTheOwner,
         disableSaveBtn: !isTheOwner,
-      });
+      })
     } else {
       setActionBtns({
         ...actionBtns,
         displayDeleteBtn: false,
         hideSaveBtn: true,
-      });
+      })
     }
 
     setEvent({
@@ -143,47 +145,47 @@ const SearchEvents: FC = () => {
       description,
       isPrivate,
       createdById,
-    });
+    })
     setModal({
       title: isTheOwner ? 'Edit Event' : 'Event (read only)',
       show: true,
-    });
-  };
+    })
+  }
 
   const handleDeleteEvent = async () => {
     setActionBtns({
       ...actionBtns,
       disableDeleteBtn: true,
       disableSaveBtn: true,
-    });
+    })
 
     if (!id) {
-      throw new Error('Event ID is missing!');
+      throw new Error('Event ID is missing!')
     }
 
     const res = await deleteEvent({
       variables: { id },
       update(cache) {
-        removeEvent(cache, id);
+        removeEvent(cache, id)
       },
-    });
+    })
 
     if (res.data && !serverError) {
-      toast.success('Event was successfully deleted!');
+      toast.success('Event was successfully deleted!')
     }
 
-    onCompleteApiRequest();
-  };
+    onCompleteApiRequest()
+  }
 
   const handleSaveEvent = async () => {
     setActionBtns({
       ...actionBtns,
       disableDeleteBtn: true,
       disableSaveBtn: true,
-    });
+    })
 
     if (!id) {
-      throw new Error('Event ID is missing!');
+      throw new Error('Event ID is missing!')
     }
 
     const res = await saveEvent({
@@ -197,73 +199,73 @@ const SearchEvents: FC = () => {
           description,
         },
       },
-    });
+    })
 
     if (res.data && !serverError) {
-      toast.success('Event was successfully saved!');
+      toast.success('Event was successfully saved!')
     }
 
-    onCompleteApiRequest();
-  };
+    onCompleteApiRequest()
+  }
 
-  const resetCurrentPage = () => setFormProps({ ...formProps, currentPage: 1 });
-
-  useEffect(() => {
-    resetCurrentPage();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedSearchText]);
+  const resetCurrentPage = () => setFormProps({ ...formProps, currentPage: 1 })
 
   useEffect(() => {
-    skipFirstRun && setSkipFirstRun(false);
-    !skipFirstRun && refetch();
-    resetCurrentPage();
+    resetCurrentPage()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [auth, refetch]);
+  }, [debouncedSearchText])
+
+  useEffect(() => {
+    skipFirstRun && setSkipFirstRun(false)
+    !skipFirstRun && refetch()
+    resetCurrentPage()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [auth, refetch])
 
   const handleFilterByAllEventsChange = (e: ChangeEvent<HTMLInputElement>) => {
-    e.persist();
+    e.persist()
     setFormProps({
       ...formProps,
       currentPage: 1,
       currentCheck: false,
       allCheck: !allCheck,
       expiredCheck: false,
-    });
-  };
+    })
+  }
 
   const handleFilterByCurrentEventsChange = (
-    e: ChangeEvent<HTMLInputElement>
+    e: ChangeEvent<HTMLInputElement>,
   ) => {
-    e.persist();
+    e.persist()
     setFormProps({
       ...formProps,
       currentPage: 1,
       currentCheck: !currentCheck,
       allCheck: false,
       expiredCheck: false,
-    });
-  };
+    })
+  }
 
   const handleFilterByExpiredEventsChange = (
-    e: ChangeEvent<HTMLInputElement>
+    e: ChangeEvent<HTMLInputElement>,
   ) => {
-    e.persist();
+    e.persist()
     setFormProps({
       ...formProps,
       currentPage: 1,
       currentCheck: false,
       allCheck: false,
       expiredCheck: !expiredCheck,
-    });
-  };
+    })
+  }
 
   const onChangeValueHandler = (prop: string, value: string | boolean) => {
-    setEvent({ ...event, [prop]: value });
-  };
+    setEvent({ ...event, [prop]: value })
+  }
 
   const isTheOwner = () => {
-    return auth && auth.userId === event.createdById;
-  };
+    return auth && auth.userId === event.createdById
+  }
 
   const eventToCard = (event: EventFull): CardType => ({
     title: event.title,
@@ -275,7 +277,7 @@ const SearchEvents: FC = () => {
     createdAt: event.createdAt ?? 0,
     updatedAt: event.updatedAt ?? 0,
     isPrivate: event.isPrivate,
-  });
+  })
 
   return (
     <>
@@ -285,29 +287,29 @@ const SearchEvents: FC = () => {
       />
 
       <Form>
-        <div className="mb-4">
-          <span className="me-3 fs-5">Filter by: </span>
+        <div className='mb-4'>
+          <span className='me-3 fs-5'>Filter by: </span>
           <Form.Check
             inline
-            label="All"
-            name="group"
-            type="radio"
+            label='All'
+            name='group'
+            type='radio'
             defaultChecked={allCheck}
             onChange={handleFilterByAllEventsChange}
           />
           <Form.Check
             inline
-            label="Active"
-            name="group"
-            type="radio"
+            label='Active'
+            name='group'
+            type='radio'
             defaultChecked={currentCheck}
             onChange={handleFilterByCurrentEventsChange}
           />
           <Form.Check
             inline
-            label="Expired"
-            name="group"
-            type="radio"
+            label='Expired'
+            name='group'
+            type='radio'
             defaultChecked={expiredCheck}
             onChange={handleFilterByExpiredEventsChange}
           />
@@ -315,17 +317,17 @@ const SearchEvents: FC = () => {
       </Form>
 
       <form
-        className="d-flex"
+        className='d-flex'
         onSubmit={handleOnSubmit}
-        data-testid="SearchBoxForm"
+        data-testid='SearchBoxForm'
       >
         <input
           value={searchText}
-          data-testid="SearchBoxInput"
-          className="form-control"
-          type="search"
-          placeholder="Search events by title"
-          aria-label="Search"
+          data-testid='SearchBoxInput'
+          className='form-control'
+          type='search'
+          placeholder='Search events by title'
+          aria-label='Search'
           onChange={handleOnChange}
         />
       </form>
@@ -342,13 +344,13 @@ const SearchEvents: FC = () => {
                   onClick={() => clickEventHandler(event)}
                 />
               </EventCardWrapper>
-            );
+            )
           })
         ) : !serverError ? (
-          <div className="event-card">
+          <div className='event-card'>
             <Alert
-              msg="No results were found."
-              type="warning"
+              msg='No results were found.'
+              type='warning'
               dismissible={false}
             />
           </div>
@@ -356,7 +358,7 @@ const SearchEvents: FC = () => {
       </EventCardContainer>
 
       {!loading && (
-        <div className="float-end">
+        <div className='float-end'>
           <Pagination
             total={data?.eventsData?.totalCount || 0}
             itemsPerPage={EVENTS_PER_PAGE}
@@ -385,28 +387,27 @@ const SearchEvents: FC = () => {
         onClose={() => setModal({ ...modal, show: false })}
         onDelete={handleDeleteEvent}
         onSubmit={handleSaveEvent}
-        children={
-          <EventBody
-            event={event}
-            disableEdit={!isTheOwner()}
-            onChangeValue={(prop, value) => onChangeValueHandler(prop, value)}
-            onValidate={(valid) =>
-              setActionBtns({ ...actionBtns, disableSaveBtn: !valid })
-            }
-          />
-        }
-      />
+      >
+        <EventBody
+          event={event}
+          disableEdit={!isTheOwner()}
+          onChangeValue={(prop, value) => onChangeValueHandler(prop, value)}
+          onValidate={(valid) =>
+            setActionBtns({ ...actionBtns, disableSaveBtn: !valid })
+          }
+        />
+      </Modal>
     </>
-  );
-};
+  )
+}
 
 export const EventCardContainer = styled.div({
   paddingTop: 10,
   paddingBottom: 20,
-});
+})
 
 export const EventCardWrapper = styled.div({
   paddingTop: 20,
-});
+})
 
-export default SearchEvents;
+export default SearchEvents

@@ -1,35 +1,35 @@
-import { FC, ReactNode } from 'react';
-import { MdSaveAlt } from 'react-icons/md';
-import { FiLogIn, FiTrash2 } from 'react-icons/fi';
-import styled from 'styled-components';
-import { Modal as ModalBootstrap, Button } from 'react-bootstrap';
-import { BtnSpinner } from '../BtnSpinner/BtnSpinner';
+import { FC, ReactNode } from 'react'
+import { MdSaveAlt } from 'react-icons/md'
+import { FiLogIn, FiTrash2 } from 'react-icons/fi'
+import styled from 'styled-components'
+import { Modal as ModalBootstrap, Button } from 'react-bootstrap'
+import { BtnSpinner } from '../BtnSpinner/BtnSpinner'
 
 type ActionBtnFlagsType = {
-  submitBtnName?: string;
-  closeBtnName?: string;
-  disableDeleteBtn?: boolean;
-  displayDeleteBtn?: boolean;
-  disableSubmitBtn?: boolean;
-  hideSubmitBtn?: boolean;
-};
+  submitBtnName?: string
+  closeBtnName?: string
+  disableDeleteBtn?: boolean
+  displayDeleteBtn?: boolean
+  disableSubmitBtn?: boolean
+  hideSubmitBtn?: boolean
+}
 
 type ActionBtnLoadingType = {
-  isSubmitLoading: boolean;
-  isDeleteLoading?: boolean;
-};
+  isSubmitLoading: boolean
+  isDeleteLoading?: boolean
+}
 
 type Props = {
-  title: string;
-  show: boolean;
-  actionBtnFlags?: ActionBtnFlagsType;
-  actionBtnLoading?: ActionBtnLoadingType;
-  closeButton?: boolean;
-  children?: ReactNode;
-  onClose: () => void;
-  onDelete?: () => void;
-  onSubmit: () => void;
-};
+  title: string
+  show: boolean
+  actionBtnFlags?: ActionBtnFlagsType
+  actionBtnLoading?: ActionBtnLoadingType
+  closeButton?: boolean
+  children?: ReactNode
+  onClose: () => void
+  onDelete?: () => void
+  onSubmit: () => void
+}
 
 const Modal: FC<Props> = ({
   title,
@@ -49,14 +49,14 @@ const Modal: FC<Props> = ({
     disableDeleteBtn,
     disableSubmitBtn,
     hideSubmitBtn,
-  } = actionBtnFlags ?? {};
+  } = actionBtnFlags ?? {}
 
-  const { isSubmitLoading, isDeleteLoading } = actionBtnLoading ?? {};
+  const { isSubmitLoading, isDeleteLoading } = actionBtnLoading ?? {}
 
   return (
     <ModalBootstrap
       show={show}
-      backdrop="static"
+      backdrop='static'
       keyboard={false}
       onHide={onClose}
     >
@@ -65,12 +65,12 @@ const Modal: FC<Props> = ({
       </ModalBootstrap.Header>
       <ModalBootstrap.Body>{children}</ModalBootstrap.Body>
       <ModalBootstrap.Footer>
-        <Button variant="secondary" onClick={onClose}>
+        <Button variant='secondary' onClick={onClose}>
           {closeBtnName || 'Cancel'}
         </Button>
         {displayDeleteBtn && (
           <Button
-            variant="danger"
+            variant='danger'
             disabled={disableDeleteBtn}
             onClick={onDelete}
           >
@@ -79,7 +79,7 @@ const Modal: FC<Props> = ({
         )}
         {!hideSubmitBtn && (
           <Button
-            variant="primary"
+            variant='primary'
             disabled={disableSubmitBtn}
             onClick={onSubmit}
           >
@@ -89,8 +89,8 @@ const Modal: FC<Props> = ({
         )}
       </ModalBootstrap.Footer>
     </ModalBootstrap>
-  );
-};
+  )
+}
 
 export const StyledModal = styled.div.attrs(() => ({
   className: 'modal-dialog',
@@ -100,6 +100,6 @@ export const StyledModal = styled.div.attrs(() => ({
       min-width: 512px;
     }
   }
-`;
+`
 
-export default Modal;
+export default Modal

@@ -1,12 +1,12 @@
-import TestRenderer, { act } from 'react-test-renderer';
-import { screen } from '@testing-library/dom';
-import { MockedProvider } from '@apollo/client/testing';
-import AddEvent from './AddEvent';
-import { SaveEventDocument } from '../../../generated/graphql';
-import { GraphQLError } from 'graphql';
-import AuthContext from '../../../store/auth-context';
+import TestRenderer, { act } from 'react-test-renderer'
+import { screen } from '@testing-library/dom'
+import { MockedProvider, MockedResponse } from '@apollo/client/testing'
+import AddEvent from './AddEvent'
+import { SaveEventDocument } from '../../../generated/graphql'
+import { GraphQLError } from 'graphql'
+import AuthContext from '../../../store/auth-context'
 
-const mocks: any = [
+const mocks: ReadonlyArray<MockedResponse> = [
   {
     request: {
       query: SaveEventDocument,
@@ -41,29 +41,29 @@ const mocks: any = [
       },
     },
   },
-];
+]
 
 describe('AddEvent', () => {
   it('should set state to loading when mutation is executed', () => {
     const component = TestRenderer.create(
       <MockedProvider mocks={mocks} addTypename={false}>
         <AddEvent />
-      </MockedProvider>
-    );
+      </MockedProvider>,
+    )
 
-    const e = { preventDefault: jest.fn() };
+    const e = { preventDefault: jest.fn() }
 
-    const saveButton = component.root.findByType('form');
+    const saveButton = component.root.findByType('form')
     act(() => {
-      saveButton.props.onSubmit(e);
-    });
+      saveButton.props.onSubmit(e)
+    })
 
-    const tree = component.toJSON();
-    //expect(JSON.stringify(tree)).toContain('Loading...');
-  });
+    // const tree = component.toJSON()
+    // expect(JSON.stringify(tree)).toContain('Loading...');
+  })
 
   xit('should add an event and display a success message', async () => {
-    const auth = { userId: 'test', username: 'some-name', token: '123' };
+    const auth = { userId: 'test', username: 'some-name', token: '123' }
     const component = TestRenderer.create(
       <MockedProvider mocks={mocks} addTypename={false}>
         <AuthContext.Provider
@@ -76,24 +76,24 @@ describe('AddEvent', () => {
         >
           <AddEvent />
         </AuthContext.Provider>
-      </MockedProvider>
-    );
+      </MockedProvider>,
+    )
 
-    const e = { preventDefault: jest.fn() };
+    const e = { preventDefault: jest.fn() }
 
-    const saveButton = component.root.findByType('form');
+    const saveButton = component.root.findByType('form')
     act(() => {
-      saveButton.props.onSubmit(e);
-    });
+      saveButton.props.onSubmit(e)
+    })
 
     await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 0)); // wait for response
-    });
+      await new Promise((resolve) => setTimeout(resolve, 0)) // wait for response
+    })
 
     // const tree = component.toJSON();
     // expect(JSON.stringify(tree)).toContain('Event was successfully added.');
-    expect(screen.getByTestId('success-alert')).toBeDefined();
-  });
+    expect(screen.getByTestId('success-alert')).toBeDefined()
+  })
 
   xit('should display a generic error message when a network or graphgql error occurs', async () => {
     const errorMock = {
@@ -114,28 +114,28 @@ describe('AddEvent', () => {
         errors: [new GraphQLError('Error!')],
         data: null,
       },
-    };
+    }
 
     const component = TestRenderer.create(
       <MockedProvider mocks={[errorMock]} addTypename={false}>
         <AddEvent />
-      </MockedProvider>
-    );
+      </MockedProvider>,
+    )
 
-    const e = { preventDefault: jest.fn() };
+    const e = { preventDefault: jest.fn() }
 
-    const saveButton = component.root.findByType('form');
+    const saveButton = component.root.findByType('form')
     act(() => {
-      saveButton.props.onSubmit(e);
-    });
+      saveButton.props.onSubmit(e)
+    })
 
     await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 0));
-    });
+      await new Promise((resolve) => setTimeout(resolve, 0))
+    })
 
-    const tree = component.toJSON();
+    const tree = component.toJSON()
     expect(JSON.stringify(tree)).toContain(
-      'Error occurred while saving event! Please try again later.'
-    );
-  });
-});
+      'Error occurred while saving event! Please try again later.',
+    )
+  })
+})

@@ -1,32 +1,32 @@
-import { FC, Fragment, useContext } from 'react';
-import { NavDropdown } from 'react-bootstrap';
-import { FaUser, FaUserEdit } from 'react-icons/fa';
-import { FiLogOut, FiSettings } from 'react-icons/fi';
-import { MdEventNote } from 'react-icons/md';
-import { Link } from 'react-router-dom';
-import AuthContext from '../../../store/auth-context';
-import { StyledNavDropdown } from './styles';
+import { FC, Fragment, useContext } from 'react'
+import { NavDropdown } from 'react-bootstrap'
+import { FaUser, FaUserEdit } from 'react-icons/fa'
+import { FiLogOut, FiSettings } from 'react-icons/fi'
+import { MdEventNote } from 'react-icons/md'
+import { Link } from 'react-router-dom'
+import AuthContext from '../../../store/auth-context'
+import { StyledNavDropdown } from './styles'
 
 type Props = {
-  onLogout: () => void;
-  onSelect: () => void;
-};
+  onLogout: () => void
+  onSelect: () => void
+}
 
 const MyAccount: FC<Props> = ({ onLogout, onSelect }) => {
-  const { auth } = useContext(AuthContext);
+  const { auth } = useContext(AuthContext)
 
   if (!auth) {
-    return null;
+    return null
   }
 
-  const { username, userId } = auth;
+  const { username, userId } = auth
 
   return (
     <Fragment>
-      <span className="nav-link text-secondary">
+      <span className='nav-link text-secondary'>
         Welcome, <b>{username}</b>
       </span>
-      <StyledNavDropdown title={<FaUser className="text-secondary" />}>
+      <StyledNavDropdown title={<FaUser className='text-secondary' />}>
         <NavDropdown.Item
           onClick={onSelect}
           as={Link}
@@ -54,7 +54,7 @@ const MyAccount: FC<Props> = ({ onLogout, onSelect }) => {
         </NavDropdown.Item>
       </StyledNavDropdown>
     </Fragment>
-  );
-};
+  )
+}
 
-export default MyAccount;
+export default MyAccount

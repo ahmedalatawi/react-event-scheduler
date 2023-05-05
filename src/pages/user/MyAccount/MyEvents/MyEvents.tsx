@@ -1,28 +1,29 @@
-import { NetworkStatus } from '@apollo/client';
-import { FC, useState } from 'react';
-import BootstrapTable from 'react-bootstrap-table-next';
-import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
+import { NetworkStatus } from '@apollo/client'
+import { FC, SyntheticEvent, useState } from 'react'
+import BootstrapTable, { SelectRowProps } from 'react-bootstrap-table-next'
+import filterFactory, { textFilter } from 'react-bootstrap-table2-filter'
 import ToolkitProvider, {
   Search,
-} from 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit';
-import { useParams } from 'react-router';
-import Alert from '../../../../components/UI/Alert/Alert';
-import Spinner from '../../../../components/UI/Spinner/Spinner';
-import TitledCard from '../../../../components/UI/TitledCard/TitledCard';
-import Pagination from '../../../../components/Pagination/Pagination';
-import { useGetUserEventsQuery } from '../../../../generated/graphql';
-import { BootstrapTableWrapper } from '../styles';
-import { useNavigateToHome } from '../../../../hooks/useNavigateToHome';
-import { ToolkitContextType } from 'react-bootstrap-table2-toolkit';
+} from 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit'
+import { useParams } from 'react-router'
+import Alert from '../../../../components/UI/Alert/Alert'
+import Spinner from '../../../../components/UI/Spinner/Spinner'
+import TitledCard from '../../../../components/UI/TitledCard/TitledCard'
+import Pagination from '../../../../components/Pagination/Pagination'
+import { useGetUserEventsQuery } from '../../../../generated/graphql'
+import { BootstrapTableWrapper } from '../styles'
+import { useNavigateToHome } from '../../../../hooks/useNavigateToHome'
+import { ToolkitContextType } from 'react-bootstrap-table2-toolkit'
+import { IEvent } from '../../../../types'
 
-const ITEMS_PER_PAGE = 10;
+const ITEMS_PER_PAGE = 10
 
 const MyEvents: FC = () => {
-  const { id } = useParams();
-  const { SearchBar } = Search;
+  const { id } = useParams()
+  const { SearchBar } = Search
 
-  const [searchText, setSearchText] = useState<string>('');
-  const [pageNumber, setPageNumber] = useState<number>(1);
+  const [searchText, setSearchText] = useState<string>('')
+  const [pageNumber, setPageNumber] = useState<number>(1)
 
   const { data, loading, error, networkStatus } = useGetUserEventsQuery({
     fetchPolicy: 'cache-and-network',
@@ -31,28 +32,33 @@ const MyEvents: FC = () => {
       id: id ?? '',
       filter: { searchText, pageNumber, pageSize: ITEMS_PER_PAGE },
     },
-  });
+  })
 
-  useNavigateToHome();
+  useNavigateToHome()
 
-  const selectRow: any = {
+  const selectRow: SelectRowProps<IEvent> = {
     mode: 'checkbox',
     clickToSelect: true,
-    onSelect: (row: any, isSelect: boolean, rowIndex: number, e: any) => {
-      console.log(row);
+    onSelect: (
+      row: IEvent,
+      isSelected: boolean,
+      rowIndex: number,
+      e: SyntheticEvent,
+    ) => {
+      console.log(row, isSelected, rowIndex, e)
     },
-    onSelectAll: (isSelect: boolean, rows: any, e: any) => {
-      console.log(rows);
+    onSelectAll: (isSelect: boolean, rows: IEvent[], e: SyntheticEvent) => {
+      console.log(rows, isSelect, e)
     },
-  };
+  }
 
   const setSearchTextHandler = (text: string) => {
-    setPageNumber(1);
-    setSearchText(text);
-  };
+    setPageNumber(1)
+    setSearchText(text)
+  }
 
   if (error) {
-    return <Alert msg={error.message} type="danger" dismissible={false} />;
+    return <Alert msg={error.message} type='danger' dismissible={false} />
   }
 
   const updatedEvents = data?.getUserEvents.events.map((event) => {
@@ -67,7 +73,7 @@ const MyEvents: FC = () => {
       createdBy,
       createdAt,
       updatedAt,
-    } = event;
+    } = event
 
     return {
       id,
@@ -80,25 +86,25 @@ const MyEvents: FC = () => {
       url: url ? <a href={url}>Link</a> : '',
       createdAt: createdAt ? new Date(createdAt).toLocaleString() : '',
       updatedAt: updatedAt ? new Date(updatedAt).toLocaleString() : '',
-    };
-  });
+    }
+  })
 
   return (
-    <TitledCard title="My Events">
+    <TitledCard title='My Events'>
       {loading || networkStatus === NetworkStatus.refetch ? (
         <Spinner />
       ) : (
         !updatedEvents?.length && (
           <Alert
             msg={'No events were found'}
-            type="warning"
+            type='warning'
             dismissible={false}
           />
         )
       )}
       <ToolkitProvider
         bootstrap4
-        keyField="id"
+        keyField='id'
         data={updatedEvents ?? []}
         columns={columns}
         search
@@ -119,7 +125,7 @@ const MyEvents: FC = () => {
                 hover
                 bordered={false}
                 selectRow={selectRow}
-                wrapperClasses="table-responsive"
+                wrapperClasses='table-responsive'
                 rowStyle={{ overflowWrap: 'break-word' }}
                 filter={filterFactory()}
               />
@@ -127,7 +133,7 @@ const MyEvents: FC = () => {
           </div>
         )}
       </ToolkitProvider>
-      <div className="float-end">
+      <div className='float-end'>
         <Pagination
           total={data?.getUserEvents.totalCount || 0}
           itemsPerPage={ITEMS_PER_PAGE}
@@ -136,8 +142,8 @@ const MyEvents: FC = () => {
         />
       </div>
     </TitledCard>
-  );
-};
+  )
+}
 
 const columns = [
   {
@@ -190,6 +196,6 @@ const columns = [
     text: 'Updated Date',
     sort: true,
   },
-];
+]
 
-export default MyEvents;
+export default MyEvents

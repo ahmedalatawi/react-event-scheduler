@@ -1,4 +1,4 @@
-import { gql } from 'graphql-tag';
+import { gql } from 'graphql-tag'
 
 export const typeDefs = gql`
   type Event {
@@ -107,4 +107,4 @@ export const typeDefs = gql`
     getEvent(id: ID!): EventFull!
     deleteEvent(id: ID!): Boolean!
   }
-`;
+`
