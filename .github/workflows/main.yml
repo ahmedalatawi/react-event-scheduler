@@ -27,5 +27,7 @@ jobs:
         run: yarn run build --if-present
       - name: Run tests
         run: yarn test
+      - name: Run lint
+        run: yarn lint
       - name: Run tsc
         uses: icrawl/action-tsc@v1
