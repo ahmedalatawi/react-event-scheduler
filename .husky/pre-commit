@@ -3,3 +3,4 @@
 
 npx pretty-quick --staged
 npx --no-install lint-staged
+npx lint-staged
