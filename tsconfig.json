@@ -17,5 +17,5 @@
     "jsx": "react-jsx"
   },
   "include": ["src", "index.d.ts", "api/**/*"],
-  "exclude": ["api/**/*"]
+  "exclude": ["node_modules"]
 }

@@ -1,14 +1,17 @@
-import jwt from 'jsonwebtoken'
+import jwt, { JwtPayload } from 'jsonwebtoken'
 import { constants } from '../config/constants'
+import { Request } from 'express'
+import { IAuthParams } from '../interfaces/types'
 
 const { JWT_SECRET } = constants
 
-export const context = async ({ req, res }) => {
+export const context = async ({ req }: { req: Request }) => {
   const auth = req.cookies['auth'] ? JSON.parse(req.cookies['auth']) : ''
+  const customReq = req as Request & IAuthParams
 
   if (!auth) {
-    req.isAuthorized = false
-    return req
+    customReq.isAuthorized = false
+    return customReq
   }
 
   let decodedToken
@@ -16,17 +19,17 @@ export const context = async ({ req, res }) => {
   try {
     decodedToken = jwt.verify(auth.token, JWT_SECRET)
   } catch (err) {
-    req.isAuthorized = false
-    return req
+    customReq.isAuthorized = false
+    return customReq
   }
 
   if (!decodedToken) {
-    req.isAuthorized = false
-    return req
+    customReq.isAuthorized = false
+    return customReq
   }
 
-  req.isAuthorized = true
-  req.userId = decodedToken.userId
+  customReq.isAuthorized = true
+  customReq.userId = (decodedToken as JwtPayload).userId
 
-  return req
+  return customReq
 }

@@ -57,10 +57,14 @@ const Calendar: FC = () => {
   const [serverError, setServerError] = useState<ApolloError | null>(null)
   const [calendarReady, setCalendarReady] = useState<boolean>(false)
 
-  const calendarApiRef = useRef<{ value: DateClickArg['view']['calendar'] }>(
-    null,
-  )
-  const clickInfoRef = useRef<{ value: EventClickArg | null }>(null)
+  const calendarApiRef = useRef<{
+    value: DateClickArg['view']['calendar'] | null
+  }>({
+    value: null,
+  })
+  const clickInfoRef = useRef<{ value: EventClickArg | null }>({
+    value: null,
+  })
 
   const { displayDeleteBtn, hideSaveBtn, disableSaveBtn, disableDeleteBtn } =
     actionBtns

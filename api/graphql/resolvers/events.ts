@@ -2,6 +2,12 @@ import { GraphQLError } from 'graphql'
 import { EventModel } from '../../models/event'
 import { UserModel } from '../../models/user'
 import { constants } from '../../config/constants'
+import {
+  EventInput,
+  FilterInput,
+  PaginationFilter,
+} from '../../../src/generated/graphql'
+import { IAuthParams } from '../../interfaces/types'
 
 export const Events = {
   eventsData: async (
@@ -15,8 +21,8 @@ export const Events = {
         startDate,
         endDate,
       },
-    },
-    { isAuthorized, userId },
+    }: { filterInput: FilterInput },
+    { isAuthorized, userId }: IAuthParams,
   ) => {
     const filter =
       isAuthorized && userId
@@ -36,43 +42,41 @@ export const Events = {
     const startDateFilter = startDate ? { start: { $gte: startDate } } : {}
     const endDateFilter = endDate ? { end: { $lt: endDate } } : {}
 
-    try {
-      const events = await EventModel.find({
-        ...regexFilter,
-        ...statusFilter,
-        ...startDateFilter,
-        ...endDateFilter,
-      })
-        .sort({ end: -1 })
-        .limit(pageSize)
-        .skip(pageNumber > 0 ? (pageNumber - 1) * pageSize : 0)
-        .populate('createdBy')
-      const totalCount = await EventModel.countDocuments({
-        ...regexFilter,
-        ...statusFilter,
-      })
+    pageSize = pageSize ?? 0
+    pageNumber = pageNumber ?? 0
 
-      return { totalCount, events }
-    } catch (err) {
-      throw err
-    }
+    const events = await EventModel.find({
+      ...regexFilter,
+      ...statusFilter,
+      ...startDateFilter,
+      ...endDateFilter,
+    })
+      .sort({ end: -1 })
+      .limit(pageSize)
+      .skip(pageNumber > 0 ? (pageNumber - 1) * pageSize : 0)
+      .populate('createdBy')
+    const totalCount = await EventModel.countDocuments({
+      ...regexFilter,
+      ...statusFilter,
+    })
+
+    return { totalCount, events }
   },
-  getEvent: async ({ id }) => {
-    try {
-      const event = await EventModel.findOne({ _id: id }).populate('createdBy')
+  getEvent: async ({ id }: { id: string }) => {
+    const event = await EventModel.findOne({ _id: id }).populate('createdBy')
 
-      if (!event) {
-        throw new Error('Event could not be found')
-      }
-
-      return event
-    } catch (err) {
-      throw err
+    if (!event) {
+      throw new Error('Event could not be found')
     }
+
+    return event
   },
   getUserEvents: async (
-    { id, paginationFilter: { searchText = '', pageNumber = 0, pageSize = 0 } },
-    { isAuthorized, userId },
+    {
+      id,
+      paginationFilter: { searchText = '', pageNumber = 0, pageSize = 0 },
+    }: { id: string; paginationFilter: PaginationFilter },
+    { isAuthorized, userId }: IAuthParams,
   ) => {
     if (!isAuthorized) {
       throw new GraphQLError('Unauthenticated')
@@ -90,21 +94,22 @@ export const Events = {
       ],
     }
 
-    try {
-      const events = await EventModel.find(filter)
-        .limit(pageSize)
-        .skip(pageNumber > 0 ? (pageNumber - 1) * pageSize : 0)
-        .populate('createdBy')
-      const totalCount = await EventModel.countDocuments(filter)
+    pageSize = pageSize ?? 0
+    pageNumber = pageNumber ?? 0
 
-      return { totalCount, events }
-    } catch (err) {
-      throw err
-    }
+    const events = await EventModel.find(filter)
+      .limit(pageSize)
+      .skip(pageNumber > 0 ? (pageNumber - 1) * pageSize : 0)
+      .populate('createdBy')
+    const totalCount = await EventModel.countDocuments(filter)
+
+    return { totalCount, events }
   },
   saveEvent: async (
-    { event: { id, title, start, end, isPrivate, description } },
-    { isAuthorized, userId },
+    {
+      event: { id, title, start, end, isPrivate, description },
+    }: { event: EventInput },
+    { isAuthorized, userId }: IAuthParams,
   ) => {
     const { URI } = constants
 
@@ -118,42 +123,41 @@ export const Events = {
       throw new GraphQLError('Unauthenticated')
     }
 
-    try {
-      let savedEvent
+    let savedEvent
 
-      if (id) {
-        const event = await EventModel.findOne({ _id: id, createdBy: userId })
+    if (id) {
+      const event = await EventModel.findOne({ _id: id, createdBy: userId })
 
-        if (!event) {
-          throw new GraphQLError('Event could not be found')
-        }
-
-        savedEvent = await EventModel.findOneAndUpdate(
-          { _id: id, createdBy: userId },
-          { title, start, end, isPrivate, description },
-          { new: true },
-        ).populate('createdBy')
-      } else {
-        const event = new EventModel({
-          title,
-          start,
-          end,
-          isPrivate,
-          description,
-          createdBy: userId,
-        })
-
-        savedEvent = await event.save().then((e) => e.populate('createdBy'))
-        savedEvent.url = `${URI}/sharedEvent/${savedEvent._id}`
-        await savedEvent.save({ timestamps: false })
+      if (!event) {
+        throw new GraphQLError('Event could not be found')
       }
 
-      return savedEvent
-    } catch (err) {
-      throw err
+      savedEvent = await EventModel.findOneAndUpdate(
+        { _id: id, createdBy: userId },
+        { title, start, end, isPrivate, description },
+        { new: true },
+      ).populate('createdBy')
+    } else {
+      const event = new EventModel({
+        title,
+        start,
+        end,
+        isPrivate,
+        description,
+        createdBy: userId,
+      })
+
+      savedEvent = await event.save().then((e) => e.populate('createdBy'))
+      savedEvent.url = `${URI}/sharedEvent/${savedEvent._id}`
+      await savedEvent.save({ timestamps: false })
     }
+
+    return savedEvent
   },
-  deleteEvent: async ({ id }, { isAuthorized, userId }) => {
+  deleteEvent: async (
+    { id }: { id: string },
+    { isAuthorized, userId }: IAuthParams,
+  ) => {
     if (!isAuthorized) {
       throw new GraphQLError('Unauthenticated')
     }
@@ -164,18 +168,14 @@ export const Events = {
       throw new GraphQLError('Unauthenticated')
     }
 
-    try {
-      const event = await EventModel.findOne({ _id: id, createdBy: userId })
+    const event = await EventModel.findOne({ _id: id, createdBy: userId })
 
-      if (!event) {
-        throw new Error('Event could not be found')
-      }
-
-      await EventModel.deleteOne({ _id: id, createdBy: userId })
-
-      return true
-    } catch (err) {
-      throw err
+    if (!event) {
+      throw new Error('Event could not be found')
     }
+
+    await EventModel.deleteOne({ _id: id, createdBy: userId })
+
+    return true
   },
 }

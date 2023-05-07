@@ -10,8 +10,8 @@
     "start:server": "cd api && ts-node-dev --respawn --transpile-only ./index.ts && wait-on tcp:4000",
     "start:web": "react-scripts start",
     "prepare": "husky install",
-    "lint": "eslint 'src/**/*.{js,jsx,ts,tsx,json}'",
-    "lint:fix": "eslint --fix 'src/**/*.{js,jsx,ts,tsx,json}'",
+    "lint": "eslint 'src/**/*.{js,jsx,ts,tsx,json}' 'api/**/*.{js,ts}'",
+    "lint:fix": "eslint --fix 'src/**/*.{js,jsx,ts,tsx,json}' 'api/**/*.{js,ts}'",
     "format": "prettier --write \"./**/*.{js,jsx,css,tsx,ts,json,md,yml}\" --config ./.prettierrc",
     "codegen": "graphql-codegen --config codegen.yml -r dotenv/config"
   },
@@ -20,7 +20,7 @@
     "node": ">=16.0.0 <19.0.0"
   },
   "dependencies": {
-    "@apollo/server": "^4.4.1",
+    "@apollo/server": "^4.7.1",
     "@fullcalendar/core": "^6.1.5",
     "@fullcalendar/daygrid": "^6.1.4",
     "@fullcalendar/interaction": "^6.1.4",
@@ -78,6 +78,7 @@
     "@types/cookie-parser": "^1.4.2",
     "@types/cors": "^2.8.13",
     "@types/express": "^4.17.15",
+    "@types/express-sslify": "^1.2.2",
     "@types/graphql": "^14.5.0",
     "@types/jest": "^29.4.0",
     "@types/jquery": "^3.5.16",

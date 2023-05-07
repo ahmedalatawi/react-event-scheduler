@@ -1,4 +1,5 @@
 {
+  "extends": "../tsconfig.json",
   "compilerOptions": {
     "module": "commonjs",
     "esModuleInterop": true,
@@ -6,6 +7,5 @@
     "moduleResolution": "node",
     "noUnusedLocals": false
   }
-  //"include": ["graphql/**/*", "models/**/*", "utils/**/*", "server.ts"]
-  //"include": ["server.ts"]
+  //"include": ["graphql/**/*", "models/**/*", "utils/**/*", "index.ts"]
 }

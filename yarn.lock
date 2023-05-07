@@ -81,7 +81,7 @@
     "@apollo/utils.keyvaluecache" "^2.1.0"
     "@apollo/utils.logger" "^2.0.0"
 
-"@apollo/server@^4.4.1":
+"@apollo/server@^4.7.1":
   version "4.7.1"
   resolved "https://registry.yarnpkg.com/@apollo/server/-/server-4.7.1.tgz#3063fb8ca4a5a94cdf15f219811ac50c3e097b9f"
   integrity sha512-rFxd8jsMlqEYzmhuxATaDAPoRH905R56FKP4TnZWaiDYJtjhHe3hxZOWl24V7s0dB52DIp6S/x+zjQX8fwD37w==
@@ -2913,6 +2913,13 @@
     "@types/qs" "*"
     "@types/range-parser" "*"
     "@types/send" "*"
+
+"@types/express-sslify@^1.2.2":
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/@types/express-sslify/-/express-sslify-1.2.2.tgz#99edbb635a4c13f6d17da59aff8a286792641f14"
+  integrity sha512-vXHxf4CWvwhzjj05dpSaD20EH7pt+snU7en6I6cuQHNbulm7FD60EML6TLxYZb+Oe85AJN2BD1XVX/nHqVFMaQ==
+  dependencies:
+    "@types/express" "*"
 
 "@types/express@*", "@types/express@^4.17.13", "@types/express@^4.17.15":
   version "4.17.17"
