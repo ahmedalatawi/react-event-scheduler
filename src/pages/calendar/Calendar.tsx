@@ -75,6 +75,7 @@ const Calendar: FC = () => {
   ] = useGetEventsLazyQuery({
     notifyOnNetworkStatusChange: true,
     onError: setServerError,
+    fetchPolicy: 'cache-and-network',
   })
 
   const { title, start, end, isPrivate, description } = event

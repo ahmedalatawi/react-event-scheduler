@@ -80,6 +80,7 @@ const SearchEvents: FC = () => {
       filter,
     },
     onError: setServerError,
+    fetchPolicy: 'cache-and-network',
   })
 
   const [saveEvent, { loading: saveEventLoading }] = useSaveEventMutation({
