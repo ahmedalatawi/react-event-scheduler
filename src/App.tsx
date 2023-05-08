@@ -15,6 +15,8 @@ const AppContainer = styled(Container)({
   minHeight: '100vh',
 })
 
+// test this comment
+
 function App() {
   const { auth, removeAuth } = useContext(AuthContext)
 
