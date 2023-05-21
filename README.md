@@ -40,10 +40,6 @@ Note that `graphql` schemas are generated on the frontend using [GraphQL Code Ge
 
 Next, run `yarn codegen` to re-generate the queries and mutations (Note: before you do this, make sure the server is up and running by either running `yarn start` or `yarn start:server`)
 
-[GraphQL Playground](https://github.com/graphql/graphql-playground) is a powerful GraphQL IDE enabling better (local) development workflows. It helps test your schemas locally. See image below:
-
-![](./images/graphql_playground.PNG)
-
 ## Run app locally
 
 > Make sure MongoDB is up and running
