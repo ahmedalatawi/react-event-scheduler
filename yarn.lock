@@ -3139,10 +3139,17 @@
     "@types/react" "*"
     "@types/react-bootstrap-table-next" "*"
 
-"@types/react-dom@^18.0.0", "@types/react-dom@^18.0.11":
+"@types/react-dom@^18.0.0":
   version "18.2.3"
   resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-18.2.3.tgz#2fe492bb0e67047b7b43e18166d8f50d44e0525e"
   integrity sha512-hxXEXWxFJXbY0LMj/T69mznqOZJXNtQMqVxIiirVAZnnpeYiD4zt+lPsgcr/cfWg2VLsxZ1y26vigG03prYB+Q==
+  dependencies:
+    "@types/react" "*"
+
+"@types/react-dom@^18.2.5":
+  version "18.2.5"
+  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-18.2.5.tgz#5c5f13548bda23cd98f50ca4a59107238bfe18f3"
+  integrity sha512-sRQsOS/sCLnpQhR4DSKGTtWFE3FZjpQa86KPVbhUqdYMRZ9FEFcfAytKhR/vUG2rH1oFbOOej6cuD7MFSobDRQ==
   dependencies:
     "@types/react" "*"
 
