@@ -66,15 +66,15 @@ const Card: FC<Props> = ({ card, onClick }) => {
           ) : null}
         </p>
 
-        <FacebookShareButton
+        <FacebookShareButtonStyled
           onClick={(e) => e.stopPropagation()}
           url={url ?? ''}
           className='card-link btn btn-outline-secondary'
         >
           <FacebookIcon size={32} round /> Share on Facebook
-        </FacebookShareButton>
+        </FacebookShareButtonStyled>
 
-        <TwitterShareButton
+        <TwitterShareButtonStyled
           onClick={(e) => e.stopPropagation()}
           className='card-link btn btn-outline-secondary'
           title={title}
@@ -82,11 +82,25 @@ const Card: FC<Props> = ({ card, onClick }) => {
           // hashtags={['hashtag1', 'hashtag2']}
         >
           <TwitterIcon size={32} round /> Share on Twitter
-        </TwitterShareButton>
+        </TwitterShareButtonStyled>
       </div>
     </StyledCard>
   )
 }
+
+const TwitterShareButtonStyled = styled(TwitterShareButton)`
+  &:hover {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+  }
+`
+
+const FacebookShareButtonStyled = styled(FacebookShareButton)`
+  &:hover {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+  }
+`
 
 export const StyledCard = styled.div.attrs(() => ({
   className: 'card',
