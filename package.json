@@ -22,7 +22,7 @@
   "dependencies": {
     "@apollo/server": "^4.7.4",
     "@fullcalendar/core": "^6.1.5",
-    "@fullcalendar/daygrid": "^6.1.4",
+    "@fullcalendar/daygrid": "^6.1.9",
     "@fullcalendar/interaction": "^6.1.4",
     "@fullcalendar/react": "^6.1.4",
     "@fullcalendar/timegrid": "^6.1.4",
