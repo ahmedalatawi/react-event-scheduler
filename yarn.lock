@@ -1469,10 +1469,10 @@
   resolved "https://registry.yarnpkg.com/@fullcalendar/interaction/-/interaction-6.1.6.tgz#9fe3f84a0b62e37013a5d842c8173fd5f72eb39a"
   integrity sha512-6TjKbDHOkF3C9hIzIhxiTX5FCmNcaCeRk5CeKXHZiIi1Y8gQwIkUkwcZps5uj7PIvb3wNVw8FbF+RNRoloPUqQ==
 
-"@fullcalendar/react@^6.1.4":
-  version "6.1.6"
-  resolved "https://registry.yarnpkg.com/@fullcalendar/react/-/react-6.1.6.tgz#2fc0161bdc79aaa3cece12189bd87ea926abff33"
-  integrity sha512-Ib1jl+4SwlyzM5JsVkhBEoB45hL11sQaN9O600XAa39lK2vSL4d0+ZTBSsBBdmezcHd/iECFk64jS0e3agGPVg==
+"@fullcalendar/react@^6.1.9":
+  version "6.1.9"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/react/-/react-6.1.9.tgz#280fd543901d792c19b50f363c55cc3068917299"
+  integrity sha512-ioxu0V++pYz2u/N1LL1V8DkMyiKGRun0gMAll2tQz3Kzi3r9pTwncGKRb1zO8h0e+TrInU08ywk/l5lBwp7eog==
 
 "@fullcalendar/timegrid@^6.1.4":
   version "6.1.6"
