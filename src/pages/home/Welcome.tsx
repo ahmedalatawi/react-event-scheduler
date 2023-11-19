@@ -18,28 +18,6 @@ const Welcome: FC = () => {
             Welcome to Event Scheduler App
           </h4>
           <br />
-          <p>
-            <a
-              title='GDPR-compliant Web Analytics'
-              href='https://clicky.com/101370668'
-            >
-              <img
-                alt='Clicky'
-                src='//static.getclicky.com/media/links/badge.gif'
-              />
-            </a>
-            <script async src='//static.getclicky.com/101370668.js'></script>
-            <noscript>
-              <p>
-                <img
-                  alt='Clicky'
-                  width='1'
-                  height='1'
-                  src='//in.getclicky.com/101370668ns.gif'
-                />
-              </p>
-            </noscript>
-          </p>
           <div style={{ fontSize: '1.2rem' }}>
             <Row>
               <Col xs={6} md={6}>
