@@ -11,6 +11,7 @@ import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css'
 
 import reportWebVitals from './reportWebVitals'
 import AuthProvider from './store/AuthProvider'
+import { BrowserRouter } from 'react-router-dom'
 
 // Put any other imports below so that CSS from your
 // components takes precedence over default styles.
@@ -22,7 +23,9 @@ const root = createRoot(container!)
 root.render(
   <React.StrictMode>
     <AuthProvider>
-      <App />
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
     </AuthProvider>
   </React.StrictMode>,
 )

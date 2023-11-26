@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import AddEvent from './pages/events/AddEvent/AddEvent'
 import Calendar from './pages/calendar/Calendar'
 import MyEvents from './pages/user/MyAccount/MyEvents/MyEvents'
@@ -12,7 +12,7 @@ import SharedEvent from './pages/events/ShareEvent/SharedEvent'
 import Welcome from './pages/home/Welcome'
 
 const AppRoutes: FC = () => (
-  <BrowserRouter>
+  <>
     <Navbar />
 
     <Routes>
@@ -26,7 +26,7 @@ const AppRoutes: FC = () => (
       <Route path='/user/:id/events' element={<MyEvents />} />
       <Route path='/user/:id/settings' element={<MySettings />} />
     </Routes>
-  </BrowserRouter>
+  </>
 )
 
 export default AppRoutes

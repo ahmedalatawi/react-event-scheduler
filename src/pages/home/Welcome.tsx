@@ -1,65 +1,87 @@
-import { FC } from 'react'
-import { Col, Row } from 'react-bootstrap'
 import styled from 'styled-components'
 import WelcomeImage from '../../assests/images/mtb.jpg'
+import { Link } from 'react-router-dom'
 
-const ImageContainer = styled(Col)({
-  backgroundSize: 'cover',
-  padding: 20,
-  backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url(${WelcomeImage})`,
-})
+const Container = styled.main`
+  &.welcome {
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    position: absolute;
+    margin: 0.8rem;
+    color: var(--color-light--2);
+    background-image: linear-gradient(
+        rgba(36, 42, 46, 0.8),
+        rgba(36, 42, 46, 0.8)
+      ),
+      url(${WelcomeImage});
+    background-size: cover;
+    background-position: center;
+    padding: 2.5rem 5rem;
+  }
 
-const Welcome: FC = () => {
+  &.welcome section {
+    display: flex;
+    flex-direction: column;
+    height: 85%;
+    align-items: center;
+    justify-content: center;
+    gap: 2.5rem;
+    text-align: center;
+  }
+
+  &.welcome h1 {
+    font-size: 3.4rem;
+    font-size: 3.4vw;
+    line-height: 1.3;
+  }
+
+  &.welcome h2 {
+    width: 90%;
+    font-size: 2vh;
+    color: var(--color-light--1);
+    font-size: 1.5rem;
+    font-size: 1.5vw;
+    line-height: 1.4;
+  }
+
+  .btn:link,
+  .btn:visited {
+    display: inline-block;
+    background-color: var(--color-brand--2);
+    color: var(--color-dark--1);
+    text-transform: uppercase;
+    text-decoration: none;
+    font-size: 1.2rem;
+    font-size: 1.2vw;
+    font-weight: 600;
+    padding: 0.8rem 2rem;
+    border-radius: 5px;
+  }
+`
+
+function Welcome() {
   return (
-    <div>
-      <Row style={{ color: 'white' }}>
-        <ImageContainer xs={12} md={12}>
-          <h4 style={{ textTransform: 'uppercase', fontSize: '1.7rem' }}>
-            Welcome to Event Scheduler App
-          </h4>
+    <Container className='welcome'>
+      <section>
+        <h1>
+          Add and share events with family & friends.
           <br />
-          <div style={{ fontSize: '1.2rem' }}>
-            <Row>
-              <Col xs={6} md={6}>
-                <p>
-                  Event Scheduler is a fullstack React app that allows users to
-                  create events. An event can be anything, such as a sport
-                  event, team meeting, party announcement, personal
-                  advertisement, etc.
-                  <br />
-                  An event consists of title, start and end date/time, and
-                  description. Events can also be shared on FB or Twitter. All
-                  events are public by default (visible to everyone). They can
-                  also be private (only visible to you) by checking the private
-                  checkbox.
-                </p>
-              </Col>
-            </Row>
-            <br />
-            <h5>Tech Stack</h5>
-            <strong>Frontend</strong>
-            <ul>
-              <li>React (react hooks)</li>
-              <li>Typescript</li>
-              <li>Styled components</li>
-              <li>Bootstrap 5</li>
-              <li>React bootstrap</li>
-              <li>JS cookie</li>
-              <li>Apollo client</li>
-            </ul>
-
-            <strong>Backend</strong>
-            <ul>
-              <li>NodeJS with Express</li>
-              <li>Apollo server express</li>
-              <li>Typescript</li>
-              <li>JSON web token</li>
-              <li>MongoDB with mongoose</li>
-            </ul>
-          </div>
-        </ImageContainer>
-      </Row>
-    </div>
+          Event Scheduler keeps track of your events.
+        </h1>
+        <h2>
+          An event booking/scheduling system designed to help you schedule,
+          manage, and run events. it aims to help and improvement user&apos;s
+          experience by helping you stay organized, keeping relevant information
+          right where you need it, and allowing you to do things like share
+          events on FB & Twitter.
+        </h2>
+        <Link to='/addEvent' className='btn'>
+          Start adding events now
+        </Link>
+      </section>
+    </Container>
   )
 }
 

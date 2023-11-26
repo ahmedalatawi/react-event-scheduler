@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, Fragment, useContext, useState } from 'react'
+import { ChangeEvent, Fragment, useContext, useState } from 'react'
 import { MdSaveAlt } from 'react-icons/md'
 import EventBody, { EventType } from '../../../components/EventBody/EventBody'
 import Alert from '../../../components/UI/Alert/Alert'
@@ -19,7 +19,7 @@ const initEvent = {
   description: '',
 }
 
-const AddEvent: FC = () => {
+function AddEvent() {
   const [event, setEvent] = useState<EventType>({ ...initEvent })
   const [resetForm, setResetForm] = useState<boolean>(false)
   const [disableSaveBtn, setDisableSaveBtn] = useState<boolean>(true)
@@ -90,7 +90,7 @@ const CustomAlert = ({
 }) =>
   !auth ? (
     <Alert
-      msg='You must log in to be able to add events.'
+      msg='You must login to be able to add events.'
       type='warning'
       dismissible={false}
     />

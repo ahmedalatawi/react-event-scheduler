@@ -1,4 +1,4 @@
-import { useState, useRef, Fragment, useContext, useEffect, FC } from 'react'
+import { useState, useRef, useContext, useEffect, Fragment } from 'react'
 import Modal from '../../components/UI/Modal/Modal'
 import { EventClickArg } from '@fullcalendar/core'
 import FullCalendar from '@fullcalendar/react'
@@ -31,7 +31,7 @@ interface ModalBodyType {
   onValidate: (valid: boolean) => void
 }
 
-const Calendar: FC = () => {
+function Calendar() {
   const [modal, setModal] = useState({
     title: '',
     show: false,
@@ -353,7 +353,7 @@ const ModalBody = ({
   <div>
     {!auth && (
       <Alert
-        msg='You must log in to be able to add or edit events.'
+        msg='You must login to be able to add or edit events.'
         type='warning'
         dismissible={false}
       />

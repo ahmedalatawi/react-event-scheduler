@@ -1,5 +1,5 @@
 import { ApolloError, NetworkStatus } from '@apollo/client'
-import { ChangeEvent, FC, useContext, useEffect, useState } from 'react'
+import { ChangeEvent, useContext, useEffect, useState } from 'react'
 import useDebounce from '../../../hooks/useDebounce'
 import Spinner from '../../../components/UI/Spinner/Spinner'
 import Card, { CardType } from '../../../components/UI/Card/Card'
@@ -23,7 +23,7 @@ import { removeEvent } from '../../../utils/apolloCache'
 
 const EVENTS_PER_PAGE = 15
 
-const SearchEvents: FC = () => {
+function SearchEvents() {
   const [modal, setModal] = useState({
     title: '',
     show: false,
