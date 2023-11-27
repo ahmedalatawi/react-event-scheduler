@@ -25,6 +25,16 @@ jobs:
       - name: Build project
         run: yarn run build --if-present
 
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-artifact
+          path: |
+            build
+            node_modules
+            package.json
+            yarn.lock
+
   lint:
     needs: setup
     runs-on: ubuntu-latest
@@ -44,14 +54,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Run tests
-        run: yarn test
+        run: yarn test -- --coverage && bash <(curl -s https://codecov.io/bash)
 
   coverage:
     needs: setup
     runs-on: ubuntu-latest
     steps:
       - name: Upload coverage reports to Codecov
-        run: yarn test -- --coverage && bash <(curl -s https://codecov.io/bash)
         uses: codecov/codecov-action@v3
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
