@@ -25,16 +25,6 @@ jobs:
       - name: Build project
         run: yarn run build --if-present
 
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: build-artifact
-          path: |
-            build
-            node_modules
-            package.json
-            yarn.lock
-
   lint:
     needs: setup
     runs-on: ubuntu-latest
