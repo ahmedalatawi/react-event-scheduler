@@ -9,105 +9,50 @@ on:
 jobs:
   setup:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [10, 12, 16]
+
     steps:
       - name: checkout
-        uses: actions/checkout@main
+        uses: actions/checkout@v2
 
-      - uses: actions/setup-node@v1
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
         with:
-          node-version: '16'
+          node-version: ${{ matrix.node-version }}
 
-      - name: cache package-lock.json
-        uses: actions/cache@v2
-        with:
-          path: package-temp-dir
-          key: lock-${{ github.sha }}
+      - name: Install project
+        run: yarn install
 
-      - name: create package-lock.json
-        run: npm i --package-lock-only
-
-      - name: hack for singe file
-        run: |
-          if [ ! -d "package-temp-dir" ]; then
-            mkdir package-temp-dir
-          fi
-          cp package-lock.json package-temp-dir
-      - name: cache node_modules
-        id: node_modules_cache_id
-        uses: actions/cache@v2
-        with:
-          path: node_modules
-          key: node_modules-${{ hashFiles('**/package-temp-dir/package-lock.json') }}
-
-      - name: install
-        if: steps.node_modules_cache_id.outputs.cache-hit != 'true'
-        run: npm ci
+      - name: Build project
+        run: yarn run build --if-present
 
   lint:
     runs-on: ubuntu-latest
     steps:
-      - name: checkout
-        uses: actions/checkout@main
-
-      - name: restore cache from package-lock.json
-        uses: actions/cache@v2
-        with:
-          path: package-temp-dir
-          key: lock-${{ github.sha }}
-
-      - name: restore cache from node_modules
-        uses: actions/cache@v2
-        with:
-          path: node_modules
-          key: node_modules-${{ hashFiles('**/package-temp-dir/package-lock.json') }}
-
-      - name: lint
-        run: npm run lint
-
+      - name: Run lint
+        run: yarn lint
     needs: setup
 
   compile:
     runs-on: ubuntu-latest
     steps:
-      - name: checkout
-        uses: actions/checkout@main
-
-      - name: restore cache from package-lock.json
-        uses: actions/cache@v2
-        with:
-          path: package-temp-dir
-          key: lock-${{ github.sha }}
-
-      - name: restore cache from node_modules
-        uses: actions/cache@v2
-        with:
-          path: node_modules
-          key: node_modules-${{ hashFiles('**/package-temp-dir/package-lock.json') }}
-
-      - name: compile
-        run: npm run compile
-
+      - name: Run tsc
+        uses: icrawl/action-tsc@v1
     needs: setup
 
   coverage:
     runs-on: ubuntu-latest
     steps:
-      - name: checkout
-        uses: actions/checkout@main
+      - name: Run tests
+        run: yarn test
 
-      - name: restore cache from package-lock.json
-        uses: actions/cache@v2
-        with:
-          path: package-temp-dir
-          key: lock-${{ github.sha }}
+        - name: Coverage
+        run: yarn test -- --coverage && bash <(curl -s https://codecov.io/bash)
 
-      - name: restore cache from node_modules
-        uses: actions/cache@v2
-        with:
-          path: node_modules
-          key: node_modules-${{ hashFiles('**/package-temp-dir/package-lock.json') }}
-
-      - name: coverage
-        run: npm test -- --coverage && bash <(curl -s https://codecov.io/bash)
-
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
     needs: setup
