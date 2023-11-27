@@ -9,7 +9,7 @@ on:
 jobs:
   setup:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -26,30 +26,32 @@ jobs:
         run: yarn run build --if-present
 
   lint:
+    needs: setup
     runs-on: ubuntu-latest
     steps:
       - name: Run lint
         run: yarn lint
-    needs: setup
 
   compile:
+    needs: setup
     runs-on: ubuntu-latest
     steps:
       - name: Run tsc
         uses: icrawl/action-tsc@v1
-    needs: setup
 
-  coverage:
+  test:
+    needs: setup
     runs-on: ubuntu-latest
     steps:
       - name: Run tests
         run: yarn test
 
-      - name: Coverage
-        run: yarn test -- --coverage && bash <(curl -s https://codecov.io/bash)
-
+  coverage:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
       - name: Upload coverage reports to Codecov
+        run: yarn test -- --coverage && bash <(curl -s https://codecov.io/bash)
         uses: codecov/codecov-action@v3
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-    needs: setup
