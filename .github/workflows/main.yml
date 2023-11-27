@@ -26,11 +26,15 @@ jobs:
         run: yarn run build --if-present
 
   lint:
-    needs: setup
     runs-on: ubuntu-latest
     steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
       - name: Run lint
         run: yarn lint
+
+    needs: setup
 
   compile:
     needs: setup
