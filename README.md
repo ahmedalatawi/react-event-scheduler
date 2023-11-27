@@ -1,6 +1,10 @@
 # React Event Scheduler App
 
-<meta name="google-site-verification" content="wfRpVuXecqgy4n5-I5NA8qvHOY4gn6mmVvSK3Sc2-uk" />
+<html lang="en">
+   <head>
+      <meta name="google-site-verification" content="wfRpVuXecqgy4n5-I5NA8qvHOY4gn6mmVvSK3Sc2-uk" />
+   </head>
+</html>
 
 ![](https://github.com/AhmedAlatawi/react-event-scheduler/actions/workflows/main.yml/badge.svg)
 [![codecov](https://codecov.io/gh/AhmedAlatawi/react-event-scheduler/branch/master/graph/badge.svg?token=ZQZQZQZQZQ)](https://codecov.io/gh/AhmedAlatawi/react-event-scheduler)
