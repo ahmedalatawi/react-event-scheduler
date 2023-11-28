@@ -26,15 +26,11 @@ jobs:
         run: yarn run build --if-present
 
   lint:
+    needs: setup
     runs-on: ubuntu-latest
     steps:
-      - name: checkout
-        uses: actions/checkout@v2
-
       - name: Run lint
         run: yarn lint
-
-    needs: setup
 
   compile:
     needs: setup
@@ -47,11 +43,11 @@ jobs:
     needs: setup
     runs-on: ubuntu-latest
     steps:
-      - name: Run tests
-        run: yarn test -- --coverage && bash <(curl -s https://codecov.io/bash)
+      - name: Run tests & coverage
+        run: yarn test --coverage && bash <(curl -s https://codecov.io/bash)
 
   coverage:
-    needs: setup
+    needs: [setup, test]
     runs-on: ubuntu-latest
     steps:
       - name: Upload coverage reports to Codecov
