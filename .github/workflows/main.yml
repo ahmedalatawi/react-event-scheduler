@@ -36,7 +36,6 @@ jobs:
           name: build-artifact
           path: |
             build
-            yarn.lock
 
   lint:
     needs: setup
