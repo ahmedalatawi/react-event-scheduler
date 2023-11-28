@@ -34,7 +34,7 @@ jobs:
         uses: ./.github/actions/upload-artifact
         with:
           name: build-artifact
-          path: ${{ inputs.path }}
+          path: build
 
   lint:
     needs: setup
@@ -44,6 +44,7 @@ jobs:
         uses: ./.github/actions/download-artifact
         with:
           name: build-artifact
+          path: build
 
       - name: Run lint
         run: yarn lint
