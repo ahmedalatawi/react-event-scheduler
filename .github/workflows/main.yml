@@ -28,10 +28,11 @@ jobs:
       - name: Delete old artifacts
         uses: geekyeggo/delete-artifact@v2
         with:
-          name: |
-            artifact-*
-            binary-file
-            output
+          path: |
+            build
+            node_modules
+            package.json
+            yarn.lock
 
       - name: Upload build artifact
         uses: ./.github/actions/upload-artifact
