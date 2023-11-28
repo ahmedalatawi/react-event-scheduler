@@ -8,8 +8,8 @@ inputs:
     required: true
   path:
     description: Destination path
-    required: true
-    default: build
+    required: false
+    default: .
 
 runs:
   using: composite
