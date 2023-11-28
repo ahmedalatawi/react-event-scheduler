@@ -32,7 +32,6 @@ jobs:
             artifact-*
             binary-file
             output
-            build-artifact
 
       - name: Upload build artifact
         uses: ./.github/actions/upload-artifact
