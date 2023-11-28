@@ -25,24 +25,14 @@ jobs:
       - name: Build project
         run: yarn run build --if-present
 
-      - name: Delete Old Artifacts
-        uses: actions/github-script@v6
-        id: artifact
+      - name: Delete old artifacts
+        uses: geekyeggo/delete-artifact@v2
         with:
-          script: |
-            const res = await github.rest.actions.listArtifactsForRepo({
-               owner: context.repo.owner,
-               repo: context.repo.repo,
-            })
-
-            res.data.artifacts
-              .forEach(({ id }) => {
-                github.rest.actions.deleteArtifact({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  artifact_id: id,
-               })
-            })
+          name: |
+            artifact-*
+            binary-file
+            output
+            build-artifact
 
       - name: Upload build artifact
         uses: ./.github/actions/upload-artifact
