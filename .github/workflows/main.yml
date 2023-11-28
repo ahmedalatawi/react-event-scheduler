@@ -41,7 +41,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download build artifact
-        uses: ./.github/actions/download-artifact
+        uses: actions/download-artifact@v3
         with:
           name: build-artifact
 
