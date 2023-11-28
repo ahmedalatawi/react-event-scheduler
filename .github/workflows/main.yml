@@ -34,8 +34,7 @@ jobs:
         uses: ./.github/actions/upload-artifact
         with:
           name: build-artifact
-          path: |
-            build
+          path: build
 
   lint:
     needs: setup
