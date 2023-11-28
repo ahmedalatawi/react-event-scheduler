@@ -25,14 +25,10 @@ jobs:
       - name: Build project
         run: yarn run build --if-present
 
-      - name: Delete old artifacts
+      - name: Delete build artifact
         uses: geekyeggo/delete-artifact@v2
         with:
-          path: |
-            build
-            node_modules
-            package.json
-            yarn.lock
+          name: build-artifact
 
       - name: Upload build artifact
         uses: ./.github/actions/upload-artifact
