@@ -25,10 +25,22 @@ jobs:
       - name: Build project
         run: yarn run build --if-present
 
+      - name: Upload build artifact
+        uses: actions/checkout@v3
+        uses: actions/upload-artifact@v3
+        with:
+          name: setup-checkout-${{ github.run_id }}
+          path: ${{ github.workspace }}/**/*
+
   lint:
     needs: setup
     runs-on: ubuntu-latest
     steps:
+      - name: Get Cached Checkout
+        uses: actions/download-artifact@v3
+        with:
+          name: setup-checkout-${{ github.run_id }}
+
       - name: Run lint
         run: yarn lint
 
@@ -36,6 +48,11 @@ jobs:
     needs: setup
     runs-on: ubuntu-latest
     steps:
+      - name: Get Cached Checkout
+        uses: actions/download-artifact@v3
+        with:
+          name: setup-checkout-${{ github.run_id }}
+
       - name: Run tsc
         uses: icrawl/action-tsc@v1
 
@@ -43,6 +60,11 @@ jobs:
     needs: setup
     runs-on: ubuntu-latest
     steps:
+      - name: Get Cached Checkout
+        uses: actions/download-artifact@v3
+        with:
+          name: setup-checkout-${{ github.run_id }}
+
       - name: Run tests & coverage
         run: yarn test --coverage && bash <(curl -s https://codecov.io/bash)
 
@@ -50,6 +72,11 @@ jobs:
     needs: [setup, test]
     runs-on: ubuntu-latest
     steps:
+      - name: Get Cached Checkout
+        uses: actions/download-artifact@v3
+        with:
+          name: setup-checkout-${{ github.run_id }}
+          
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
         env:
