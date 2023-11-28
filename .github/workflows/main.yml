@@ -35,7 +35,11 @@ jobs:
         uses: ./.github/actions/upload-artifact
         with:
           name: build-artifact
-          path: build
+          path: |
+            build
+            node_modules
+            package.json
+            yarn.lock
 
   lint:
     name: Lint
