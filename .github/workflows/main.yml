@@ -36,7 +36,6 @@ jobs:
           name: build-artifact
           path: |
             build
-            node_modules
             package.json
             yarn.lock
 
