@@ -6,7 +6,7 @@
     "start": "run-p --race start:server start:web",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "test:coverage": "yarn test --watchAll=false --coverage",
+    "test:coverage": "react-scripts test --watchAll=false --coverage",
     "eject": "react-scripts eject",
     "start:server": "cd api && ts-node-dev --respawn --transpile-only ./index.ts && wait-on tcp:4000",
     "start:web": "react-scripts start",
