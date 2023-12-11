@@ -22,6 +22,8 @@ import toast from 'react-hot-toast'
 import { removeEvent } from '../../utils/apolloCache'
 import client from '../../apollo'
 import { DateTime } from 'luxon'
+import { Button } from 'react-bootstrap'
+import LoginContainer from '../user/LoginContainer/LoginContainer'
 
 interface ModalBodyType {
   auth: IAuth | null
@@ -29,6 +31,7 @@ interface ModalBodyType {
   disableEdit: boolean
   onChangeValue: (prop: string, value: string | boolean) => void
   onValidate: (valid: boolean) => void
+  onLogin: () => void
 }
 
 function Calendar() {
@@ -53,6 +56,7 @@ function Calendar() {
     disableDeleteBtn: false,
   })
 
+  const [showLoginModal, setShowLoginModal] = useState(false)
   const [disableEdit, setDisableEdit] = useState<boolean>(false)
   const [serverError, setServerError] = useState<ApolloError | null>(null)
   const [calendarReady, setCalendarReady] = useState<boolean>(false)
@@ -275,8 +279,19 @@ function Calendar() {
     setEvent({ ...event, [prop]: value })
   }
 
+  const handleShowLoginModal = (flag: boolean) => {
+    setShowLoginModal(flag)
+    setModal({ ...modal, show: false })
+  }
+
   return (
     <Fragment>
+      {showLoginModal && (
+        <LoginContainer
+          view={'Login'}
+          onClose={() => handleShowLoginModal(false)}
+        />
+      )}
       <ServerErrorAlert
         error={serverError}
         onClose={() => setServerError(null)}
@@ -307,6 +322,7 @@ function Calendar() {
           onValidate={(valid) =>
             setActionBtns({ ...actionBtns, disableSaveBtn: !valid })
           }
+          onLogin={() => handleShowLoginModal(true)}
         />
       </Modal>
 
@@ -349,6 +365,7 @@ const ModalBody = ({
   disableEdit,
   onChangeValue,
   onValidate,
+  onLogin,
 }: ModalBodyType) => (
   <div>
     {!auth && (
@@ -356,6 +373,11 @@ const ModalBody = ({
         msg='You must login to be able to add or edit events.'
         type='warning'
         dismissible={false}
+        btn={
+          <Button variant='primary' size='sm' type='button' onClick={onLogin}>
+            Login
+          </Button>
+        }
       />
     )}
     <EventBody

@@ -101,7 +101,7 @@ const MainNavbar: FC = () => {
                 Calendar
               </NavLink>
             </Nav>
-            <div className='me-2'>
+            <div className='me-4'>
               <Switch
                 checked={isDark}
                 onChange={(isDark) => {
@@ -117,14 +117,14 @@ const MainNavbar: FC = () => {
               {!auth ? (
                 <Fragment>
                   <button
-                    className='btn btn me-2'
+                    className='btn btn-light me-2'
                     type='button'
                     onClick={handleLoginBtnClick}
                   >
                     Login
                   </button>
                   <button
-                    className='btn btn-outline-dark'
+                    className='btn btn-primary'
                     type='button'
                     onClick={handleSignupBtnClick}
                   >

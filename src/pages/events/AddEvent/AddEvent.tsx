@@ -1,6 +1,6 @@
 import { ChangeEvent, Fragment, useContext, useState } from 'react'
 import { MdSaveAlt } from 'react-icons/md'
-import EventBody, { EventType } from '../../../components/EventBody/EventBody'
+import EventBody from '../../../components/EventBody/EventBody'
 import Alert from '../../../components/UI/Alert/Alert'
 import AuthContext from '../../../store/auth-context'
 import {
@@ -10,6 +10,8 @@ import {
 import { IAuth } from '../../../types'
 import { ApolloError } from '@apollo/client'
 import { BtnSpinner } from '../../../components/UI/BtnSpinner/BtnSpinner'
+import { Button } from 'react-bootstrap'
+import LoginContainer from '../../user/LoginContainer/LoginContainer'
 
 const initEvent = {
   title: '',
@@ -20,9 +22,10 @@ const initEvent = {
 }
 
 function AddEvent() {
-  const [event, setEvent] = useState<EventType>({ ...initEvent })
-  const [resetForm, setResetForm] = useState<boolean>(false)
-  const [disableSaveBtn, setDisableSaveBtn] = useState<boolean>(true)
+  const [showModal, setShowModal] = useState(false)
+  const [event, setEvent] = useState({ ...initEvent })
+  const [resetForm, setResetForm] = useState(false)
+  const [disableSaveBtn, setDisableSaveBtn] = useState(true)
 
   const { title, start, end, isPrivate, description } = event
 
@@ -51,7 +54,16 @@ function AddEvent() {
 
   return (
     <Fragment>
-      <CustomAlert auth={auth} data={data} error={error} onClose={reset} />
+      {showModal && (
+        <LoginContainer view={'Login'} onClose={() => setShowModal(false)} />
+      )}
+      <CustomAlert
+        auth={auth}
+        data={data}
+        error={error}
+        onClose={reset}
+        onLogin={() => setShowModal(true)}
+      />
       <form className='row g-3' onSubmit={handleOnSubmit}>
         <div className='col-12'>
           <EventBody
@@ -82,17 +94,24 @@ const CustomAlert = ({
   data,
   error,
   onClose,
+  onLogin,
 }: {
   auth: IAuth | null
   data: SaveEventMutation | null | undefined
   error: ApolloError | undefined
   onClose: () => void
+  onLogin: () => void
 }) =>
   !auth ? (
     <Alert
       msg='You must login to be able to add events.'
       type='warning'
       dismissible={false}
+      btn={
+        <Button variant='primary' size='sm' type='button' onClick={onLogin}>
+          Login
+        </Button>
+      }
     />
   ) : data ? (
     <Alert
