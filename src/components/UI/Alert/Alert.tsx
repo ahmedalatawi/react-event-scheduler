@@ -14,20 +14,31 @@ type Props = {
 
 const Alert: FC<Props> = ({ type, msg, dismissible = true, btn, onClose }) => {
   return (
-    <BootstrapAlert variant={type} onClose={onClose} dismissible={dismissible}>
+    <AlertContent variant={type} onClose={onClose} dismissible={dismissible}>
       {type === 'success' ? (
         <BsCheck2Circle size={25} />
       ) : (
         <IoWarningOutline size={25} />
-      )}{' '}
+      )}
       <span>{msg}</span>
-      {btn && <StyledButton>{btn}</StyledButton>}
-    </BootstrapAlert>
+      {btn && <span>{btn}</span>}
+    </AlertContent>
   )
 }
 
-const StyledButton = styled.span`
-  padding-left: 12px;
+const AlertContent = styled(BootstrapAlert)`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  column-gap: 4px;
+  flex-wrap: nowrap;
+  padding: 8px;
+
+  &.alert-dismissible .btn-close {
+    padding: 0;
+    top: 12px;
+    right: 6px;
+  }
 `
 
 export default React.memo(Alert)

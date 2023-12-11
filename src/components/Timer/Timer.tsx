@@ -7,12 +7,12 @@ type Props = {
 
 const Timer: FC<Props> = ({ seconds, onTimeout }) => {
   const [timeLeft, setTimeLeft] = useState<number>(seconds)
-  const intervalRef = useRef<number | undefined | NodeJS.Timer>()
+  const intervalRef = useRef()
 
   useEffect(() => {
     intervalRef.current = setInterval(() => {
       setTimeLeft((t) => t - 1)
-    }, 1000)
+    }, 1000) as unknown as undefined
 
     return () => clearInterval(intervalRef.current)
   }, [])
