@@ -68,7 +68,7 @@
     "@graphql-codegen/introspection": "3.0.1",
     "@graphql-codegen/typescript": "3.0.1",
     "@graphql-codegen/typescript-operations": "4.2.0",
-    "@graphql-codegen/typescript-react-apollo": "3.3.7",
+    "@graphql-codegen/typescript-react-apollo": "4.3.0",
     "@graphql-codegen/typescript-resolvers": "4.0.4",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",
