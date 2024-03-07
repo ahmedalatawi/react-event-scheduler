@@ -20,6 +20,7 @@ import { dateToTitle } from '../../../utils/dateTransforms'
 import { ServerErrorAlert } from '../../../components/ServerErrorAlert/ServerErrorAlert'
 import toast from 'react-hot-toast'
 import { removeEvent } from '../../../utils/apolloCache'
+import { DateTime } from 'luxon'
 
 const EVENTS_PER_PAGE = 15
 
@@ -112,10 +113,10 @@ function SearchEvents() {
   }
 
   const getExSubTitle = (endTime: string) => {
-    const today = new Date()
-    const endDate = new Date(endTime)
+    const today = DateTime.now()
+    const endDate = DateTime.fromISO(endTime)
 
-    return endDate.getTime() < today.getTime() ? 'Expired' : ''
+    return endDate < today ? 'Expired' : 'Active'
   }
 
   const clickEventHandler = (event: EventFull) => {

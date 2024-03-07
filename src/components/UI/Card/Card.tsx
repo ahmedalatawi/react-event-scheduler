@@ -43,7 +43,10 @@ const Card: FC<Props> = ({ card, onClick }) => {
     <StyledCard onClick={onClick}>
       <div className='card-body'>
         <h5 className='card-title'>
-          {title} {exSubTitle && <StyledSubTitle>{exSubTitle}</StyledSubTitle>}{' '}
+          {title}{' '}
+          <StyledSubTitle type={exSubTitle === 'Active' ? 'info' : 'warning'}>
+            {exSubTitle}
+          </StyledSubTitle>{' '}
           {isPrivate && <StyledPrivateBadge>Private</StyledPrivateBadge>}
         </h5>
         <h6 className='card-subtitle mb-2 text-muted'>{subtitle}</h6>
@@ -111,9 +114,13 @@ export const StyledCard = styled.div.attrs(() => ({
   }
 `
 
-export const StyledSubTitle = styled.span.attrs(() => ({
-  className: 'badge rounded-pill bg-warning text-dark',
-}))`
+export const StyledSubTitle = styled.span.attrs<{ type: string }>(
+  ({ type }) => ({
+    className: `badge rounded-pill bg-${type} ${
+      type === 'info' ? 'text-light' : 'text-dark'
+    }`,
+  }),
+)<{ type: string }>`
   font-size: small;
   font-weight: 500;
 `
