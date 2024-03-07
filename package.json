@@ -65,7 +65,7 @@
   "devDependencies": {
     "@apollo/client": "^3.8.9",
     "@graphql-codegen/cli": "^3.2.1",
-    "@graphql-codegen/introspection": "3.0.1",
+    "@graphql-codegen/introspection": "4.0.3",
     "@graphql-codegen/typescript": "3.0.1",
     "@graphql-codegen/typescript-operations": "4.2.0",
     "@graphql-codegen/typescript-react-apollo": "4.3.0",
