@@ -13,6 +13,8 @@ All events are public by default (visible to everyone). They can also be private
 
 ### [Demo](https://react-event-scheduler.vercel.app/) :movie_camera:
 
+> If you're looking for a backend starter project with NodeJS, GraphQL, TypeScript, MongoDB and Prisma, check [this](https://github.com/ahmedalatawi/nodejs-graphql-fake-api) out.
+
 ## Tech Stack
 
 ### Frontend
