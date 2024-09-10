@@ -116,7 +116,7 @@
     "react-test-renderer": "^18.2.0",
     "ts-node-dev": "^2.0.0",
     "wait-on": "^7.0.1",
-    "web-vitals": "^3.5.2"
+    "web-vitals": "^4.2.3"
   },
   "proxy": "http://localhost:4000/",
   "eslintConfig": {
