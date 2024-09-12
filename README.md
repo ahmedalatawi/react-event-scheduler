@@ -11,9 +11,12 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 Event Scheduler is a React app that allows users to create events. An event can be anything, such as a sport event, team meeting, party announcement, personal advertisement, etc. An event consists of title, start and end date/time, and description. Events can also be shared on FB or Twitter.
 All events are public by default (visible to everyone). They can also be private (only visible to you) by checking the private checkbox.
 
-### [Demo](https://react-event-scheduler.vercel.app/) :movie_camera:
+> If you're looking for a frontend or backend starter project, check these out:
+>
+> - **[Frontend starter project](https://github.com/ahmedalatawi/react-graphql-starter)** built with React, GraphQL (Apollo client) and Typescript.
+> - **[Backend starter project](https://github.com/ahmedalatawi/nodejs-graphql-fake-api)** built with NodeJS, GraphQL (Apollo server), TypeScript, MongoDB and Prisma.
 
-> If you're looking for a backend starter project with NodeJS, GraphQL, TypeScript, MongoDB and Prisma, check [this](https://github.com/ahmedalatawi/nodejs-graphql-fake-api) out.
+### [Demo](https://react-event-scheduler.vercel.app/) :movie_camera:
 
 ## Tech Stack
 
