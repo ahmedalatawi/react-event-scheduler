@@ -41,7 +41,7 @@ All events are public by default (visible to everyone). They can also be private
 
 Note that `graphql` schemas are generated on the frontend using [GraphQL Code Generator](https://www.graphql-code-generator.com/docs/getting-started). This means that if you make any changes to the schema (server/graphql/schema/index.ts), make sure that the `.graphql` files in the frontend are also updated accordingly.
 
-Next, run `yarn codegen` to re-generate the queries and mutations (Note: before you do this, make sure the server is up and running by either running `yarn start` or `yarn start:server`)
+Next, run `yarn codegen` to re-generate the queries and mutations (before you do this, make sure the server is up and running by either running `yarn start` or `yarn start:server`)
 
 ## Run app locally
 
