@@ -44,7 +44,7 @@ const EditMyProfile = ({ user, onReadOnlyMode }: Props) => {
 
     setValidated(true)
 
-    form.checkValidity() &&
+    if (form.checkValidity())
       saveUser({
         variables: {
           user: {

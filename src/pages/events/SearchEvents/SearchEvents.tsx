@@ -216,14 +216,12 @@ function SearchEvents() {
 
   useEffect(() => {
     resetCurrentPage()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearchText])
 
   useEffect(() => {
-    skipFirstRun && setSkipFirstRun(false)
-    !skipFirstRun && refetch()
+    if (skipFirstRun) setSkipFirstRun(false)
+    if (!skipFirstRun) refetch()
     resetCurrentPage()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth, refetch])
 
   const handleFilterByAllEventsChange = (e: ChangeEvent<HTMLInputElement>) => {

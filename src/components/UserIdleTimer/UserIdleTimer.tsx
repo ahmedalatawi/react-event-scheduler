@@ -13,9 +13,7 @@ const UserIdleTimer = ({ onLogout }: Props) => {
 
   const { auth } = useContext(AuthContext)
 
-  const handleOnIdle = () => {
-    auth ? setDisplayModal(true) : onLogout()
-  }
+  const handleOnIdle = () => (auth ? setDisplayModal(true) : onLogout())
 
   const handleOnStayLoggedIn = () => {
     reset()

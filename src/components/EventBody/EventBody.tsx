@@ -99,7 +99,6 @@ const EventBody = ({
     if (resetForm) {
       setLocalEvent({ ...event })
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authCtx, resetForm])
 
   return (

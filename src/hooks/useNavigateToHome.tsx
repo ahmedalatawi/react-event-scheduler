@@ -7,6 +7,6 @@ export const useNavigateToHome = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    !auth && navigate('/')
+    if (!auth) navigate('/')
   }, [auth, navigate])
 }

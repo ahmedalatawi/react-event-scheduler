@@ -97,14 +97,14 @@ function Calendar() {
   const { auth } = useContext(AuthContext)
 
   useEffect(() => {
-    calendarReady && refetch()
+    if (calendarReady) refetch()
+
     setDisableEdit(!auth)
     setActionBtns({
       ...actionBtns,
       disableSaveBtn: true,
       disableDeleteBtn: !auth,
     })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth, refetch])
 
   const onCompleteApiRequest = () => {

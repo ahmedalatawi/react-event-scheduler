@@ -19,6 +19,7 @@ export const context = async ({ req }: { req: Request }) => {
   try {
     decodedToken = jwt.verify(auth.token, JWT_SECRET)
   } catch (err) {
+    console.error('Error verifying JWT:', err)
     customReq.isAuthorized = false
     return customReq
   }
