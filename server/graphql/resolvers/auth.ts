@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken'
 import { constants } from '../../config/constants'
 import { UserModel } from '../../models/user'
 import { validatePassword } from '../../utils/validations'
-import { LoginInput, UserInput } from '../../../src/generated/graphql'
+import type { LoginInput, UserInput } from '../../../src/generated/graphql'
 
 const { JWT_SECRET } = constants
 

@@ -1,12 +1,12 @@
-import { ChangeEvent, FC } from 'react'
-import { LoginOrSignupFormProps } from '../Signup/Signup'
+import type { ChangeEvent } from 'react'
+import { type LoginOrSignupFormProps } from '../Signup/Signup'
 
 type Props = {
   onChangeValue: (prop: LoginOrSignupFormProps, value: string) => void
   onToggleLogin: () => void
 }
 
-const Login: FC<Props> = ({ onChangeValue, onToggleLogin }) => {
+const Login = ({ onChangeValue, onToggleLogin }: Props) => {
   return (
     <div className='row g-3'>
       <div className='col-12'>

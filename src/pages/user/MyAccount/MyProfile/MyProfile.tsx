@@ -1,14 +1,14 @@
-import { FC, useState } from 'react'
+import { useState } from 'react'
 import { useParams } from 'react-router'
 import { BiEditAlt } from 'react-icons/bi'
-import Alert from '../../../../components/UI/Alert/Alert'
-import Spinner from '../../../../components/UI/Spinner/Spinner'
+import Alert from '../../../../components/ui/Alert/Alert'
+import Spinner from '../../../../components/ui/Spinner/Spinner'
 import EditMyProfile from './EditMyProfile'
-import TitledCard from '../../../../components/UI/TitledCard/TitledCard'
+import TitledCard from '../../../../components/ui/TitledCard/TitledCard'
 import { useGetUserQuery } from '../../../../generated/graphql'
 import { useNavigateToHome } from '../../../../hooks/useNavigateToHome'
 
-const MyProfile: FC = () => {
+const MyProfile = () => {
   const { id } = useParams()
 
   const { data, loading, error } = useGetUserQuery({

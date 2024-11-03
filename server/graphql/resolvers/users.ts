@@ -1,7 +1,7 @@
 import { GraphQLError } from 'graphql'
 import { UserModel } from '../../models/user'
-import { IAuthParams } from '../../interfaces/types'
-import { UserInputFull } from '../../../src/generated/graphql'
+import type { IAuthParams } from '../../interfaces/types'
+import type { UserInputFull } from '../../../src/generated/graphql'
 
 export const Users = {
   getUser: async (

@@ -1,4 +1,4 @@
-import { FC, Fragment } from 'react'
+import { Fragment } from 'react'
 import {
   FacebookShareButton,
   TwitterShareButton,
@@ -6,7 +6,7 @@ import {
   TwitterIcon,
 } from 'react-share'
 import styled from 'styled-components'
-import { Maybe } from '../../../generated/graphql'
+import type { Maybe } from '../../../generated/graphql'
 import { formatDateTime } from '../../../utils/dateTransforms'
 
 export type CardType = {
@@ -26,7 +26,7 @@ type Props = {
   onClick: () => void
 }
 
-const Card: FC<Props> = ({ card, onClick }) => {
+const Card = ({ card, onClick }: Props) => {
   const {
     title,
     subtitle,

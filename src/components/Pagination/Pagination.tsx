@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo, FC, useCallback } from 'react'
+import { useEffect, useState, useMemo, useCallback } from 'react'
 import ReactBootstrapPagination from 'react-bootstrap/Pagination'
 
 const scrollToTop = () =>
@@ -14,12 +14,12 @@ type Props = {
   onPageChange: (page: number) => void
 }
 
-const Pagination: FC<Props> = ({
+const Pagination = ({
   total,
   itemsPerPage,
   currentPage,
   onPageChange,
-}) => {
+}: Props) => {
   const [totalPages, setTotalPages] = useState<number>(0)
 
   const onPageChangeHandler = useCallback(

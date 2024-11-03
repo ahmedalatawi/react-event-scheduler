@@ -1,24 +1,24 @@
 import { NetworkStatus } from '@apollo/client'
-import { FC, SyntheticEvent, useState } from 'react'
-import BootstrapTable, { SelectRowProps } from 'react-bootstrap-table-next'
+import { type SyntheticEvent, useState } from 'react'
+import BootstrapTable, { type SelectRowProps } from 'react-bootstrap-table-next'
 import filterFactory, { textFilter } from 'react-bootstrap-table2-filter'
 import ToolkitProvider, {
   Search,
 } from 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit'
 import { useParams } from 'react-router'
-import Alert from '../../../../components/UI/Alert/Alert'
-import Spinner from '../../../../components/UI/Spinner/Spinner'
-import TitledCard from '../../../../components/UI/TitledCard/TitledCard'
+import Alert from '../../../../components/ui/Alert/Alert'
+import Spinner from '../../../../components/ui/Spinner/Spinner'
+import TitledCard from '../../../../components/ui/TitledCard/TitledCard'
 import Pagination from '../../../../components/Pagination/Pagination'
 import { useGetUserEventsQuery } from '../../../../generated/graphql'
 import { BootstrapTableWrapper } from '../styles'
 import { useNavigateToHome } from '../../../../hooks/useNavigateToHome'
-import { ToolkitContextType } from 'react-bootstrap-table2-toolkit'
-import { IEvent } from '../../../../types'
+import type { ToolkitContextType } from 'react-bootstrap-table2-toolkit'
+import type { IEvent } from '../../../../types'
 
 const ITEMS_PER_PAGE = 10
 
-const MyEvents: FC = () => {
+const MyEvents = () => {
   const { id } = useParams()
   const { SearchBar } = Search
 

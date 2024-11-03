@@ -1,6 +1,6 @@
-import { FC, useState } from 'react'
+import { useState } from 'react'
 import { Tab, Tabs } from 'react-bootstrap'
-import TitledCard from '../../../../components/UI/TitledCard/TitledCard'
+import TitledCard from '../../../../components/ui/TitledCard/TitledCard'
 import styled from 'styled-components'
 import { useNavigateToHome } from '../../../../hooks/useNavigateToHome'
 
@@ -8,7 +8,7 @@ const BodyContainer = styled.div({
   minHeight: '15rem',
 })
 
-const MySettings: FC = () => {
+const MySettings = () => {
   const [key, setKey] = useState<string | null>('inbox')
 
   useNavigateToHome()

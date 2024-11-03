@@ -1,11 +1,11 @@
-import { FC, ReactNode } from 'react'
+import type { ReactNode } from 'react'
 
 type Props = {
   title: string
   children?: ReactNode
 }
 
-const TitledCard: FC<Props> = ({ title, children }) => {
+const TitledCard = ({ title, children }: Props) => {
   return (
     <div className='card'>
       <h5 className='card-header'>{title}</h5>

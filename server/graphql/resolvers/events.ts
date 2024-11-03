@@ -2,12 +2,12 @@ import { GraphQLError } from 'graphql'
 import { EventModel } from '../../models/event'
 import { UserModel } from '../../models/user'
 import { constants } from '../../config/constants'
-import {
+import type {
   EventInput,
   FilterInput,
   PaginationFilter,
 } from '../../../src/generated/graphql'
-import { IAuthParams } from '../../interfaces/types'
+import type { IAuthParams } from '../../interfaces/types'
 
 export const Events = {
   eventsData: async (
@@ -36,8 +36,8 @@ export const Events = {
     const statusFilter = currentCheck
       ? { end: { $gte: new Date().toISOString() } }
       : expiredCheck
-      ? { end: { $lt: new Date().toISOString() } }
-      : {}
+        ? { end: { $lt: new Date().toISOString() } }
+        : {}
 
     const startDateFilter = startDate ? { start: { $gte: startDate } } : {}
     const endDateFilter = endDate ? { end: { $lt: endDate } } : {}

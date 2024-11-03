@@ -1,11 +1,11 @@
-import { FC, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 type Props = {
   seconds: number
   onTimeout: () => void
 }
 
-const Timer: FC<Props> = ({ seconds, onTimeout }) => {
+const Timer = ({ seconds, onTimeout }: Props) => {
   const [timeLeft, setTimeLeft] = useState<number>(seconds)
   const intervalRef = useRef()
 

@@ -1,16 +1,18 @@
 import { ApolloError, NetworkStatus } from '@apollo/client'
-import { ChangeEvent, useContext, useEffect, useState } from 'react'
+import { type ChangeEvent, useContext, useEffect, useState } from 'react'
 import useDebounce from '../../../hooks/useDebounce'
-import Spinner from '../../../components/UI/Spinner/Spinner'
-import Card, { CardType } from '../../../components/UI/Card/Card'
-import Alert from '../../../components/UI/Alert/Alert'
+import Spinner from '../../../components/ui/Spinner/Spinner'
+import Card, { type CardType } from '../../../components/ui/Card/Card'
+import Alert from '../../../components/ui/Alert/Alert'
 import Pagination from '../../../components/Pagination/Pagination'
 import AuthContext from '../../../store/auth-context'
-import Modal from '../../../components/UI/Modal/Modal'
-import EventBody, { EventType } from '../../../components/EventBody/EventBody'
+import Modal from '../../../components/ui/Modal/Modal'
+import EventBody, {
+  type EventType,
+} from '../../../components/EventBody/EventBody'
 import { Form } from 'react-bootstrap'
 import {
-  EventFull,
+  type EventFull,
   useDeleteEventMutation,
   useGetEventsQuery,
   useSaveEventMutation,

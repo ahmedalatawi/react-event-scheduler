@@ -1,5 +1,5 @@
 import React from 'react'
-import { IAuth } from '../types'
+import type { IAuth } from '../types'
 
 type AuthContextProps = {
   auth: IAuth | null

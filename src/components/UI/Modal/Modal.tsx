@@ -1,4 +1,4 @@
-import { FC, ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import { MdSaveAlt } from 'react-icons/md'
 import { FiLogIn, FiTrash2 } from 'react-icons/fi'
 import styled from 'styled-components'
@@ -31,7 +31,7 @@ type Props = {
   onSubmit: () => void
 }
 
-const Modal: FC<Props> = ({
+const Modal = ({
   title,
   show,
   actionBtnFlags,
@@ -41,7 +41,7 @@ const Modal: FC<Props> = ({
   onClose,
   onSubmit,
   onDelete,
-}) => {
+}: Props) => {
   const {
     submitBtnName,
     closeBtnName,

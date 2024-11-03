@@ -1,4 +1,4 @@
-import { ChangeEvent, FC } from 'react'
+import type { ChangeEvent } from 'react'
 
 export type LoginOrSignupFormProps = 'username' | 'password' | 'confirmPassword'
 
@@ -7,7 +7,7 @@ type Props = {
   onToggleSignup: () => void
 }
 
-const Signup: FC<Props> = ({ onChangeValue, onToggleSignup }) => (
+const Signup = ({ onChangeValue, onToggleSignup }: Props) => (
   <div className='row g-3'>
     <div className='col-12 required'>
       <label htmlFor='username' className='form-label'>

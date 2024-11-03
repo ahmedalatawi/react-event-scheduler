@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon'
-import { useEffect, useState, ChangeEvent, FC, useContext } from 'react'
+import { useEffect, useState, type ChangeEvent, useContext } from 'react'
 import AuthContext from '../../store/auth-context'
-import Alert from '../UI/Alert/Alert'
+import Alert from '../ui/Alert/Alert'
 
 export type EventType = {
   id?: string
@@ -21,13 +21,13 @@ type Props = {
   onValidate: (valid: boolean) => void
 }
 
-const EventBody: FC<Props> = ({
+const EventBody = ({
   event,
   disableEdit,
   resetForm,
   onChangeValue,
   onValidate,
-}) => {
+}: Props) => {
   const [localEvent, setLocalEvent] = useState<EventType>({ ...event })
   const [errorMsg, setErrorMsg] = useState<string>('')
 

@@ -1,5 +1,5 @@
 import { ApolloProvider } from '@apollo/client'
-import client from './apollo'
+import client from './apolloClient'
 import UserIdleTimer from './components/UserIdleTimer/UserIdleTimer'
 import { useContext } from 'react'
 import AuthContext from './store/auth-context'

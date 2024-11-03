@@ -1,4 +1,3 @@
-import { FC } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import AddEvent from './pages/events/AddEvent/AddEvent'
 import Calendar from './pages/calendar/Calendar'
@@ -11,7 +10,7 @@ import SearchEvents from './pages/events/SearchEvents/SearchEvents'
 import SharedEvent from './pages/events/ShareEvent/SharedEvent'
 import Welcome from './pages/home/Welcome'
 
-const AppRoutes: FC = () => (
+const AppRoutes = () => (
   <>
     <Navbar />
 

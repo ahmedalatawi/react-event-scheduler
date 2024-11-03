@@ -1,4 +1,4 @@
-import React, { FC, ReactNode } from 'react'
+import React, { type ReactNode } from 'react'
 import { IoWarningOutline } from 'react-icons/io5'
 import { BsCheck2Circle } from 'react-icons/bs'
 import { Alert as BootstrapAlert } from 'react-bootstrap'
@@ -12,7 +12,7 @@ type Props = {
   onClose?: () => void
 }
 
-const Alert: FC<Props> = ({ type, msg, dismissible = true, btn, onClose }) => {
+const Alert = ({ type, msg, dismissible = true, btn, onClose }: Props) => {
   return (
     <AlertContent variant={type} onClose={onClose} dismissible={dismissible}>
       {type === 'success' ? (

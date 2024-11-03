@@ -1,4 +1,4 @@
-import { FC, Fragment, useContext } from 'react'
+import { Fragment, useContext } from 'react'
 import { NavDropdown } from 'react-bootstrap'
 import { FaUser, FaUserEdit } from 'react-icons/fa'
 import { FiLogOut, FiSettings } from 'react-icons/fi'
@@ -12,7 +12,7 @@ type Props = {
   onSelect: () => void
 }
 
-const MyAccount: FC<Props> = ({ onLogout, onSelect }) => {
+const MyAccount = ({ onLogout, onSelect }: Props) => {
   const { auth } = useContext(AuthContext)
 
   if (!auth) {

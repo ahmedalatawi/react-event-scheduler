@@ -5,7 +5,8 @@
     "esModuleInterop": true,
     "target": "es6",
     "moduleResolution": "node",
-    "noUnusedLocals": false
+    "noUnusedLocals": false,
+    "verbatimModuleSyntax": false
   }
   //"include": ["graphql/**/*", "models/**/*", "utils/**/*", "index.ts"]
 }

@@ -1,7 +1,7 @@
-import jwt, { JwtPayload } from 'jsonwebtoken'
+import jwt, { type JwtPayload } from 'jsonwebtoken'
 import { constants } from '../config/constants'
-import { Request } from 'express'
-import { IAuthParams } from '../interfaces/types'
+import type { Request } from 'express'
+import type { IAuthParams } from '../interfaces/types'
 
 const { JWT_SECRET } = constants
 

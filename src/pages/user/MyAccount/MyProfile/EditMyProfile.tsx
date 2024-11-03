@@ -1,12 +1,12 @@
-import { FC, FormEvent, useContext, useState } from 'react'
+import { type FormEvent, useContext, useState } from 'react'
 import { Button, Col, Form, InputGroup, Row } from 'react-bootstrap'
 import { MdSaveAlt } from 'react-icons/md'
 import AuthContext from '../../../../store/auth-context'
-import Spinner from '../../../../components/UI/Spinner/Spinner'
-import Alert from '../../../../components/UI/Alert/Alert'
-import TitledCard from '../../../../components/UI/TitledCard/TitledCard'
+import Spinner from '../../../../components/ui/Spinner/Spinner'
+import Alert from '../../../../components/ui/Alert/Alert'
+import TitledCard from '../../../../components/ui/TitledCard/TitledCard'
 import {
-  UserFullFragment,
+  type UserFullFragment,
   useSaveUserMutation,
 } from '../../../../generated/graphql'
 
@@ -17,7 +17,7 @@ type Props = {
   onReadOnlyMode: () => void
 }
 
-const EditMyProfile: FC<Props> = ({ user, onReadOnlyMode }) => {
+const EditMyProfile = ({ user, onReadOnlyMode }: Props) => {
   const [validated, setValidated] = useState(false)
   const [userToEdit, setUserToEdit] = useState<UserFullFragment>(user)
 

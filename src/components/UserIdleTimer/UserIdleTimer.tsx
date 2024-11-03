@@ -1,14 +1,14 @@
-import { FC, useContext, useState } from 'react'
+import { useContext, useState } from 'react'
 import { useIdleTimer } from 'react-idle-timer'
 import AuthContext from '../../store/auth-context'
 import Timer from '../Timer/Timer'
-import Modal from '../UI/Modal/Modal'
+import Modal from '../ui/Modal/Modal'
 
 type Props = {
   onLogout: () => void
 }
 
-const UserIdleTimer: FC<Props> = ({ onLogout }) => {
+const UserIdleTimer = ({ onLogout }: Props) => {
   const [displayModal, setDisplayModal] = useState<boolean>(false)
 
   const { auth } = useContext(AuthContext)

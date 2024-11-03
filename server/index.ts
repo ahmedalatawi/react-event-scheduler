@@ -17,7 +17,7 @@ import { json, urlencoded } from 'body-parser'
 
 import { constants } from './config/constants'
 import { context } from './middleware/auth'
-import { IContext } from './interfaces/types'
+import type { IContext } from './interfaces/types'
 
 dotenv.config()
 
@@ -44,7 +44,7 @@ app.use(urlencoded({ extended: true }))
 
 app.use('/', express.static(`${__dirname}/../build`))
 
-app.get('*', (req, res) => {
+app.get('*', (_, res) => {
   res.sendFile(path.join(__dirname, '../build', 'index.html'))
 })
 

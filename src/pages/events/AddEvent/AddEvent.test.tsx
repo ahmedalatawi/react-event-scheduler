@@ -1,6 +1,6 @@
 import TestRenderer, { act } from 'react-test-renderer'
 import { screen } from '@testing-library/dom'
-import { MockedProvider, MockedResponse } from '@apollo/client/testing'
+import { MockedProvider, type MockedResponse } from '@apollo/client/testing'
 import AddEvent from './AddEvent'
 import { SaveEventDocument } from '../../../generated/graphql'
 import { GraphQLError } from 'graphql'

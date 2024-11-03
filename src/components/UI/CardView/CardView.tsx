@@ -1,4 +1,4 @@
-import { FC, Fragment } from 'react'
+import { Fragment } from 'react'
 import { formatDateTime } from '../../../utils/dateTransforms'
 
 type CardViewType = {
@@ -14,7 +14,7 @@ type Props = {
   card: CardViewType
 }
 
-const CardView: FC<Props> = ({ card }) => {
+const CardView = ({ card }: Props) => {
   const { title, subtitle, content, createdBy, createdAt, updatedAt } = card
 
   return (
