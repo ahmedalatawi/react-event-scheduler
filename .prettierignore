@@ -7,6 +7,6 @@
 /coverage
 
 # production
-/build
+/dist
 
 generated/
