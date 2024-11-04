@@ -3,7 +3,7 @@ import { expressMiddleware } from '@apollo/server/express4'
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer'
 import compression from 'compression'
 import express from 'express'
-import enforce from 'express-sslify'
+// import enforce from 'express-sslify'
 import path from 'path'
 import cors from 'cors'
 import dotenv from 'dotenv'
@@ -14,26 +14,22 @@ import { connect, set } from 'mongoose'
 import { rootValue } from './graphql/resolvers'
 import { typeDefs } from './graphql/schema'
 import { json, urlencoded } from 'body-parser'
-
-import { constants } from './config/constants'
 import { context } from './middleware/auth'
 import type { IContext } from './interfaces/types'
 
-dotenv.config()
-
-const { ENV, PORT, URI, MONGODB_URI } = constants
+dotenv.config({ path: '../.env' })
 
 const corsOptions = {
-  origin: URI,
+  origin: process.env.URI,
   credentials: true,
 }
 
 const app = express()
 
 // enforce https for production
-if (ENV === 'production') {
-  app.use(enforce.HTTPS({ trustProtoHeader: true }))
-}
+// if (process.env.ENV === 'production') {
+//   app.use(enforce.HTTPS({ trustProtoHeader: true }))
+// }
 
 app.use(cors(corsOptions))
 app.use(cookieParser())
@@ -68,14 +64,20 @@ const startServer = async () => {
 
   try {
     set('strictQuery', false)
-    await connect(MONGODB_URI)
+    if (process.env.MONGODB_URI) {
+      await connect(process.env.MONGODB_URI)
+    } else {
+      throw new Error('MONGODB_URI is not provided!')
+    }
 
     await new Promise<void>((resolve) =>
-      httpServer.listen({ port: PORT }, resolve),
+      httpServer.listen({ port: process.env.PORT }, resolve),
     )
-    console.log(`🚀 Server ready at http://localhost:${PORT}/graphql`)
+    console.log(
+      `🚀 Server ready at http://localhost:${process.env.PORT}/graphql`,
+    )
   } catch (err) {
-    console.error('Error occured while connecting to MongoDB: ', err)
+    console.error('Error ocurred while connecting to MongoDB: ', err)
   }
 }
 

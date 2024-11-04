@@ -1,12 +1,22 @@
 import { GraphQLError } from 'graphql'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
-import { constants } from '../../config/constants'
 import { UserModel } from '../../models/user'
 import { validatePassword } from '../../utils/validations'
 import type { LoginInput, UserInput } from '../../../src/generated/graphql'
+import type { Types } from 'mongoose'
 
-const { JWT_SECRET } = constants
+import dotenv from 'dotenv'
+
+dotenv.config({ path: '../.env' })
+
+const getJwtToken = (userId: Types.ObjectId, username: string) => {
+  if (!process.env.JWT_SECRET) throw new Error('JWT_SECRET is not provided!')
+
+  return jwt.sign({ userId, username }, process.env.JWT_SECRET, {
+    expiresIn: '1h',
+  })
+}
 
 export const Auth = {
   signup: async ({
@@ -40,11 +50,13 @@ export const Auth = {
 
     const savedUser = await user.save()
 
-    const token = jwt.sign(
-      { userId: savedUser._id, username: savedUser.username },
-      JWT_SECRET,
-      { expiresIn: '1h' },
-    )
+    const token = getJwtToken(savedUser._id, savedUser.username)
+
+    // jwt.sign(
+    //   { userId: savedUser._id, username: savedUser.username },
+    //   process.env.JWT_SECRET,
+    //   { expiresIn: '1h' },
+    // )
 
     return {
       userId: savedUser._id,
@@ -72,11 +84,13 @@ export const Auth = {
       throw new GraphQLError(ERROR_MESSAGE)
     }
 
-    const token = jwt.sign(
-      { userId: user._id, username: user.username },
-      JWT_SECRET,
-      { expiresIn: '1h' },
-    )
+    const token = getJwtToken(user._id, user.username)
+
+    // jwt.sign(
+    //   { userId: user._id, username: user.username },
+    //   JWT_SECRET,
+    //   { expiresIn: '1h' },
+    // )
 
     return {
       userId: user._id,

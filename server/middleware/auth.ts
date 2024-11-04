@@ -1,12 +1,10 @@
 import jwt, { type JwtPayload } from 'jsonwebtoken'
-import { constants } from '../config/constants'
 import type { Request } from 'express'
 import type { IAuthParams } from '../interfaces/types'
 
-const { JWT_SECRET } = constants
-
 export const context = async ({ req }: { req: Request }) => {
   const auth = req.cookies['auth'] ? JSON.parse(req.cookies['auth']) : ''
+  console.log('auth: ', auth)
   const customReq = req as Request & IAuthParams
 
   if (!auth) {
@@ -17,7 +15,9 @@ export const context = async ({ req }: { req: Request }) => {
   let decodedToken
 
   try {
-    decodedToken = jwt.verify(auth.token, JWT_SECRET)
+    if (!process.env.JWT_SECRET) throw new Error('JWT_SECRET is not provided!')
+
+    decodedToken = jwt.verify(auth.token, process.env.JWT_SECRET)
   } catch (err) {
     console.error('Error verifying JWT:', err)
     customReq.isAuthorized = false

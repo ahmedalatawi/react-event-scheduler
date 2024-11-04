@@ -1,13 +1,16 @@
 import { GraphQLError } from 'graphql'
 import { EventModel } from '../../models/event'
 import { UserModel } from '../../models/user'
-import { constants } from '../../config/constants'
 import type {
   EventInput,
   FilterInput,
   PaginationFilter,
 } from '../../../src/generated/graphql'
 import type { IAuthParams } from '../../interfaces/types'
+
+import dotenv from 'dotenv'
+
+dotenv.config({ path: '../.env' })
 
 export const Events = {
   eventsData: async (
@@ -111,8 +114,6 @@ export const Events = {
     }: { event: EventInput },
     { isAuthorized, userId }: IAuthParams,
   ) => {
-    const { URI } = constants
-
     if (!isAuthorized) {
       throw new GraphQLError('Unauthenticated')
     }
@@ -148,7 +149,7 @@ export const Events = {
       })
 
       savedEvent = await event.save().then((e) => e.populate('createdBy'))
-      savedEvent.url = `${URI}/sharedEvent/${savedEvent._id}`
+      savedEvent.url = `${process.env.URI}/sharedEvent/${savedEvent._id}`
       await savedEvent.save({ timestamps: false })
     }
 
