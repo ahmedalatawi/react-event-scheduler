@@ -40,7 +40,7 @@
     "express-sslify": "^1.2.0",
     "graphql": "^16.9.0",
     "graphql-tag": "^2.12.6",
-    "js-cookie": "^3.0.1",
+    "js-cookie": "^3.0.5",
     "jsonwebtoken": "^9.0.0",
     "lodash": "^4.17.21",
     "luxon": "^3.3.0",

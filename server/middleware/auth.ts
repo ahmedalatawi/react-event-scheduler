@@ -4,7 +4,6 @@ import type { IAuthParams } from '../interfaces/types'
 
 export const context = async ({ req }: { req: Request }) => {
   const auth = req.cookies['auth'] ? JSON.parse(req.cookies['auth']) : ''
-  console.log('auth: ', auth)
   const customReq = req as Request & IAuthParams
 
   if (!auth) {

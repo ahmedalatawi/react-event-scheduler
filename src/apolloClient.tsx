@@ -27,7 +27,7 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 
 const httpLink = createHttpLink({
   uri: import.meta.env.VITE_APP_GRAPHQL_ENDPOINT,
-  credentials: 'same-origin',
+  credentials: 'include',
 })
 
 const client = new ApolloClient({

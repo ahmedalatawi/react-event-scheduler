@@ -22,6 +22,7 @@ dotenv.config({ path: '../.env' })
 const corsOptions = {
   origin: process.env.URI,
   credentials: true,
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
 }
 
 const app = express()
@@ -31,7 +32,6 @@ const app = express()
 //   app.use(enforce.HTTPS({ trustProtoHeader: true }))
 // }
 
-app.use(cors(corsOptions))
 app.use(cookieParser())
 app.use(compression())
 
@@ -55,7 +55,7 @@ const startServer = async () => {
   await apolloServer.start()
   app.use(
     '/graphql',
-    cors<cors.CorsRequest>(),
+    cors<cors.CorsRequest>(corsOptions),
     json(),
     expressMiddleware(apolloServer, {
       context,
