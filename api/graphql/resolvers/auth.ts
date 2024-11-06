@@ -11,7 +11,8 @@ import dotenv from 'dotenv'
 dotenv.config({ path: '../.env' })
 
 const getJwtToken = (userId: Types.ObjectId, username: string) => {
-  if (!process.env.JWT_SECRET) throw new Error('JWT_SECRET is not provided!')
+  if (!process.env.JWT_SECRET)
+    throw new Error('getJwtToken: JWT_SECRET is not provided!')
 
   return jwt.sign({ userId, username }, process.env.JWT_SECRET, {
     expiresIn: '1h',
@@ -52,12 +53,6 @@ export const Auth = {
 
     const token = getJwtToken(savedUser._id, savedUser.username)
 
-    // jwt.sign(
-    //   { userId: savedUser._id, username: savedUser.username },
-    //   process.env.JWT_SECRET,
-    //   { expiresIn: '1h' },
-    // )
-
     return {
       userId: savedUser._id,
       token,
@@ -85,12 +80,6 @@ export const Auth = {
     }
 
     const token = getJwtToken(user._id, user.username)
-
-    // jwt.sign(
-    //   { userId: user._id, username: user.username },
-    //   JWT_SECRET,
-    //   { expiresIn: '1h' },
-    // )
 
     return {
       userId: user._id,

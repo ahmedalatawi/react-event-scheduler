@@ -14,7 +14,8 @@ export const context = async ({ req }: { req: Request }) => {
   let decodedToken
 
   try {
-    if (!process.env.JWT_SECRET) throw new Error('JWT_SECRET is not provided!')
+    if (!process.env.JWT_SECRET)
+      throw new Error('Context: JWT_SECRET is not provided!')
 
     decodedToken = jwt.verify(auth.token, process.env.JWT_SECRET)
   } catch (err) {
