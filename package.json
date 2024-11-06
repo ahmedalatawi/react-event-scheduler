@@ -7,7 +7,7 @@
     "build": "tsc && vite build",
     "test": "jest",
     "test:coverage": "jest --watchAll=false --coverage",
-    "start:server": "cd server && ts-node-dev --respawn --transpile-only ./index.ts && wait-on tcp:4000",
+    "start:server": "cd api && ts-node-dev --respawn --transpile-only ./index.ts && wait-on tcp:4000",
     "start:web": "vite --host --open",
     "ts-check": "tsc --noEmit --watch",
     "lint": "eslint .",
