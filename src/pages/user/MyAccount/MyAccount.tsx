@@ -4,7 +4,7 @@ import { FaUser, FaUserEdit } from 'react-icons/fa'
 import { FiLogOut, FiSettings } from 'react-icons/fi'
 import { MdEventNote } from 'react-icons/md'
 import { Link } from 'react-router-dom'
-import AuthContext from '../../../store/auth-context'
+import AuthContext from '@/store/auth-context'
 import { StyledNavDropdown } from './styles'
 
 type Props = {

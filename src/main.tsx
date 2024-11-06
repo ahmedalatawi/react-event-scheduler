@@ -10,8 +10,6 @@ import 'jquery/dist/jquery.min.js'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 
-import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css'
-
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <AuthProvider>

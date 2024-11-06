@@ -41,7 +41,7 @@ const UserIdleTimer = ({ onLogout }: Props) => {
       onClose={onLogout}
       onSubmit={handleOnStayLoggedIn}
     >
-      <Timer seconds={90} onTimeout={onLogout} />
+      <Timer seconds={60} onTimeout={onLogout} />
     </Modal>
   )
 }

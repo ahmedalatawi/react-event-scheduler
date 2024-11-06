@@ -1,18 +1,15 @@
 import { type FormEvent, useContext, useState } from 'react'
 import { Button, Col, Form, InputGroup, Row } from 'react-bootstrap'
 import { MdSaveAlt } from 'react-icons/md'
-import AuthContext from '../../../../store/auth-context'
-import Spinner from '../../../../components/ui/Spinner/Spinner'
-import Alert from '../../../../components/ui/Alert/Alert'
-import TitledCard from '../../../../components/ui/TitledCard/TitledCard'
-import {
-  type UserFullFragment,
-  useSaveUserMutation,
-} from '../../../../generated/graphql'
+import AuthContext from '@/store/auth-context'
+import Spinner from '@/components/ui/Spinner/Spinner'
+import Alert from '@/components/ui/Alert/Alert'
+import TitledCard from '@/components/ui/TitledCard/TitledCard'
+import { type UserFullFragment, useSaveUserMutation } from '@/generated/graphql'
 
 type UserPropKeys = keyof UserFullFragment
 
-type Props = {
+interface Props {
   user: UserFullFragment
   onReadOnlyMode: () => void
 }

@@ -6,7 +6,7 @@ import Spinner from '../../../../components/ui/Spinner/Spinner'
 import EditMyProfile from './EditMyProfile'
 import TitledCard from '../../../../components/ui/TitledCard/TitledCard'
 import { useGetUserQuery } from '../../../../generated/graphql'
-import { useNavigateToHome } from '../../../../hooks/useNavigateToHome'
+import { useNavigateToHome } from '@/hooks/useNavigateToHome'
 
 const MyProfile = () => {
   const { id } = useParams()

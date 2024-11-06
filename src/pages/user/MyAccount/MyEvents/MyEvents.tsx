@@ -1,60 +1,49 @@
-import { NetworkStatus } from '@apollo/client'
-import { type SyntheticEvent, useState } from 'react'
-import BootstrapTable, { type SelectRowProps } from 'react-bootstrap-table-next'
-import filterFactory, { textFilter } from 'react-bootstrap-table2-filter'
-import ToolkitProvider, {
-  Search,
-} from 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit'
+import { useCallback, useState } from 'react'
 import { useParams } from 'react-router'
-import Alert from '../../../../components/ui/Alert/Alert'
-import Spinner from '../../../../components/ui/Spinner/Spinner'
-import TitledCard from '../../../../components/ui/TitledCard/TitledCard'
-import Pagination from '../../../../components/Pagination/Pagination'
-import { useGetUserEventsQuery } from '../../../../generated/graphql'
-import { BootstrapTableWrapper } from '../styles'
-import { useNavigateToHome } from '../../../../hooks/useNavigateToHome'
-import type { ToolkitContextType } from 'react-bootstrap-table2-toolkit'
-import type { IEvent } from '../../../../types'
+import Alert from '@/components/ui/Alert/Alert'
+import Spinner from '@/components/ui/Spinner/Spinner'
+import TitledCard from '@/components/ui/TitledCard/TitledCard'
+import Pagination from '@/components/Pagination/Pagination'
+import { useGetUserEventsQuery } from '@/generated/graphql'
+import { Table } from '@/components/Table/Table'
+import type { TableHeader } from '@/components/Table/TableHead'
+import { useNavigateToHome } from '@/hooks/useNavigateToHome'
+import { debounce } from 'lodash'
 
-const ITEMS_PER_PAGE = 10
+const ITEMS_PER_PAGE = 20
 
 const MyEvents = () => {
   const { id } = useParams()
-  const { SearchBar } = Search
 
+  const [selectedRow, setSelectedRow] = useState<object>()
   const [searchText, setSearchText] = useState<string>('')
+  const [searchTextDelayed, setSearchTextDelayed] = useState<string>('')
   const [pageNumber, setPageNumber] = useState<number>(1)
-
-  const { data, loading, error, networkStatus } = useGetUserEventsQuery({
-    fetchPolicy: 'cache-and-network',
-    notifyOnNetworkStatusChange: true,
-    variables: {
-      id: id ?? '',
-      filter: { searchText, pageNumber, pageSize: ITEMS_PER_PAGE },
-    },
-  })
 
   useNavigateToHome()
 
-  const selectRow: SelectRowProps<IEvent> = {
-    mode: 'checkbox',
-    clickToSelect: true,
-    onSelect: (
-      row: IEvent,
-      isSelected: boolean,
-      rowIndex: number,
-      e: SyntheticEvent,
-    ) => {
-      console.log(row, isSelected, rowIndex, e)
+  const { data, loading, error } = useGetUserEventsQuery({
+    fetchPolicy: 'cache-and-network',
+    variables: {
+      id: id ?? '',
+      filter: {
+        searchText: searchTextDelayed,
+        pageNumber,
+        pageSize: ITEMS_PER_PAGE,
+      },
     },
-    onSelectAll: (isSelect: boolean, rows: IEvent[], e: SyntheticEvent) => {
-      console.log(rows, isSelect, e)
-    },
-  }
+  })
 
-  const setSearchTextHandler = (text: string) => {
+  const handleSearch = debounce((text: string) => {
     setPageNumber(1)
+    setSearchTextDelayed(text)
+  })
+
+  const debounceSearch = useCallback(debounce(handleSearch, 500), [])
+
+  const handleSearchChange = (text: string) => {
     setSearchText(text)
+    debounceSearch(text)
   }
 
   if (error) {
@@ -89,10 +78,51 @@ const MyEvents = () => {
     }
   })
 
+  const headers = [
+    {
+      key: 'title',
+      label: 'Title',
+    },
+    {
+      key: 'start',
+      label: 'Start',
+    },
+    {
+      key: 'end',
+      label: 'End',
+    },
+    {
+      key: 'description',
+      label: 'Description',
+    },
+    {
+      key: 'isPrivate',
+      label: 'Private',
+    },
+    {
+      key: 'url',
+      label: 'Link',
+    },
+    {
+      key: 'createdBy',
+      label: 'Posted by',
+    },
+    {
+      key: 'createdAt',
+      label: 'Posted on',
+    },
+    {
+      key: 'updatedAt',
+      label: 'Updated on',
+    },
+  ] as TableHeader<object>[]
+
+  console.log(selectedRow)
+
   return (
     <TitledCard title='My Events'>
-      {loading || networkStatus === NetworkStatus.refetch ? (
-        <Spinner />
+      {loading ? (
+        <Spinner style={{ paddingBottom: 12 }} />
       ) : (
         !updatedEvents?.length && (
           <Alert
@@ -102,37 +132,15 @@ const MyEvents = () => {
           />
         )
       )}
-      <ToolkitProvider
-        bootstrap4
-        keyField='id'
+      <Table
+        searchable
         data={updatedEvents ?? []}
-        columns={columns}
-        search
-      >
-        {(props: ToolkitContextType) => (
-          <div>
-            <SearchBar
-              {...props.searchProps}
-              onSearch={setSearchTextHandler}
-              searchText={searchText}
-              delay={800}
-            />
-            <hr />
-            <BootstrapTableWrapper>
-              <BootstrapTable
-                {...props.baseProps}
-                striped
-                hover
-                bordered={false}
-                selectRow={selectRow}
-                wrapperClasses='table-responsive'
-                rowStyle={{ overflowWrap: 'break-word' }}
-                filter={filterFactory()}
-              />
-            </BootstrapTableWrapper>
-          </div>
-        )}
-      </ToolkitProvider>
+        selectedRow={selectedRow}
+        searchText={searchText}
+        config={{ headers }}
+        onSearch={handleSearchChange}
+        onSelect={setSelectedRow}
+      />
       <div className='float-end'>
         <Pagination
           total={data?.getUserEvents.totalCount || 0}
@@ -144,58 +152,5 @@ const MyEvents = () => {
     </TitledCard>
   )
 }
-
-const columns = [
-  {
-    dataField: 'title',
-    text: 'Title',
-    sort: true,
-    filter: textFilter(),
-  },
-  {
-    dataField: 'start',
-    text: 'Start',
-    sort: true,
-    filter: textFilter(),
-  },
-  {
-    dataField: 'end',
-    text: 'End',
-    sort: true,
-    filter: textFilter(),
-  },
-  {
-    dataField: 'description',
-    text: 'Description',
-    sort: true,
-    filter: textFilter(),
-  },
-  {
-    dataField: 'isPrivate',
-    text: 'Private',
-    sort: true,
-  },
-  {
-    dataField: 'url',
-    text: 'Link',
-    sort: true,
-  },
-  {
-    dataField: 'createdBy',
-    text: 'Posted By',
-    sort: true,
-  },
-  {
-    dataField: 'createdAt',
-    text: 'Posted Date',
-    sort: true,
-    filter: textFilter(),
-  },
-  {
-    dataField: 'updatedAt',
-    text: 'Updated Date',
-    sort: true,
-  },
-]
 
 export default MyEvents
