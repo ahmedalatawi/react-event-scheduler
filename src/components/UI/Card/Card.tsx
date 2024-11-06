@@ -6,8 +6,8 @@ import {
   TwitterIcon,
 } from 'react-share'
 import styled from 'styled-components'
-import type { Maybe } from '../../../generated/graphql'
-import { formatDateTime } from '../../../utils/dateTransforms'
+import type { Maybe } from '@/generated/graphql'
+import { formatDateTime } from '@/utils/dateTransforms'
 
 export type CardType = {
   title: string

@@ -1,9 +1,9 @@
 import { useState, Fragment, useContext } from 'react'
 import { Container, Form, Nav, Navbar } from 'react-bootstrap'
 import { NavLink } from 'react-router-dom'
-import AuthContext from '../../store/auth-context'
-import LoginContainer from '../../pages/user/LoginContainer/LoginContainer'
-import MyAccount from '../../pages/user/MyAccount/MyAccount'
+import AuthContext from '@/store/auth-context'
+import LoginContainer from '@/pages/user/LoginContainer/LoginContainer'
+import MyAccount from '@/pages/user/MyAccount/MyAccount'
 import { Switch, useDarkreader } from 'react-darkreader'
 
 const MainNavbar = () => {

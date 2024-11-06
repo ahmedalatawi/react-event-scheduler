@@ -1,27 +1,25 @@
 import { ApolloError, NetworkStatus } from '@apollo/client'
 import { type ChangeEvent, useContext, useEffect, useState } from 'react'
-import useDebounce from '../../../hooks/useDebounce'
-import Spinner from '../../../components/ui/Spinner/Spinner'
-import Card, { type CardType } from '../../../components/ui/Card/Card'
-import Alert from '../../../components/ui/Alert/Alert'
-import Pagination from '../../../components/Pagination/Pagination'
-import AuthContext from '../../../store/auth-context'
-import Modal from '../../../components/ui/Modal/Modal'
-import EventBody, {
-  type EventType,
-} from '../../../components/EventBody/EventBody'
+import useDebounce from '@/hooks/useDebounce'
+import Spinner from '@/components/ui/Spinner/Spinner'
+import Card, { type CardType } from '@/components/ui/Card/Card'
+import Alert from '@/components/ui/Alert/Alert'
+import Pagination from '@/components/Pagination/Pagination'
+import AuthContext from '@/store/auth-context'
+import Modal from '@/components/ui/Modal/Modal'
+import EventBody, { type EventType } from '@/components/EventBody/EventBody'
 import { Form } from 'react-bootstrap'
 import {
   type EventFull,
   useDeleteEventMutation,
   useGetEventsQuery,
   useSaveEventMutation,
-} from '../../../generated/graphql'
+} from '@/generated/graphql'
 import styled from 'styled-components'
-import { dateToTitle } from '../../../utils/dateTransforms'
-import { ServerErrorAlert } from '../../../components/ServerErrorAlert/ServerErrorAlert'
+import { dateToTitle } from '@/utils/dateTransforms'
+import { ServerErrorAlert } from '@/components/ServerErrorAlert/ServerErrorAlert'
 import toast from 'react-hot-toast'
-import { removeEvent } from '../../../utils/apolloCache'
+import { removeEvent } from '@/utils/apolloCache'
 import { DateTime } from 'luxon'
 
 const EVENTS_PER_PAGE = 15

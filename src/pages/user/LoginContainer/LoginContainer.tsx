@@ -1,18 +1,16 @@
 import { useState, Fragment, useContext } from 'react'
-import useValidation from '../../../hooks/useValidation'
-import Login from '../../../components/Login/Login'
-import Signup, {
-  type LoginOrSignupFormProps,
-} from '../../../components/Signup/Signup'
-import Alert from '../../../components/ui/Alert/Alert'
-import Modal from '../../../components/ui/Modal/Modal'
-import AuthContext from '../../../store/auth-context'
+import useValidation from '@/hooks/useValidation'
+import Login from '@/components/Login/Login'
+import Signup, { type LoginOrSignupFormProps } from '@/components/Signup/Signup'
+import Alert from '@/components/ui/Alert/Alert'
+import Modal from '@/components/ui/Modal/Modal'
+import AuthContext from '@/store/auth-context'
 import {
   type Auth,
   useLoginLazyQuery,
   useSignupMutation,
-} from '../../../generated/graphql'
-import type { ISignupInput } from '../../../types'
+} from '@/generated/graphql'
+import type { ISignupInput } from '@/types'
 import { ApolloError } from '@apollo/client'
 
 type Props = {

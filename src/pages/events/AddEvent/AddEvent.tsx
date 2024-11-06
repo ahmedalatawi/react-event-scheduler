@@ -1,15 +1,15 @@
 import { type ChangeEvent, Fragment, useContext, useState } from 'react'
 import { MdSaveAlt } from 'react-icons/md'
-import EventBody from '../../../components/EventBody/EventBody'
-import Alert from '../../../components/ui/Alert/Alert'
-import AuthContext from '../../../store/auth-context'
+import EventBody from '@/components/EventBody/EventBody'
+import Alert from '@/components/ui/Alert/Alert'
+import AuthContext from '@/store/auth-context'
 import {
   type SaveEventMutation,
   useSaveEventMutation,
-} from '../../../generated/graphql'
-import type { IAuth } from '../../../types'
+} from '@/generated/graphql'
+import type { IAuth } from '@/types'
 import { ApolloError } from '@apollo/client'
-import { BtnSpinner } from '../../../components/ui/BtnSpinner/BtnSpinner'
+import { BtnSpinner } from '@/components/ui/BtnSpinner/BtnSpinner'
 import { Button } from 'react-bootstrap'
 import LoginContainer from '../../user/LoginContainer/LoginContainer'
 

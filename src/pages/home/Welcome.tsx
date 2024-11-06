@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import WelcomeImage from '../../assests/images/mtb.jpg'
+import WelcomeImage from '@/assests/images/mtb.jpg'
 import { Link } from 'react-router-dom'
 
 const Container = styled.main`

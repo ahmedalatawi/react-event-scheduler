@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { useParams } from 'react-router'
 import { BiEditAlt } from 'react-icons/bi'
-import Alert from '../../../../components/ui/Alert/Alert'
-import Spinner from '../../../../components/ui/Spinner/Spinner'
+import Alert from '@/components/ui/Alert/Alert'
+import Spinner from '@/components/ui/Spinner/Spinner'
 import EditMyProfile from './EditMyProfile'
-import TitledCard from '../../../../components/ui/TitledCard/TitledCard'
-import { useGetUserQuery } from '../../../../generated/graphql'
+import TitledCard from '@/components/ui/TitledCard/TitledCard'
+import { useGetUserQuery } from '@/generated/graphql'
 import { useNavigateToHome } from '@/hooks/useNavigateToHome'
 
 const MyProfile = () => {

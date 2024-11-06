@@ -1,5 +1,5 @@
 import { Fragment } from 'react'
-import { formatDateTime } from '../../../utils/dateTransforms'
+import { formatDateTime } from '@/utils/dateTransforms'
 
 type CardViewType = {
   title: string | undefined

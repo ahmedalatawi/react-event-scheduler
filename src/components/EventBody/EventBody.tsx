@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 import { useEffect, useState, type ChangeEvent, useContext } from 'react'
-import AuthContext from '../../store/auth-context'
+import AuthContext from '@/store/auth-context'
 import Alert from '../ui/Alert/Alert'
 
 export type EventType = {

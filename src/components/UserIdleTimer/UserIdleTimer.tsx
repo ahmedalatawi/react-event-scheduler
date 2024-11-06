@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react'
 import { useIdleTimer } from 'react-idle-timer'
-import AuthContext from '../../store/auth-context'
+import AuthContext from '@/store/auth-context'
 import Timer from '../Timer/Timer'
 import Modal from '../ui/Modal/Modal'
 

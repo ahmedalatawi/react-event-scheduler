@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Tab, Tabs } from 'react-bootstrap'
-import TitledCard from '../../../../components/ui/TitledCard/TitledCard'
+import TitledCard from '@/components/ui/TitledCard/TitledCard'
 import styled from 'styled-components'
 import { useNavigateToHome } from '@/hooks/useNavigateToHome'
 
