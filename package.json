@@ -3,7 +3,7 @@
   "version": "1.0.1",
   "private": true,
   "scripts": {
-    "dev": "run-p --race start:server start:web",
+    "start": "run-p --race start:server start:web",
     "build": "tsc && vite build",
     "test": "jest",
     "test:coverage": "jest --watchAll=false --coverage",
