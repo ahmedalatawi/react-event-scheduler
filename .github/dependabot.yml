@@ -6,8 +6,8 @@
 version: 2
 updates:
   - package-ecosystem: npm # See documentation for possible values
-    directory: "/" # Location of package manifests
+    directory: '/' # Location of package manifests
     schedule:
       interval: daily
-      time: "21:00"
+      time: '21:00'
     open-pull-requests-limit: 10

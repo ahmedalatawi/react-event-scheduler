@@ -1,25 +1,25 @@
 import { ApolloError, NetworkStatus } from '@apollo/client'
-import { ChangeEvent, useContext, useEffect, useState } from 'react'
-import useDebounce from '../../../hooks/useDebounce'
-import Spinner from '../../../components/UI/Spinner/Spinner'
-import Card, { CardType } from '../../../components/UI/Card/Card'
-import Alert from '../../../components/UI/Alert/Alert'
-import Pagination from '../../../components/Pagination/Pagination'
-import AuthContext from '../../../store/auth-context'
-import Modal from '../../../components/UI/Modal/Modal'
-import EventBody, { EventType } from '../../../components/EventBody/EventBody'
+import { type ChangeEvent, useContext, useEffect, useState } from 'react'
+import useDebounce from '@/hooks/useDebounce'
+import Spinner from '@/components/ui/Spinner/Spinner'
+import Card, { type CardType } from '@/components/ui/Card/Card'
+import Alert from '@/components/ui/Alert/Alert'
+import Pagination from '@/components/Pagination/Pagination'
+import AuthContext from '@/store/auth-context'
+import Modal from '@/components/ui/Modal/Modal'
+import EventBody, { type EventType } from '@/components/EventBody/EventBody'
 import { Form } from 'react-bootstrap'
 import {
-  EventFull,
+  type EventFull,
   useDeleteEventMutation,
   useGetEventsQuery,
   useSaveEventMutation,
-} from '../../../generated/graphql'
+} from '@/generated/graphql'
 import styled from 'styled-components'
-import { dateToTitle } from '../../../utils/dateTransforms'
-import { ServerErrorAlert } from '../../../components/ServerErrorAlert/ServerErrorAlert'
+import { dateToTitle } from '@/utils/dateTransforms'
+import { ServerErrorAlert } from '@/components/ServerErrorAlert/ServerErrorAlert'
 import toast from 'react-hot-toast'
-import { removeEvent } from '../../../utils/apolloCache'
+import { removeEvent } from '@/utils/apolloCache'
 import { DateTime } from 'luxon'
 
 const EVENTS_PER_PAGE = 15
@@ -214,14 +214,12 @@ function SearchEvents() {
 
   useEffect(() => {
     resetCurrentPage()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearchText])
 
   useEffect(() => {
-    skipFirstRun && setSkipFirstRun(false)
-    !skipFirstRun && refetch()
+    if (skipFirstRun) setSkipFirstRun(false)
+    if (!skipFirstRun) refetch()
     resetCurrentPage()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth, refetch])
 
   const handleFilterByAllEventsChange = (e: ChangeEvent<HTMLInputElement>) => {

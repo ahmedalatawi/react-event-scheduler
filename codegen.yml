@@ -1,5 +1,5 @@
 overwrite: true
-schema: ${REACT_APP_GRAPHQL_ENDPOINT}
+schema: ${VITE_APP_GRAPHQL_ENDPOINT}
 documents: 'src/**/*.graphql'
 generates:
   src/generated/graphql.tsx:
@@ -8,6 +8,8 @@ generates:
       - 'typescript-operations'
       - 'typescript-resolvers'
       - 'typescript-react-apollo'
+    config:
+      useTypeImports: true
   ./graphql.schema.json:
     plugins:
       - 'introspection'

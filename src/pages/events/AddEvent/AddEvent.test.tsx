@@ -1,10 +1,10 @@
 import TestRenderer, { act } from 'react-test-renderer'
 import { screen } from '@testing-library/dom'
-import { MockedProvider, MockedResponse } from '@apollo/client/testing'
+import { MockedProvider, type MockedResponse } from '@apollo/client/testing'
 import AddEvent from './AddEvent'
-import { SaveEventDocument } from '../../../generated/graphql'
+import { SaveEventDocument } from '@/generated/graphql'
 import { GraphQLError } from 'graphql'
-import AuthContext from '../../../store/auth-context'
+import AuthContext from '@/store/auth-context'
 
 const mocks: ReadonlyArray<MockedResponse> = [
   {

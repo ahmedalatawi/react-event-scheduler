@@ -1,18 +1,16 @@
-import { useState, Fragment, useContext, FC } from 'react'
-import useValidation from '../../../hooks/useValidation'
-import Login from '../../../components/Login/Login'
-import Signup, {
-  LoginOrSignupFormProps,
-} from '../../../components/Signup/Signup'
-import Alert from '../../../components/UI/Alert/Alert'
-import Modal from '../../../components/UI/Modal/Modal'
-import AuthContext from '../../../store/auth-context'
+import { useState, Fragment, useContext } from 'react'
+import useValidation from '@/hooks/useValidation'
+import Login from '@/components/Login/Login'
+import Signup, { type LoginOrSignupFormProps } from '@/components/Signup/Signup'
+import Alert from '@/components/ui/Alert/Alert'
+import Modal from '@/components/ui/Modal/Modal'
+import AuthContext from '@/store/auth-context'
 import {
-  Auth,
+  type Auth,
   useLoginLazyQuery,
   useSignupMutation,
-} from '../../../generated/graphql'
-import { ISignupInput } from '../../../types'
+} from '@/generated/graphql'
+import type { ISignupInput } from '@/types'
 import { ApolloError } from '@apollo/client'
 
 type Props = {
@@ -20,7 +18,7 @@ type Props = {
   onClose: () => void
 }
 
-const LoginContainer: FC<Props> = ({ view, onClose }) => {
+const LoginContainer = ({ view, onClose }: Props) => {
   const [viewType, setViewType] = useState<string>('')
   const [formError, setFormError] = useState<string>('')
   const [serverError, setServerError] = useState<ApolloError | null>(null)

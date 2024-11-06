@@ -1,26 +1,26 @@
 import { useState, useRef, useContext, useEffect, Fragment } from 'react'
-import Modal from '../../components/UI/Modal/Modal'
-import { EventClickArg } from '@fullcalendar/core'
+import Modal from '@/components/ui/Modal/Modal'
+import type { EventClickArg } from '@fullcalendar/core'
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
-import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction'
-import EventBody, { EventType } from '../../components/EventBody/EventBody'
+import interactionPlugin, { type DateClickArg } from '@fullcalendar/interaction'
+import EventBody, { type EventType } from '@/components/EventBody/EventBody'
 import { ApolloError, NetworkStatus } from '@apollo/client'
-import Spinner from '../../components/UI/Spinner/Spinner'
-import Alert from '../../components/UI/Alert/Alert'
-import { IAuth } from '../../types'
-import AuthContext from '../../store/auth-context'
+import Spinner from '@/components/ui/Spinner/Spinner'
+import Alert from '@/components/ui/Alert/Alert'
+import type { IAuth } from '@/types'
+import AuthContext from '@/store/auth-context'
 import {
   useDeleteEventMutation,
   useGetEventsLazyQuery,
   useSaveEventMutation,
-} from '../../generated/graphql'
-import { ServerErrorAlert } from '../../components/ServerErrorAlert/ServerErrorAlert'
+} from '@/generated/graphql'
+import { ServerErrorAlert } from '@/components/ServerErrorAlert/ServerErrorAlert'
 import styled from 'styled-components'
 import toast from 'react-hot-toast'
-import { removeEvent } from '../../utils/apolloCache'
-import client from '../../apollo'
+import { removeEvent } from '@/utils/apolloCache'
+import client from '@/apolloClient'
 import { DateTime } from 'luxon'
 import { Button } from 'react-bootstrap'
 import LoginContainer from '../user/LoginContainer/LoginContainer'
@@ -97,14 +97,14 @@ function Calendar() {
   const { auth } = useContext(AuthContext)
 
   useEffect(() => {
-    calendarReady && refetch()
+    if (calendarReady) refetch()
+
     setDisableEdit(!auth)
     setActionBtns({
       ...actionBtns,
       disableSaveBtn: true,
       disableDeleteBtn: !auth,
     })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth, refetch])
 
   const onCompleteApiRequest = () => {

@@ -1,21 +1,19 @@
-import { FC, useContext, useState } from 'react'
+import { useContext, useState } from 'react'
 import { useIdleTimer } from 'react-idle-timer'
-import AuthContext from '../../store/auth-context'
+import AuthContext from '@/store/auth-context'
 import Timer from '../Timer/Timer'
-import Modal from '../UI/Modal/Modal'
+import Modal from '../ui/Modal/Modal'
 
 type Props = {
   onLogout: () => void
 }
 
-const UserIdleTimer: FC<Props> = ({ onLogout }) => {
+const UserIdleTimer = ({ onLogout }: Props) => {
   const [displayModal, setDisplayModal] = useState<boolean>(false)
 
   const { auth } = useContext(AuthContext)
 
-  const handleOnIdle = () => {
-    auth ? setDisplayModal(true) : onLogout()
-  }
+  const handleOnIdle = () => (auth ? setDisplayModal(true) : onLogout())
 
   const handleOnStayLoggedIn = () => {
     reset()
@@ -43,7 +41,7 @@ const UserIdleTimer: FC<Props> = ({ onLogout }) => {
       onClose={onLogout}
       onSubmit={handleOnStayLoggedIn}
     >
-      <Timer seconds={90} onTimeout={onLogout} />
+      <Timer seconds={60} onTimeout={onLogout} />
     </Modal>
   )
 }

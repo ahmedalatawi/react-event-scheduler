@@ -1,7 +1,6 @@
-import { FC } from 'react'
-import Alert from '../UI/Alert/Alert'
+import Alert from '../ui/Alert/Alert'
 
-const PageNotFound: FC = () => (
+const PageNotFound = () => (
   <Alert msg={'404 - Page Not Found'} type='warning' dismissible={false} />
 )
 

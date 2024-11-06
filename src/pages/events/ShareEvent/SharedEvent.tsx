@@ -1,12 +1,12 @@
-import { FC, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useParams } from 'react-router'
-import CardView from '../../../components/UI/CardView/CardView'
-import Alert from '../../../components/UI/Alert/Alert'
-import Spinner from '../../../components/UI/Spinner/Spinner'
-import { EventFull, useGetEventMutation } from '../../../generated/graphql'
-import { dateToTitle } from '../../../utils/dateTransforms'
+import CardView from '@/components/ui/CardView/CardView'
+import Alert from '@/components/ui/Alert/Alert'
+import Spinner from '@/components/ui/Spinner/Spinner'
+import { type EventFull, useGetEventMutation } from '@/generated/graphql'
+import { dateToTitle } from '@/utils/dateTransforms'
 
-const SharedEvent: FC = () => {
+const SharedEvent = () => {
   const [getEvent, { data, loading, error }] = useGetEventMutation()
 
   const { id } = useParams()

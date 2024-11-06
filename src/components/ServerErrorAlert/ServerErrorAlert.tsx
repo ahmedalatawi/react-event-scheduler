@@ -1,5 +1,5 @@
 import { ApolloError } from '@apollo/client'
-import Alert from '../UI/Alert/Alert'
+import Alert from '../ui/Alert/Alert'
 
 export const ServerErrorAlert = ({
   error,
