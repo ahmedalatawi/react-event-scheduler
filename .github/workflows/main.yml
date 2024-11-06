@@ -24,7 +24,7 @@ jobs:
         run: yarn install
 
       - name: Build project
-        run: yarn run build --if-present
+        run: yarn run build
 
       - name: Delete build artifact
         uses: geekyeggo/delete-artifact@v2
