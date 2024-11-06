@@ -51,9 +51,9 @@ Create a `.env` file in the project's root directory, and copy & paste what's in
 
 ### `yarn start`
 
-Runs the backend and frontend apps simultaneously in the development mode.\
+Runs the backend and frontend apps simultaneously in the development mode.
 
-> Or if you prefer running the apps separately by running `start:web` and `start:server` in separate terminals.
+> Or if you prefer running the apps separately by running `yarn start:web` and `yarn start:server` in separate terminals.
 
 The app will automatically start at [http://localhost:3000](http://localhost:3000) in the browser.
 
