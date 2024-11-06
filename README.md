@@ -4,7 +4,7 @@
 [![codecov](https://codecov.io/gh/AhmedAlatawi/react-event-scheduler/graph/badge.svg?token=EG9GTUBOUE)](https://codecov.io/gh/AhmedAlatawi/react-event-scheduler)
 [![License: MIT](https://img.shields.io/github/license/AhmedAlatawi/react-event-scheduler)](https://github.com/AhmedAlatawi/react-event-scheduler/blob/master/LICENSE)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project was bootstrapped with [Vite](https://vite.dev/).
 
 ![](./images/react-event-pic.gif)
 
@@ -47,7 +47,7 @@ Next, run `yarn codegen` to re-generate the queries and mutations (before you do
 
 > Make sure MongoDB is up and running
 
-In the project directory, run `yarn`, then:
+Create a `.env` file in the project's root directory, and copy & paste what's in `.env.example`, then run `yarn`:
 
 ### `yarn start`
 
@@ -55,10 +55,9 @@ Runs the backend and frontend apps simultaneously in the development mode.\
 
 > Or if you prefer running the apps separately by running `start:web` and `start:server` in separate terminals.
 
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+The app will automatically start at [http://localhost:3000](http://localhost:3000) in the browser.
 
-The page will reload if you make changes.\
-You will also see any lint errors in the console.
+You will also see any Lint or Typescript errors in the console.
 
 ## Current functionality
 
