@@ -38,10 +38,10 @@ app.use(compression())
 app.use(json())
 app.use(urlencoded({ extended: true }))
 
-app.use('/', express.static(`${__dirname}/../build`))
+app.use('/', express.static(`${__dirname}/../dist`))
 
 app.get('*', (_, res) => {
-  res.sendFile(path.join(__dirname, '../build', 'index.html'))
+  res.sendFile(path.join(__dirname, '../dist', 'index.html'))
 })
 
 const startServer = async () => {
