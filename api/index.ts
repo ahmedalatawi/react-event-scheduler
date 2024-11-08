@@ -3,7 +3,6 @@ import { expressMiddleware } from '@apollo/server/express4'
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer'
 import compression from 'compression'
 import express from 'express'
-// import enforce from 'express-sslify'
 import path from 'path'
 import cors from 'cors'
 import dotenv from 'dotenv'
@@ -26,11 +25,6 @@ const corsOptions = {
 }
 
 const app = express()
-
-// enforce https for production
-// if (process.env.ENV === 'production') {
-//   app.use(enforce.HTTPS({ trustProtoHeader: true }))
-// }
 
 app.use(cookieParser())
 app.use(compression())

@@ -37,7 +37,6 @@
     "dataloader": "^2.2.2",
     "dotenv": "^16.0.3",
     "express": "^4.19.2",
-    "express-sslify": "^1.2.0",
     "graphql": "^16.9.0",
     "graphql-tag": "^2.12.6",
     "js-cookie": "^3.0.5",
