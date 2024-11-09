@@ -1,5 +1,5 @@
-//@ts-expect-error fix this later
-const config = {
+/* eslint-disable no-undef */
+module.exports = {
   testEnvironment: 'jsdom',
   transform: {
     '^.+\\.tsx?$': 'ts-jest',
@@ -12,5 +12,3 @@ const config = {
 
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
 }
-
-export default config
