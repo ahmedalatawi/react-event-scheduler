@@ -1,5 +1,4 @@
-import TestRenderer, { act } from 'react-test-renderer'
-import { screen } from '@testing-library/dom'
+import { act, render, screen } from '@testing-library/react'
 import { MockedProvider, type MockedResponse } from '@apollo/client/testing'
 import AddEvent from './AddEvent'
 import { SaveEventDocument } from '@/generated/graphql'
@@ -45,7 +44,7 @@ const mocks: ReadonlyArray<MockedResponse> = [
 
 describe('AddEvent', () => {
   it('should set state to loading when mutation is executed', () => {
-    const component = TestRenderer.create(
+    render(
       <MockedProvider mocks={mocks} addTypename={false}>
         <AddEvent />
       </MockedProvider>,
@@ -53,7 +52,7 @@ describe('AddEvent', () => {
 
     const e = { preventDefault: jest.fn() }
 
-    const saveButton = component.root.findByType('form')
+    const saveButton = screen.findByRole('form')
     act(() => {
       saveButton.props.onSubmit(e)
     })

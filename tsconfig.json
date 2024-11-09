@@ -20,12 +20,13 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "verbatimModuleSyntax": true,
+    "esModuleInterop": true,
 
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src", "api/**/*"],
+  "include": ["src", "api/**/*", "./jest.setup.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
