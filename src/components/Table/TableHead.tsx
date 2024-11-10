@@ -1,4 +1,5 @@
 import type { SortConfig, TableConfig } from './Table'
+import { PiSortAscendingLight, PiSortDescendingLight } from 'react-icons/pi'
 
 export type TableHeader<T> = {
   key: keyof T
@@ -13,9 +14,14 @@ interface Props<T> {
 }
 
 function TableHead<T>({ columns, config, sortConfig, onClick }: Props<T>) {
-  const getSortClassName = (key: keyof T) => {
+  const getSortIcon = (key: keyof T) => {
     if (!sortConfig?.key) return
-    return sortConfig.key === key ? sortConfig.direction : undefined
+    const dir = sortConfig.key === key ? sortConfig.direction : null
+    return dir === 'asc' ? (
+      <PiSortAscendingLight />
+    ) : dir === 'desc' ? (
+      <PiSortDescendingLight />
+    ) : null
   }
 
   return (
@@ -23,21 +29,13 @@ function TableHead<T>({ columns, config, sortConfig, onClick }: Props<T>) {
       <tr>
         {config
           ? config.headers.map((h) => (
-              <th
-                key={h.key as string}
-                onClick={() => onClick?.(h.key)}
-                className={getSortClassName(h.key)}
-              >
-                {h.label}
+              <th key={h.key as string} onClick={() => onClick?.(h.key)}>
+                {h.label} {getSortIcon(h.key)}
               </th>
             ))
           : columns.map((k) => (
-              <th
-                key={k}
-                onClick={() => onClick?.(k as keyof T)}
-                className={getSortClassName(k as keyof T)}
-              >
-                {k}
+              <th key={k} onClick={() => onClick?.(k as keyof T)}>
+                {k} {getSortIcon(k as keyof T)}
               </th>
             ))}
       </tr>

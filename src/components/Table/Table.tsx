@@ -117,23 +117,7 @@ const StyledTable = styled.table`
     cursor: pointer;
   }
 
-  // tr[data-selected='true'] {
-  //   background: #a7c7e7;
-  // }
-
   thead {
     white-space: nowrap;
-  }
-
-  thead th.asc::after {
-    content: 'V';
-    display: inline-block;
-    margin-left: 0.3em;
-  }
-
-  thead th.desc::after {
-    content: '^';
-    display: inline-block;
-    margin-left: 0.3em;
   }
 `
