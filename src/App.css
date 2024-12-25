@@ -2,3 +2,11 @@
   content: '*';
   color: red;
 }
+
+.DataTable {
+  .virtual-cell,
+  .header-cell,
+  .checkbox-cell {
+    border-right: none !important;
+  }
+}

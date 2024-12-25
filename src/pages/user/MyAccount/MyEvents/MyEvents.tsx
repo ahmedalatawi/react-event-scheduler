@@ -155,6 +155,7 @@ const MyEvents = () => {
   return (
     <TitledCard title='My Events'>
       <DataTable
+        className='DataTable'
         data={updatedEvents ?? []}
         columns={columns}
         pageSize={10}
