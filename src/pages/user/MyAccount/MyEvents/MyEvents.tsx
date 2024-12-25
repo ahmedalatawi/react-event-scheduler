@@ -1,24 +1,33 @@
-import { useCallback, useState } from 'react'
 import { useParams } from 'react-router'
 import Alert from '@/components/ui/Alert/Alert'
-import Spinner from '@/components/ui/Spinner/Spinner'
 import TitledCard from '@/components/ui/TitledCard/TitledCard'
-import Pagination from '@/components/Pagination/Pagination'
 import { useGetUserEventsQuery } from '@/generated/graphql'
-import { Table } from '@/components/Table/Table'
-import type { TableHeader } from '@/components/Table/TableHead'
 import { useNavigateToHome } from '@/hooks/useNavigateToHome'
-import { debounce } from 'lodash'
+// import { debounce } from 'lodash'
+
+import { DataTable, type Column } from '@atawi/react-datatable'
+
+type Event = {
+  id: string
+  title: string
+  description: string
+  start: string
+  end: string
+  isPrivate: string
+  url: string | JSX.Element
+  createdAt: string
+  updatedAt: string
+}
 
 const ITEMS_PER_PAGE = 20
 
 const MyEvents = () => {
   const { id } = useParams()
 
-  const [selectedRow, setSelectedRow] = useState<object>()
-  const [searchText, setSearchText] = useState<string>('')
-  const [searchTextDelayed, setSearchTextDelayed] = useState<string>('')
-  const [pageNumber, setPageNumber] = useState<number>(1)
+  // const [selectedRow, setSelectedRow] = useState<object>()
+  // const [searchText, setSearchText] = useState<string>('')
+  // const [searchTextDelayed, setSearchTextDelayed] = useState<string>('')
+  // const [pageNumber, setPageNumber] = useState<number>(1)
 
   useNavigateToHome()
 
@@ -26,25 +35,30 @@ const MyEvents = () => {
     fetchPolicy: 'cache-and-network',
     variables: {
       id: id ?? '',
+      // filter: {
+      //   searchText: searchTextDelayed,
+      //   pageNumber,
+      //   pageSize: ITEMS_PER_PAGE,
+      // },
       filter: {
-        searchText: searchTextDelayed,
-        pageNumber,
+        searchText: '',
+        pageNumber: 1,
         pageSize: ITEMS_PER_PAGE,
       },
     },
   })
 
-  const handleSearch = debounce((text: string) => {
-    setPageNumber(1)
-    setSearchTextDelayed(text)
-  })
+  // const handleSearch = debounce((text: string) => {
+  //   setPageNumber(1)
+  //   setSearchTextDelayed(text)
+  // })
 
-  const debounceSearch = useCallback(debounce(handleSearch, 500), [])
+  // const debounceSearch = useCallback(debounce(handleSearch, 500), [])
 
-  const handleSearchChange = (text: string) => {
-    setSearchText(text)
-    debounceSearch(text)
-  }
+  // const handleSearchChange = (text: string) => {
+  //   setSearchText(text)
+  //   debounceSearch(text)
+  // }
 
   if (error) {
     return <Alert msg={error.message} type='danger' dismissible={false} />
@@ -59,7 +73,7 @@ const MyEvents = () => {
       isPrivate,
       description,
       url,
-      createdBy,
+      // createdBy,
       createdAt,
       updatedAt,
     } = event
@@ -70,85 +84,88 @@ const MyEvents = () => {
       description,
       start: new Date(start).toLocaleString(),
       end: new Date(end).toLocaleString(),
-      createdBy: createdBy?.username,
+      // createdBy: createdBy?.username,
       isPrivate: isPrivate ? 'Yes' : 'No',
-      url: url ? <a href={url}>Link</a> : '',
+      url: url,
       createdAt: createdAt ? new Date(createdAt).toLocaleString() : '',
       updatedAt: updatedAt ? new Date(updatedAt).toLocaleString() : '',
     }
-  })
+  }) as Event[]
 
-  const headers = [
+  const columns: Column<Event>[] = [
     {
       key: 'title',
-      label: 'Title',
+      header: 'Title',
+      sortable: true,
+      searchable: true,
     },
     {
       key: 'start',
-      label: 'Start',
+      header: 'Start',
+      sortable: true,
+      searchable: true,
+      width: '10%',
     },
     {
       key: 'end',
-      label: 'End',
+      header: 'End',
+      sortable: true,
+      searchable: true,
+      width: '10%',
     },
     {
       key: 'description',
-      label: 'Description',
+      header: 'Description',
+      sortable: true,
+      searchable: true,
     },
     {
       key: 'isPrivate',
-      label: 'Private',
+      header: 'Private',
+      sortable: true,
+      searchable: true,
+      width: '10%',
     },
     {
       key: 'url',
-      label: 'Link',
-    },
-    {
-      key: 'createdBy',
-      label: 'Posted by',
+      header: 'Link',
+      sortable: true,
+      searchable: true,
+      width: '10%',
+      render: (value) => <a href={value as string}>Link</a>,
     },
     {
       key: 'createdAt',
-      label: 'Posted on',
+      header: 'Posted on',
+      sortable: true,
+      searchable: true,
     },
     {
       key: 'updatedAt',
-      label: 'Updated on',
+      header: 'Updated on',
+      sortable: true,
+      searchable: true,
     },
-  ] as TableHeader<object>[]
+  ]
 
-  console.log(selectedRow)
+  const handleSelectionChange = (selectedItems: Event[]) => {
+    console.log('Selected:', selectedItems)
+  }
 
   return (
     <TitledCard title='My Events'>
-      {loading ? (
-        <Spinner style={{ paddingBottom: 12 }} />
-      ) : (
-        !updatedEvents?.length && (
-          <Alert
-            msg={'No events were found'}
-            type='warning'
-            dismissible={false}
-          />
-        )
-      )}
-      <Table
-        searchable
+      <DataTable
         data={updatedEvents ?? []}
-        selectedRow={selectedRow}
-        searchText={searchText}
-        config={{ headers }}
-        onSearch={handleSearchChange}
-        onSelect={setSelectedRow}
+        columns={columns}
+        pageSize={10}
+        selectable={true}
+        expandable={false}
+        stickyHeader={true}
+        searchable={true}
+        exportable={true}
+        loading={loading}
+        onSelectionChange={handleSelectionChange}
       />
-      <div className='float-end'>
-        <Pagination
-          total={data?.getUserEvents.totalCount || 0}
-          itemsPerPage={ITEMS_PER_PAGE}
-          currentPage={pageNumber}
-          onPageChange={(page) => setPageNumber(page)}
-        />
-      </div>
     </TitledCard>
   )
 }
