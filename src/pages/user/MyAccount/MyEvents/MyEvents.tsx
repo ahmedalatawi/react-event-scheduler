@@ -3,9 +3,9 @@ import Alert from '@/components/ui/Alert/Alert'
 import TitledCard from '@/components/ui/TitledCard/TitledCard'
 import { useGetUserEventsQuery } from '@/generated/graphql'
 import { useNavigateToHome } from '@/hooks/useNavigateToHome'
-// import { debounce } from 'lodash'
-
+import { debounce } from 'lodash'
 import { DataTable, type Column } from '@atawi/react-datatable'
+import { useCallback, useState } from 'react'
 
 type Event = {
   id: string
@@ -23,11 +23,8 @@ const ITEMS_PER_PAGE = 20
 
 const MyEvents = () => {
   const { id } = useParams()
-
-  // const [selectedRow, setSelectedRow] = useState<object>()
-  // const [searchText, setSearchText] = useState<string>('')
-  // const [searchTextDelayed, setSearchTextDelayed] = useState<string>('')
-  // const [pageNumber, setPageNumber] = useState<number>(1)
+  const [searchTextDelayed, setSearchTextDelayed] = useState<string>('')
+  const [pageNumber, setPageNumber] = useState<number>(1)
 
   useNavigateToHome()
 
@@ -35,30 +32,24 @@ const MyEvents = () => {
     fetchPolicy: 'cache-and-network',
     variables: {
       id: id ?? '',
-      // filter: {
-      //   searchText: searchTextDelayed,
-      //   pageNumber,
-      //   pageSize: ITEMS_PER_PAGE,
-      // },
       filter: {
-        searchText: '',
-        pageNumber: 1,
+        searchText: searchTextDelayed,
+        pageNumber,
         pageSize: ITEMS_PER_PAGE,
       },
     },
   })
 
-  // const handleSearch = debounce((text: string) => {
-  //   setPageNumber(1)
-  //   setSearchTextDelayed(text)
-  // })
+  const handleSearch = debounce((text: string) => {
+    setPageNumber(1)
+    setSearchTextDelayed(text)
+  })
 
-  // const debounceSearch = useCallback(debounce(handleSearch, 500), [])
+  const debounceSearch = useCallback(debounce(handleSearch, 500), [])
 
-  // const handleSearchChange = (text: string) => {
-  //   setSearchText(text)
-  //   debounceSearch(text)
-  // }
+  const handleSearchChange = (text: string) => {
+    debounceSearch(text)
+  }
 
   if (error) {
     return <Alert msg={error.message} type='danger' dismissible={false} />
@@ -166,6 +157,8 @@ const MyEvents = () => {
         exportable={true}
         loading={loading}
         onSelectionChange={handleSelectionChange}
+        onSearchTextChange={handleSearchChange}
+        onPageChange={setPageNumber}
       />
     </TitledCard>
   )
