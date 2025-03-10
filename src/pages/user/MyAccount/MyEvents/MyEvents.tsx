@@ -7,6 +7,8 @@ import { debounce } from 'lodash'
 import { DataTable, type Column } from '@atawi/react-datatable'
 import { useCallback, useState } from 'react'
 
+import '../styles.css'
+
 type Event = {
   id: string
   title: string

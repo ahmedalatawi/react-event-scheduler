@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@apollo/server": "^4.9.5",
-    "@atawi/react-datatable": "^1.0.2",
+    "@atawi/react-datatable": "^1.0.3",
     "@atawi/react-popover": "^1.0.4",
     "@fullcalendar/core": "^6.1.5",
     "@fullcalendar/daygrid": "^6.1.4",
