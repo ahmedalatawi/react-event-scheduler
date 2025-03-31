@@ -210,10 +210,10 @@
   dependencies:
     node-fetch "^2.6.1"
 
-"@atawi/react-datatable@^1.0.3":
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/@atawi/react-datatable/-/react-datatable-1.0.3.tgz#0015f24391449f59a87cc69da798b27c698b9972"
-  integrity sha512-UNxgsUZKhRVGxJ5QlBqbHHrXTIRFwdQfrNWp5gbJv8QCLV+nEqBdFnzU4zeKBrv5ZbyHy8NJ1jB/j6ty5atRDQ==
+"@atawi/react-datatable@^1.0.5":
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/@atawi/react-datatable/-/react-datatable-1.0.5.tgz#b8d5af1c63de4ccaa5a4e8e97d53952e87cec2be"
+  integrity sha512-jA8laCx4b9saalfkO/2r0Fe44w26hY+Rd7RsmK886O2nWWCH0bbH9PeOhVralAN9vTKvPAHmfnL7AFWuzpExug==
   dependencies:
     lodash "^4.17.21"
     react-virtualized-auto-sizer "^1.0.20"

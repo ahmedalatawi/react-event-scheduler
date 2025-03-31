@@ -161,6 +161,7 @@ const MyEvents = () => {
         onSelectionChange={handleSelectionChange}
         onSearchTextChange={handleSearchChange}
         onPageChange={setPageNumber}
+        disableInternalSearch={true}
       />
     </TitledCard>
   )
