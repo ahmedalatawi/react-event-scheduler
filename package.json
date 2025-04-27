@@ -16,10 +16,6 @@
     "codegen": "graphql-codegen --config codegen.yml -r dotenv/config",
     "prepare": "husky install"
   },
-  "engines": {
-    "npm": ">=8.0.0 <10.7.1",
-    "node": ">=16.0.0 <20.18.4"
-  },
   "dependencies": {
     "@apollo/server": "^4.9.5",
     "@atawi/react-datatable": "^1.0.5",
