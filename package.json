@@ -99,7 +99,7 @@
     "husky": "^8.0.0",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^29.7.0",
-    "jest-environment-jsdom": "^29.7.0",
+    "jest-environment-jsdom": "^30.0.4",
     "jest-transformer-svg": "^2.0.2",
     "jquery": "^3.6.4",
     "lint-staged": "^13.2.2",
