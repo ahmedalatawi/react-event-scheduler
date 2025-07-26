@@ -19,7 +19,7 @@
   "dependencies": {
     "@apollo/server": "^4.9.5",
     "@atawi/react-datatable": "^1.0.5",
-    "@atawi/react-popover": "^1.0.4",
+    "@atawi/react-popover": "^1.0.8",
     "@fullcalendar/core": "^6.1.5",
     "@fullcalendar/daygrid": "^6.1.4",
     "@fullcalendar/interaction": "^6.1.4",
