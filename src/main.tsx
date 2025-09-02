@@ -10,7 +10,7 @@ import 'jquery/dist/jquery.min.js'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 
-import '@atawi/react-datatable/style.css'
+import '@atawi/react-datatable/dist/style.css'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
