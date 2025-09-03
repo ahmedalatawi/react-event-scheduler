@@ -7,8 +7,25 @@
   flex-direction: column;
   gap: 8px;
 
+  .active {
+    background-color: #e9ecef !important;
+    color: black;
+    border-radius: 4px;
+    text-decoration: none;
+  }
+
+  .dropdown-item {
+    padding: 6px 12px;
+    color: #212529;
+    text-decoration: none;
+  }
+
   .dropdown-item:hover {
-    text-decoration: underline;
+    background-color: #e9ecef;
+    cursor: pointer;
+    color: black;
+    border-radius: 4px;
+    text-decoration: none;
   }
 }
 

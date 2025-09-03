@@ -3,7 +3,7 @@ import { NavDropdown } from 'react-bootstrap'
 import { FaUser, FaUserEdit } from 'react-icons/fa'
 import { FiLogOut, FiSettings } from 'react-icons/fi'
 import { MdEventNote } from 'react-icons/md'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import AuthContext from '@/store/auth-context'
 import { BiSolidChevronDown } from 'react-icons/bi'
 import { Popover } from '@atawi/react-popover'
@@ -18,6 +18,7 @@ type Props = {
 const MyAccount = ({ onLogout, onSelect }: Props) => {
   const [openPopover, setOpenPopover] = useState(false)
   const { auth } = useContext(AuthContext)
+  const location = useLocation()
 
   if (!auth) {
     return null
@@ -51,6 +52,9 @@ const MyAccount = ({ onLogout, onSelect }: Props) => {
               onClick={handleOnSelect}
               as={Link}
               to={`/user/${userId}/profile`}
+              className={
+                location.pathname === `/user/${userId}/profile` ? 'active' : ''
+              }
             >
               <FaUserEdit /> My profile
             </NavDropdown.Item>
@@ -58,6 +62,9 @@ const MyAccount = ({ onLogout, onSelect }: Props) => {
               onClick={handleOnSelect}
               as={Link}
               to={`/user/${userId}/events`}
+              className={
+                location.pathname === `/user/${userId}/events` ? 'active' : ''
+              }
             >
               <MdEventNote /> My events
             </NavDropdown.Item>
@@ -65,6 +72,9 @@ const MyAccount = ({ onLogout, onSelect }: Props) => {
               onClick={handleOnSelect}
               as={Link}
               to={`/user/${userId}/settings`}
+              className={
+                location.pathname === `/user/${userId}/settings` ? 'active' : ''
+              }
             >
               <FiSettings /> Settings
             </NavDropdown.Item>
