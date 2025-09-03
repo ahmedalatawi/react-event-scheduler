@@ -1,11 +1,11 @@
-import { useParams } from 'react-router'
 import Alert from '@/components/ui/Alert/Alert'
 import TitledCard from '@/components/ui/TitledCard/TitledCard'
 import { useGetUserEventsQuery } from '@/generated/graphql'
 import { useNavigateToHome } from '@/hooks/useNavigateToHome'
 import { debounce } from 'lodash'
 import { DataTable, type Column } from '@atawi/react-datatable'
-import { useCallback, useState } from 'react'
+import { useCallback, useContext, useState } from 'react'
+import AuthContext from '@/store/auth-context'
 
 import '../styles.css'
 
@@ -24,7 +24,9 @@ type Event = {
 const ITEMS_PER_PAGE = 20
 
 const MyEvents = () => {
-  const { id } = useParams()
+  const { auth } = useContext(AuthContext)
+  const id = auth?.userId ?? ''
+
   const [searchTextDelayed, setSearchTextDelayed] = useState<string>('')
   const [pageNumber, setPageNumber] = useState<number>(1)
 
@@ -33,7 +35,7 @@ const MyEvents = () => {
   const { data, loading, error } = useGetUserEventsQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
-      id: id ?? '',
+      id,
       filter: {
         searchText: searchTextDelayed,
         pageNumber,

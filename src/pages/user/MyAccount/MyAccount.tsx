@@ -6,10 +6,9 @@ import { MdEventNote } from 'react-icons/md'
 import { Link } from 'react-router-dom'
 import AuthContext from '@/store/auth-context'
 import { BiSolidChevronDown } from 'react-icons/bi'
-import './styles.css'
-
 import { Popover } from '@atawi/react-popover'
-import '@atawi/react-popover/dist/style.css'
+
+import './styles.css'
 
 type Props = {
   onLogout: () => void
