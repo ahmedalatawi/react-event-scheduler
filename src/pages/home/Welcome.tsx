@@ -75,7 +75,7 @@ function Welcome() {
           manage, and run events. it aims to help and improvement user&apos;s
           experience by helping you stay organized, keeping relevant information
           right where you need it, and allowing you to do things like share
-          events on FB & Twitter.
+          events on FB & X.
         </h2>
         <Link to='/addEvent' className='btn'>
           Start adding events now

@@ -66,7 +66,7 @@ You will also see any Lint or Typescript errors in the console.
 - Search & pagination
 - Make events as private (only visible to creators)
 - Session expiry warning (displayed when being idle for 3 minutes after logging in)
-- Share events with family & friends on Facebook and Twitter
+- Share events with family & friends on Facebook and X
 
 ### Coming soon
 
