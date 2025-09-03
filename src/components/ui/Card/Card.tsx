@@ -3,7 +3,7 @@ import {
   FacebookShareButton,
   TwitterShareButton,
   FacebookIcon,
-  TwitterIcon,
+  XIcon,
 } from 'react-share'
 import styled from 'styled-components'
 import type { Maybe } from '@/generated/graphql'
@@ -84,7 +84,7 @@ const Card = ({ card, onClick }: Props) => {
           url={url ?? ''}
           // hashtags={['hashtag1', 'hashtag2']}
         >
-          <TwitterIcon size={32} round /> Share on Twitter
+          <XIcon size={32} round /> Share on X
         </TwitterShareButtonStyled>
       </div>
     </StyledCard>
