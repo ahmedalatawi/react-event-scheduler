@@ -33,7 +33,7 @@
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dataloader": "^2.2.2",
-    "dotenv": "^16.0.3",
+    "dotenv": "^17.2.2",
     "express": "^4.19.2",
     "graphql": "^16.11.0",
     "graphql-tag": "^2.12.6",
