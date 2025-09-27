@@ -36,9 +36,3 @@
   align-items: center;
   padding-left: 12px;
 }
-
-.DataTable {
-  .search-icon {
-    top: 30% !important;
-  }
-}

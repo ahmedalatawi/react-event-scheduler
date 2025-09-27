@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useParams } from 'react-router'
+import { useParams } from 'react-router-dom'
 import CardView from '@/components/ui/CardView/CardView'
 import Alert from '@/components/ui/Alert/Alert'
 import Spinner from '@/components/ui/Spinner/Spinner'

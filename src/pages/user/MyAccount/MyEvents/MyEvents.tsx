@@ -7,8 +7,6 @@ import { DataTable, type Column } from '@atawi/react-datatable'
 import { useCallback, useContext, useState } from 'react'
 import AuthContext from '@/store/auth-context'
 
-import '../styles.css'
-
 type Event = {
   id: string
   title: string
@@ -150,7 +148,6 @@ const MyEvents = () => {
   return (
     <TitledCard title='My Events'>
       <DataTable
-        className='DataTable'
         data={updatedEvents ?? []}
         columns={columns}
         pageSize={10}

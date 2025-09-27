@@ -220,15 +220,15 @@
     "@csstools/css-tokenizer" "^3.0.3"
     lru-cache "^10.4.3"
 
-"@atawi/react-datatable@^1.0.7":
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/@atawi/react-datatable/-/react-datatable-1.0.7.tgz#eca584d7cde240fe05ed159782127cc7e902de71"
-  integrity sha512-u8rFUBCeocB45xEcJ/mCYH1vdR5TIoj10TScHBEh+vZX3RJYAG0b1qLrIAJNNyiW6+Ztpm59/Kyoht7uFWzxIg==
+"@atawi/react-datatable@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@atawi/react-datatable/-/react-datatable-1.1.0.tgz#7d4dc2e84bc611d0b871c0b75874b30a6a5d7876"
+  integrity sha512-T9JlQPCOvhmiXzvECiV7icYwYJn+3WwSuSxdUCQng9Y7PSuEjLlLI2B8SOuSZuS6CiCD+tmfFPaW59TDGZMrow==
   dependencies:
     lodash "^4.17.21"
     react-virtualized-auto-sizer "^1.0.20"
     react-window "^1.8.10"
-    sass "^1.71.1"
+    sass "^1.93.2"
     xlsx "^0.18.5"
 
 "@atawi/react-popover@^1.0.9":
@@ -7838,10 +7838,10 @@ safe-regex-test@^1.0.3:
   resolved "https://registry.yarnpkg.com/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
   integrity sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
 
-sass@^1.71.1:
-  version "1.83.0"
-  resolved "https://registry.yarnpkg.com/sass/-/sass-1.83.0.tgz#e36842c0b88a94ed336fd16249b878a0541d536f"
-  integrity sha512-qsSxlayzoOjdvXMVLkzF84DJFc2HZEL/rFyGIKbbilYtAvlCxyuzUeff9LawTn4btVnLKg75Z8MMr1lxU1lfGw==
+sass@^1.93.2:
+  version "1.93.2"
+  resolved "https://registry.yarnpkg.com/sass/-/sass-1.93.2.tgz#e97d225d60f59a3b3dbb6d2ae3c1b955fd1f2cd1"
+  integrity sha512-t+YPtOQHpGW1QWsh1CHQ5cPIr9lbbGZLZnbihP/D/qZj/yuV68m8qarcV17nvkOX81BCrvzAlq2klCQFZghyTg==
   dependencies:
     chokidar "^4.0.0"
     immutable "^5.0.2"
