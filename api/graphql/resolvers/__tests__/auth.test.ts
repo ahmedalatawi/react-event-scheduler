@@ -39,9 +39,7 @@ describe('Auth Resolvers', () => {
         save: jest.fn().mockResolvedValue(true),
       }
 
-      jest.mocked(UserModel).mockImplementation(
-        () => mockSavedUser as never,
-      )
+      jest.mocked(UserModel).mockImplementation(() => mockSavedUser as never)
 
       const result = await Auth.signup({ userInput })
 
@@ -139,9 +137,7 @@ describe('Auth Resolvers', () => {
         save: jest.fn().mockResolvedValue(true),
       }
 
-      jest.mocked(UserModel).mockImplementation(
-        () => mockSavedUser as never,
-      )
+      jest.mocked(UserModel).mockImplementation(() => mockSavedUser as never)
 
       await expect(Auth.signup({ userInput })).rejects.toThrow(
         'getJwtToken: JWT_SECRET is not provided!',
@@ -196,9 +192,7 @@ describe('Auth Resolvers', () => {
 
       jest.mocked(UserModel.findOne).mockResolvedValue(null)
 
-      await expect(Auth.login({ loginInput })).rejects.toThrow(
-        GraphQLError,
-      )
+      await expect(Auth.login({ loginInput })).rejects.toThrow(GraphQLError)
       await expect(Auth.login({ loginInput })).rejects.toThrow(
         'Username or password is incorrect',
       )
@@ -219,9 +213,7 @@ describe('Auth Resolvers', () => {
       jest.mocked(UserModel.findOne).mockResolvedValue(mockUser as never)
       jest.mocked(bcrypt.compare).mockResolvedValue(false as never)
 
-      await expect(Auth.login({ loginInput })).rejects.toThrow(
-        GraphQLError,
-      )
+      await expect(Auth.login({ loginInput })).rejects.toThrow(GraphQLError)
       await expect(Auth.login({ loginInput })).rejects.toThrow(
         'Username or password is incorrect',
       )

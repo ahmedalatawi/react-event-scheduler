@@ -45,7 +45,12 @@ describe('Alert', () => {
 
   it('should render non-dismissible alert when specified', () => {
     render(
-      <Alert msg='Test' type='success' dismissible={false} onClose={mockOnClose} />,
+      <Alert
+        msg='Test'
+        type='success'
+        dismissible={false}
+        onClose={mockOnClose}
+      />,
     )
     const closeButton = screen.queryByRole('button')
     expect(closeButton).not.toBeInTheDocument()

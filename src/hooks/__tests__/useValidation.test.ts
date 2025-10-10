@@ -57,22 +57,12 @@ describe('useValidation', () => {
     })
 
     it('should return error when passwords do not match', () => {
-      const result = validate(
-        'validuser',
-        'Password1!',
-        'Password2!',
-        'Signup',
-      )
+      const result = validate('validuser', 'Password1!', 'Password2!', 'Signup')
       expect(result).toBe('Password and confirmed password do not match.')
     })
 
     it('should return empty string when all validations pass', () => {
-      const result = validate(
-        'validuser',
-        'Password1!',
-        'Password1!',
-        'Signup',
-      )
+      const result = validate('validuser', 'Password1!', 'Password1!', 'Signup')
       expect(result).toBe('')
     })
 

@@ -43,10 +43,7 @@ describe('Events Resolvers', () => {
       jest.mocked(EventModel.find).mockReturnValue(mockFind as never)
       jest.mocked(EventModel.countDocuments).mockResolvedValue(2)
 
-      const result = await Events.eventsData(
-        { filterInput },
-        mockAuthParams,
-      )
+      const result = await Events.eventsData({ filterInput }, mockAuthParams)
 
       expect(result).toEqual({
         totalCount: 2,
@@ -228,14 +225,15 @@ describe('Events Resolvers', () => {
 
       const mockEventInstance = {
         save: jest.fn().mockReturnValue({
-          then: (callback: (e: typeof mockSavedEvent) => typeof mockSavedEvent) =>
-            Promise.resolve(callback(mockSavedEvent)),
+          then: (
+            callback: (e: typeof mockSavedEvent) => typeof mockSavedEvent,
+          ) => Promise.resolve(callback(mockSavedEvent)),
         }),
       }
 
-      jest.mocked(EventModel).mockImplementation(
-        () => mockEventInstance as never,
-      )
+      jest
+        .mocked(EventModel)
+        .mockImplementation(() => mockEventInstance as never)
 
       const result = await Events.saveEvent(
         { event: eventInput },

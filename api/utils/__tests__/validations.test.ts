@@ -72,9 +72,9 @@ describe('Validations', () => {
     })
 
     it('should accept long valid password', () => {
-      expect(
-        validatePassword('VeryLongPassword123!WithManyCharacters'),
-      ).toBe(true)
+      expect(validatePassword('VeryLongPassword123!WithManyCharacters')).toBe(
+        true,
+      )
     })
   })
 })

@@ -10,10 +10,9 @@ describe('useDebounce', () => {
   })
 
   it('should debounce value changes', async () => {
-    const { result, rerender } = renderHook(
-      ({ value }) => useDebounce(value),
-      { initialProps: { value: 'initial' } },
-    )
+    const { result, rerender } = renderHook(({ value }) => useDebounce(value), {
+      initialProps: { value: 'initial' },
+    })
 
     expect(result.current).toBe('initial')
 
@@ -28,10 +27,9 @@ describe('useDebounce', () => {
   })
 
   it('should cancel previous timer on rapid changes', async () => {
-    const { result, rerender } = renderHook(
-      ({ value }) => useDebounce(value),
-      { initialProps: { value: 'initial' } },
-    )
+    const { result, rerender } = renderHook(({ value }) => useDebounce(value), {
+      initialProps: { value: 'initial' },
+    })
 
     rerender({ value: 'first' })
     jest.advanceTimersByTime(300)
@@ -50,10 +48,9 @@ describe('useDebounce', () => {
   })
 
   it('should handle empty string', async () => {
-    const { result, rerender } = renderHook(
-      ({ value }) => useDebounce(value),
-      { initialProps: { value: 'initial' } },
-    )
+    const { result, rerender } = renderHook(({ value }) => useDebounce(value), {
+      initialProps: { value: 'initial' },
+    })
 
     rerender({ value: '' })
     jest.advanceTimersByTime(500)
