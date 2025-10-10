@@ -4,15 +4,11 @@ import { NavLink } from 'react-router-dom'
 import AuthContext from '@/store/auth-context'
 import LoginContainer from '@/pages/user/LoginContainer/LoginContainer'
 import MyAccount from '@/pages/user/MyAccount/MyAccount'
-import { Switch, useDarkreader } from 'react-darkreader'
 
 const MainNavbar = () => {
   const [showModal, setShowModal] = useState<boolean>(false)
   const [isExpanded, setIsExpanded] = useState<boolean>(false)
   const [view, setView] = useState<string>('Login')
-  const [isDark, { toggle }] = useDarkreader(
-    localStorage.getItem('react-event-scheduler-theme') === 'dark',
-  )
 
   const { auth, removeAuth } = useContext(AuthContext)
 
@@ -101,18 +97,6 @@ const MainNavbar = () => {
                 Calendar
               </NavLink>
             </Nav>
-            <div className='me-4'>
-              <Switch
-                checked={isDark}
-                onChange={(isDark) => {
-                  localStorage.setItem(
-                    'react-event-scheduler-theme',
-                    isDark ? 'dark' : 'light',
-                  )
-                  toggle()
-                }}
-              />
-            </div>
             <Form className='d-flex'>
               {!auth ? (
                 <Fragment>

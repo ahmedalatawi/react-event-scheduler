@@ -35,5 +35,5 @@ export interface IContext {
 
 export interface IAuthParams {
   isAuthorized: boolean
-  userId: string
+  userId?: string
 }
