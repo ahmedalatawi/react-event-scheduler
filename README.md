@@ -75,7 +75,7 @@ You will also see any Lint or Typescript errors in the console.
 
 ## Run unit tests
 
-coming soon...
+`yarn test`
 
 ## Run E2E tests
 

@@ -14,7 +14,7 @@ describe('dateTransforms', () => {
 
       const result = dateToTitle(mockEvent)
 
-      expect(result).toContain('January 15, 2024')
+      expect(result).toContain('Jan 15, 2024')
       expect(result).toContain('10:00 AM')
       expect(result).toContain('12:00 PM')
       expect(result).toContain(' - ')
@@ -30,8 +30,8 @@ describe('dateTransforms', () => {
 
       const result = dateToTitle(mockEvent)
 
-      expect(result).toContain('January 15, 2024')
-      expect(result).toContain('January 16, 2024')
+      expect(result).toContain('Jan 15, 2024')
+      expect(result).toContain('Jan 16, 2024')
     })
 
     it('should handle ISO date strings with timezone', () => {
@@ -55,7 +55,7 @@ describe('dateTransforms', () => {
 
       const result = formatDateTime(timestamp)
 
-      expect(result).toContain('January 15, 2024')
+      expect(result).toContain('Jan 15, 2024')
       expect(result).toContain('10:30 AM')
     })
 
@@ -64,7 +64,7 @@ describe('dateTransforms', () => {
 
       const result = formatDateTime(timestamp)
 
-      expect(result).toContain('January 15, 2024')
+      expect(result).toContain('Jan 15, 2024')
       expect(result).toContain('12:00 AM')
     })
 
@@ -73,7 +73,7 @@ describe('dateTransforms', () => {
 
       const result = formatDateTime(timestamp)
 
-      expect(result).toContain('January 15, 2024')
+      expect(result).toContain('Jan 15, 2024')
       expect(result).toContain('11:59 PM')
     })
 

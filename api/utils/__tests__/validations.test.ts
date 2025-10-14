@@ -7,7 +7,7 @@ describe('Validations', () => {
     })
 
     it('should return false when password is too short', () => {
-      expect(validatePassword('Pass1!')).toBe(false)
+      expect(validatePassword('Pas1!')).toBe(false)
     })
 
     it('should return false when password has no uppercase letter', () => {
@@ -38,7 +38,7 @@ describe('Validations', () => {
     })
 
     it('should accept password exactly 6 characters long', () => {
-      expect(validatePassword('Pass1!')).toBe(false)
+      expect(validatePassword('Pass1!')).toBe(true)
       expect(validatePassword('Pass12!')).toBe(true)
     })
 

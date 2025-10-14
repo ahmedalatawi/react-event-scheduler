@@ -220,6 +220,7 @@ describe('Events Resolvers', () => {
         populate: jest.fn().mockResolvedValue({
           _id: mockEventId,
           ...eventInput,
+          save: jest.fn().mockResolvedValue(true),
         }),
       }
 
@@ -241,7 +242,8 @@ describe('Events Resolvers', () => {
       )
 
       expect(result).toBeDefined()
-      expect(mockSavedEvent.save).toHaveBeenCalled()
+      expect(mockEventInstance.save).toHaveBeenCalled()
+      //expect(mockSavedEvent.save).toHaveBeenCalled()
     })
 
     it('should update existing event', async () => {

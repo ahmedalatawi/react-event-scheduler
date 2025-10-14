@@ -36,7 +36,11 @@ describe('Auth Resolvers', () => {
         _id: mockUserId,
         username: mockUsername,
         password: mockHashedPassword,
-        save: jest.fn().mockResolvedValue(true),
+        save: jest.fn().mockResolvedValue({
+          _id: mockUserId,
+          username: mockUsername,
+          password: mockHashedPassword,
+        }),
       }
 
       jest.mocked(UserModel).mockImplementation(() => mockSavedUser as never)
