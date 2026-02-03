@@ -82,7 +82,7 @@
     "@types/lodash": "^4.14.191",
     "@types/luxon": "^3.6.2",
     "@types/mongoose": "^5.11.97",
-    "@types/node": "^18.15.11",
+    "@types/node": "^25.2.0",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.2.25",
     "@types/react-test-renderer": "^18.0.0",
