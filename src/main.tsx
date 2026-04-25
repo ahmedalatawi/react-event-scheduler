@@ -12,6 +12,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 
 import '@atawi/react-datatable/dist/style.css'
 import '@atawi/react-popover/dist/style.css'
+import '@atawi/react-date-picker/style.css'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>

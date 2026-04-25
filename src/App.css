@@ -10,3 +10,8 @@
     border-right: none !important;
   }
 }
+
+.small-date-picker-trigger {
+  min-width: 0 !important;
+  width: 226px;
+}

@@ -28,7 +28,7 @@ import LoginContainer from '../user/LoginContainer/LoginContainer'
 interface ModalBodyType {
   auth: IAuth | null
   event: EventType
-  disableEdit: boolean
+  disableEdit?: boolean
   onChangeValue: (prop: string, value: string | boolean) => void
   onValidate: (valid: boolean) => void
   onLogin: () => void
@@ -57,7 +57,6 @@ function Calendar() {
   })
 
   const [showLoginModal, setShowLoginModal] = useState(false)
-  const [disableEdit, setDisableEdit] = useState<boolean>(false)
   const [serverError, setServerError] = useState<ApolloError | null>(null)
   const [calendarReady, setCalendarReady] = useState<boolean>(false)
 
@@ -99,7 +98,6 @@ function Calendar() {
   useEffect(() => {
     if (calendarReady) refetch()
 
-    setDisableEdit(!auth)
     setActionBtns({
       ...actionBtns,
       disableSaveBtn: true,
@@ -169,7 +167,6 @@ function Calendar() {
     if (calendarApiRef.current)
       calendarApiRef.current.value = selectedDate.view.calendar
 
-    setDisableEdit(!auth)
     setActionBtns({
       disableSaveBtn: true,
       disableDeleteBtn: !auth,
@@ -198,7 +195,6 @@ function Calendar() {
       false
 
     if (auth) {
-      setDisableEdit(!isTheOwner)
       setActionBtns({
         disableSaveBtn: !isTheOwner,
         disableDeleteBtn: !isTheOwner,
@@ -206,7 +202,6 @@ function Calendar() {
         hideSaveBtn: !isTheOwner,
       })
     } else {
-      setDisableEdit(true)
       setActionBtns({
         disableSaveBtn: true,
         disableDeleteBtn: true,
@@ -317,7 +312,6 @@ function Calendar() {
         <ModalBody
           auth={auth}
           event={event}
-          disableEdit={disableEdit}
           onChangeValue={(prop, value) => onChangeValueHandler(prop, value)}
           onValidate={(valid) =>
             setActionBtns({ ...actionBtns, disableSaveBtn: !valid })
@@ -362,7 +356,6 @@ function Calendar() {
 const ModalBody = ({
   auth,
   event,
-  disableEdit,
   onChangeValue,
   onValidate,
   onLogin,
@@ -382,7 +375,6 @@ const ModalBody = ({
     )}
     <EventBody
       event={event}
-      disableEdit={disableEdit}
       onChangeValue={onChangeValue}
       onValidate={onValidate}
     />
