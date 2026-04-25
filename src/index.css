@@ -38,3 +38,10 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* Ensure datepicker / popover portals appear above modals (Bootstrap z-index ~1050) */
+[data-testid='popover-content'],
+.date-time-picker-popover-surface,
+.date-time-picker {
+  z-index: 2000 !important;
+}

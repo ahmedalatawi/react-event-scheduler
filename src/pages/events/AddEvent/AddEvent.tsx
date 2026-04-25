@@ -68,7 +68,7 @@ function AddEvent() {
         <div className='col-12'>
           <EventBody
             event={event}
-            disableEdit={!auth || loading}
+            disableEdit={loading}
             resetForm={resetForm}
             onChangeValue={(prop, value) => onChangeValueHandler(prop, value)}
             onValidate={(valid) => setDisableSaveBtn(!valid)}

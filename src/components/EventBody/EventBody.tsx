@@ -1,5 +1,6 @@
 import { DateTime } from 'luxon'
 import { useEffect, useState, type ChangeEvent, useContext } from 'react'
+import { DateTimePicker } from '@atawi/react-date-picker'
 import AuthContext from '@/store/auth-context'
 import Alert from '../ui/Alert/Alert'
 
@@ -15,7 +16,7 @@ export type EventType = {
 
 type Props = {
   event: EventType
-  disableEdit: boolean
+  disableEdit?: boolean
   resetForm?: boolean
   onChangeValue: (prop: string, value: string | boolean) => void
   onValidate: (valid: boolean) => void
@@ -101,6 +102,9 @@ const EventBody = ({
     }
   }, [authCtx, resetForm])
 
+  const start = event?.start ? DateTime.fromISO(event.start).toJSDate() : null
+  const end = event?.end ? DateTime.fromISO(event.end).toJSDate() : null
+
   return (
     <div className='row g-3'>
       <div className='col-12 required'>
@@ -122,29 +126,56 @@ const EventBody = ({
         <label htmlFor='start' className='form-label'>
           Start
         </label>
-        <input
-          type='datetime-local'
-          className='form-control'
+        <DateTimePicker
+          styles={{
+            triggerClassName: 'small-date-picker-trigger',
+          }}
+          value={start}
+          onChange={(date) =>
+            handleValueChange(
+              {
+                target: {
+                  value: (date
+                    ? DateTime.fromJSDate(date as Date).toISO()
+                    : '') as string,
+                },
+              } as ChangeEvent<HTMLInputElement>,
+              'start',
+            )
+          }
+          mode='single'
+          placeholder='Pick start date/time'
           disabled={disableEdit}
-          id='start'
-          placeholder='Start'
-          value={localEvent.start}
-          onChange={(e) => handleValueChange(e, 'start')}
+          clearable
+          showTime
         />
       </div>
       <div className='col-md-6 required'>
         <label htmlFor='end' className='form-label'>
           End
         </label>
-        <input
-          type='datetime-local'
-          className='form-control'
+        <DateTimePicker
+          styles={{
+            triggerClassName: 'small-date-picker-trigger',
+          }}
+          value={end}
+          onChange={(date) =>
+            handleValueChange(
+              {
+                target: {
+                  value: (date
+                    ? DateTime.fromJSDate(date as Date).toISO()
+                    : '') as string,
+                },
+              } as ChangeEvent<HTMLInputElement>,
+              'end',
+            )
+          }
+          mode='single'
+          placeholder='Pick end date/time'
           disabled={disableEdit}
-          id='end'
-          min={localEvent.start}
-          value={localEvent.end}
-          placeholder='End'
-          onChange={(e) => handleValueChange(e, 'end')}
+          clearable
+          showTime
         />
       </div>
       {errorMsg && !disableEdit && (
