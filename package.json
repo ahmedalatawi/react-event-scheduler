@@ -21,7 +21,7 @@
     "@atawi/react-datatable": "^1.1.0",
     "@atawi/react-date-picker": "^2.0.5",
     "@atawi/react-popover": "^1.0.9",
-    "@fullcalendar/core": "^6.1.5",
+    "@fullcalendar/core": "^6.1.20",
     "@fullcalendar/daygrid": "^6.1.4",
     "@fullcalendar/interaction": "^6.1.4",
     "@fullcalendar/react": "^6.1.4",
