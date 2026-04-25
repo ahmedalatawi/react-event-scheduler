@@ -45,3 +45,7 @@ code {
 .date-time-picker {
   z-index: 2000 !important;
 }
+
+.modal-open {
+  overflow: auto !important;
+}
