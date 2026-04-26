@@ -231,10 +231,10 @@
     sass "^1.93.2"
     xlsx "^0.18.5"
 
-"@atawi/react-date-picker@^2.0.6":
-  version "2.0.6"
-  resolved "https://registry.yarnpkg.com/@atawi/react-date-picker/-/react-date-picker-2.0.6.tgz#3fe7eb7e9742650fa420810797e8c55a26e7dff7"
-  integrity sha512-v8/0m7S2ApqqhYkqWlxgGXudFVruKA17tDD0Ho5gPSQPXo3cn4UYeESKdVtcytv05SFDpZumesISoGvDIOqHQw==
+"@atawi/react-date-picker@^2.0.7":
+  version "2.0.7"
+  resolved "https://registry.yarnpkg.com/@atawi/react-date-picker/-/react-date-picker-2.0.7.tgz#2a1de6005753b2495a1111f8a1df9a59daee53bf"
+  integrity sha512-mShdG+wtMKNSqpJMtumtFvz5gS3PZUEYkAp6vcFtEXSryt9UvtcBtBry5xHuwwxK+ws4weySIDL4aSPwB550DQ==
   dependencies:
     "@atawi/react-popover" "^1.0.10"
     date-fns "^3.3.1"
